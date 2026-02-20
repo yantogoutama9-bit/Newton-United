@@ -1,13 +1,804 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Non-League Football Manager</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Newton United FC - Football Manager Ultra</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      color: #fff;
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    header {
+      background: linear-gradient(90deg, #800000 0%, #4a0000 100%);
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+    
+    .club-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    
+    .club-info h1 {
+      font-size: 2.5em;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    
+    .club-badge {
+      width: 80px;
+      height: 80px;
+      background: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2em;
+      color: #800000;
+      font-weight: bold;
+    }
+    
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+    
+    .stat-box {
+      background: rgba(255,255,255,0.1);
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    
+    .stat-label {
+      font-size: 0.8em;
+      opacity: 0.8;
+    }
+    
+    .stat-value {
+      font-size: 1.3em;
+      font-weight: bold;
+      color: #ffd700;
+    }
+    
+    .main-content {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 20px;
+    }
+    
+    .sidebar {
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 20px;
+    }
+    
+    .nav-menu {
+      list-style: none;
+    }
+    
+    .nav-menu li {
+      margin-bottom: 10px;
+    }
+    
+    .nav-menu button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(90deg, #800000 0%, #600000 100%);
+      border: none;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: all 0.3s;
+    }
+    
+    .nav-menu button:hover {
+      transform: translateX(5px);
+      box-shadow: 0 2px 10px rgba(128,0,0,0.5);
+    }
+    
+    .nav-menu button.active {
+      background: linear-gradient(90deg, #ffd700 0%, #ffed4e 100%);
+      color: #000;
+    }
+    
+    .content-area {
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 20px;
+      min-height: 600px;
+    }
+    
+    .section-title {
+      font-size: 1.8em;
+      margin-bottom: 20px;
+      color: #ffd700;
+      border-bottom: 2px solid #800000;
+      padding-bottom: 10px;
+    }
+    
+    .hidden {
+      display: none;
+    }
+    
+    /* Squad Styles */
+    .squad-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+    }
+    
+    .player-card {
+      background: linear-gradient(135deg, #2d2d44 0%, #1a1a2e 100%);
+      border-radius: 10px;
+      padding: 15px;
+      border: 2px solid #800000;
+      transition: transform 0.3s;
+    }
+    
+    .player-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 20px rgba(128,0,0,0.5);
+    }
+    
+    .player-name {
+      font-weight: bold;
+      font-size: 1.1em;
+      color: #ffd700;
+    }
+    
+    .player-position {
+      color: #aaa;
+      font-size: 0.9em;
+    }
+    
+    .player-rating {
+      font-size: 2em;
+      color: #00ff88;
+      text-align: center;
+      margin: 10px 0;
+    }
+    
+    .player-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+      font-size: 0.8em;
+    }
+    
+    /* Match Styles */
+    .match-container {
+      background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+      border-radius: 15px;
+      padding: 30px;
+      text-align: center;
+    }
+    
+    .scoreboard {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      margin: 30px 0;
+    }
+    
+    .team-display {
+      text-align: center;
+    }
+    
+    .team-name {
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+    
+    .score {
+      font-size: 4em;
+      font-weight: bold;
+      color: #ffd700;
+      min-width: 100px;
+    }
+    
+    .match-time {
+      font-size: 1.2em;
+      color: #00ff88;
+      margin: 20px 0;
+    }
+    
+    .match-events {
+      background: rgba(0,0,0,0.3);
+      border-radius: 10px;
+      padding: 20px;
+      max-height: 300px;
+      overflow-y: auto;
+      text-align: left;
+    }
+    
+    .event {
+      padding: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .event-time {
+      color: #ffd700;
+      font-weight: bold;
+    }
+    
+    /* Tactics Styles */
+    .pitch {
+      background: linear-gradient(90deg, #2d5a27 0%, #3d7a37 50%, #2d5a27 100%);
+      border-radius: 10px;
+      padding: 40px;
+      position: relative;
+      min-height: 500px;
+      margin-bottom: 20px;
+    }
+    
+    .formation-display {
+      display: grid;
+      grid-template-rows: repeat(4, 1fr);
+      gap: 20px;
+      height: 100%;
+    }
+    
+    .position-row {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+    
+    .position-slot {
+      width: 80px;
+      height: 80px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .position-slot:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 20px rgba(255,215,0,0.5);
+    }
+    
+    .position-slot.filled {
+      background: #ffd700;
+    }
+    
+    /* Transfer Styles */
+    .transfer-list {
+      display: grid;
+      gap: 10px;
+    }
+    
+    .transfer-item {
+      background: rgba(255,255,255,0.1);
+      padding: 15px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .transfer-info h4 {
+      color: #ffd700;
+    }
+    
+    .transfer-price {
+      font-size: 1.2em;
+      color: #00ff88;
+    }
+    
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+    
+    .btn-primary {
+      background: #800000;
+      color: #fff;
+    }
+    
+    .btn-success {
+      background: #00ff88;
+      color: #000;
+    }
+    
+    .btn-danger {
+      background: #ff4444;
+      color: #fff;
+    }
+    
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    
+    /* Finance Styles */
+    .finance-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    
+    .finance-card {
+      background: rgba(255,255,255,0.1);
+      padding: 20px;
+      border-radius: 10px;
+    }
+    
+    .finance-amount {
+      font-size: 2em;
+      color: #00ff88;
+    }
+    
+    .finance-negative {
+      color: #ff4444;
+    }
+    
+    /* Youth Academy */
+    .youth-player {
+      background: rgba(255,215,0,0.1);
+      border: 1px solid #ffd700;
+    }
+    
+    .potential-bar {
+      background: #333;
+      height: 10px;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-top: 5px;
+    }
+    
+    .potential-fill {
+      background: linear-gradient(90deg, #ffd700, #ff6b6b);
+      height: 100%;
+      transition: width 0.3s;
+    }
+    
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .modal-content {
+      background: #1a1a2e;
+      padding: 30px;
+      border-radius: 15px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    
+    .close-modal {
+      float: right;
+      font-size: 1.5em;
+      cursor: pointer;
+      color: #ff4444;
+    }
+    
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    th {
+      background: #800000;
+      color: #fff;
+    }
+    
+    tr:hover {
+      background: rgba(255,255,255,0.05);
+    }
+    
+    .start-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #800000 0%, #1a1a2e 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+    
+    .start-screen h1 {
+      font-size: 4em;
+      margin-bottom: 20px;
+      text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+    }
+    
+    .start-btn {
+      padding: 20px 60px;
+      font-size: 1.5em;
+      background: #ffd700;
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+    
+    .start-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 30px rgba(255,215,0,0.5);
+    }
+    
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #800000;
+      color: #fff;
+      padding: 15px 25px;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      z-index: 3000;
+      animation: slideIn 0.3s ease;
+    }
+    
+    @keyframes slideIn {
+      from { transform: translateX(400px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    
+    .progress-bar {
+      background: #333;
+      height: 20px;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 10px 0;
+    }
+    
+    .progress-fill {
+      background: linear-gradient(90deg, #800000, #ffd700);
+      height: 100%;
+      transition: width 0.5s;
+    }
+  </style>
 </head>
 <body>
-  <h1>Non-League Football Manager</h1>
-  <p>Club: <strong>Newton United FC</strong></p>
-  <button onclick="startGame()">Start Career</button>
+  <div class="start-screen" id="startScreen">
+    <h1>⚽ Newton United FC</h1>
+    <p style="font-size: 1.5em; margin-bottom: 30px;">Football Manager Ultra</p>
+    <button class="start-btn" onclick="startGame()">Mulai Karir</button>
+  </div>
+
+  <div class="container" id="mainGame" style="display: none;">
+    <header>
+      <div class="club-header">
+        <div class="club-info">
+          <h1>⚽ Newton United FC</h1>
+          <p>The Newtonians | Level <span id="clubLevel">8</span></p>
+        </div>
+        <div class="club-badge">NU</div>
+      </div>
+      <div class="stats-bar">
+        <div class="stat-box">
+          <div class="stat-label">Uang</div>
+          <div class="stat-value" id="moneyDisplay">£50K</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Minggu</div>
+          <div class="stat-value" id="weekDisplay">1</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Musim</div>
+          <div class="stat-value" id="seasonDisplay">2024/25</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Reputasi</div>
+          <div class="stat-value" id="reputationDisplay">⭐</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Fans</div>
+          <div class="stat-value" id="fansDisplay">1.2K</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="main-content">
+      <aside class="sidebar">
+        <ul class="nav-menu">
+          <li><button onclick="showSection('dashboard')" class="active" id="nav-dashboard">📊 Dashboard</button></li>
+          <li><button onclick="showSection('squad')" id="nav-squad">👥 Skuat</button></li>
+          <li><button onclick="showSection('tactics')" id="nav-tactics">📋 Taktik</button></li>
+          <li><button onclick="showSection('matches')" id="nav-matches">🏆 Pertandingan</button></li>
+          <li><button onclick="showSection('transfers')" id="nav-transfers">💰 Transfer</button></li>
+          <li><button onclick="showSection('youth')" id="nav-youth">🌱 Akademi</button></li>
+          <li><button onclick="showSection('finances')" id="nav-finances">💵 Keuangan</button></li>
+          <li><button onclick="showSection('facilities')" id="nav-facilities">🏟️ Fasilitas</button></li>
+          <li><button onclick="nextWeek()" style="background: #ffd700; color: #000; margin-top: 20px;">⏭️ Minggu Berikutnya</button></li>
+        </ul>
+      </aside>
+
+      <main class="content-area">
+        <!-- Dashboard -->
+        <section id="dashboard" class="game-section">
+          <h2 class="section-title">Dashboard Manajer</h2>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="finance-card">
+              <h3>Pertandingan Berikutnya</h3>
+              <div id="nextMatch" style="margin-top: 15px;">
+                <p>Memuat jadwal...</p>
+              </div>
+            </div>
+            <div class="finance-card">
+              <h3>Klasemen Liga</h3>
+              <div id="miniLeagueTable" style="margin-top: 15px;">
+                <p>Memuat klasemen...</p>
+              </div>
+            </div>
+          </div>
+          <div class="finance-card" style="margin-top: 20px;">
+            <h3>Performa Terbaru</h3>
+            <div id="recentForm" style="margin-top: 15px;">
+              <p>Belum ada pertandingan</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Squad -->
+        <section id="squad" class="game-section hidden">
+          <h2 class="section-title">Manajemen Skuat</h2>
+          <div style="margin-bottom: 20px;">
+            <button class="btn btn-primary" onclick="showSquadFilter('all')">Semua</button>
+            <button class="btn btn-primary" onclick="showSquadFilter('GK')">KI</button>
+            <button class="btn btn-primary" onclick="showSquadFilter('DEF')">Bek</button>
+            <button class="btn btn-primary" onclick="showSquadFilter('MID')">Gelandang</button>
+            <button class="btn btn-primary" onclick="showSquadFilter('FWD')">Penyerang</button>
+          </div>
+          <div class="squad-grid" id="squadContainer">
+            <!-- Players will be loaded here -->
+          </div>
+        </section>
+
+        <!-- Tactics -->
+        <section id="tactics" class="game-section hidden">
+          <h2 class="section-title">Taktik & Formasi</h2>
+          <div style="margin-bottom: 20px;">
+            <label>Formasi: </label>
+            <select id="formationSelect" onchange="changeFormation()" style="padding: 10px; font-size: 1em;">
+              <option value="4-4-2">4-4-2 (Klasik)</option>
+              <option value="4-3-3">4-3-3 (Serang)</option>
+              <option value="4-5-1">4-5-1 (Defensif)</option>
+              <option value="3-5-2">3-5-2 (Tengah Kuat)</option>
+              <option value="5-3-2">5-3-2 (Ultra Defensif)</option>
+            </select>
+          </div>
+          <div class="pitch" id="tacticsPitch">
+            <div class="formation-display" id="formationDisplay">
+              <!-- Formation will be rendered here -->
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px;">
+            <div class="finance-card">
+              <h4>Gaya Permainan</h4>
+              <select id="playStyle" style="width: 100%; margin-top: 10px; padding: 8px;">
+                <option value="balanced">Seimbang</option>
+                <option value="possession">Penguasaan Bola</option>
+                <option value="counter">Serangan Balik</option>
+                <option value="longball">Bola Panjang</option>
+                <option value="pressing">High Pressing</option>
+              </select>
+            </div>
+            <div class="finance-card">
+              <h4>Intensitas</h4>
+              <select id="intensity" style="width: 100%; margin-top: 10px; padding: 8px;">
+                <option value="low">Rendah</option>
+                <option value="medium">Sedang</option>
+                <option value="high">Tinggi</option>
+              </select>
+            </div>
+            <div class="finance-card">
+              <h4>Mentality</h4>
+              <select id="mentality" style="width: 100%; margin-top: 10px; padding: 8px;">
+                <option value="defensive">Defensif</option>
+                <option value="cautious">Hati-hati</option>
+                <option value="balanced">Seimbang</option>
+                <option value="positive">Positif</option>
+                <option value="attacking">Menyerang</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <!-- Matches -->
+        <section id="matches" class="game-section hidden">
+          <h2 class="section-title">Pusat Pertandingan</h2>
+          <div class="match-container" id="matchContainer">
+            <div class="scoreboard">
+              <div class="team-display">
+                <div class="team-name">Newton United</div>
+              </div>
+              <div class="score" id="matchScore">0 - 0</div>
+              <div class="team-display">
+                <div class="team-name" id="opponentName">Opponent</div>
+              </div>
+            </div>
+            <div class="match-time" id="matchTime">Belum Dimulai</div>
+            <button class="btn btn-success" id="playMatchBtn" onclick="playMatch()" style="font-size: 1.2em; padding: 15px 40px;">Mainkan Pertandingan</button>
+            <div class="match-events" id="matchEvents">
+              <div class="event">Pertandingan belum dimulai...</div>
+            </div>
+          </div>
+          <div style="margin-top: 30px;">
+            <h3>Jadwal Musim Ini</h3>
+            <table id="fixturesTable">
+              <thead>
+                <tr>
+                  <th>Minggu</th>
+                  <th>Lawan</th>
+                  <th>Tandang/Kandang</th>
+                  <th>Hasil</th>
+                </tr>
+              </thead>
+              <tbody id="fixturesBody">
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Transfers -->
+        <section id="transfers" class="game-section hidden">
+          <h2 class="section-title">Pasar Transfer</h2>
+          <div style="margin-bottom: 20px;">
+            <input type="text" id="scoutInput" placeholder="Cari pemain..." style="padding: 10px; width: 300px;">
+            <button class="btn btn-primary" onclick="scoutPlayers()">Scout</button>
+            <button class="btn btn-success" onclick="generateTransferList()">Refresh Pasar</button>
+          </div>
+          <div class="transfer-list" id="transferList">
+            <!-- Transfer targets will be loaded here -->
+          </div>
+        </section>
+
+        <!-- Youth Academy -->
+        <section id="youth" class="game-section hidden">
+          <h2 class="section-title">Akademi Pemuda</h2>
+          <div class="finance-card" style="margin-bottom: 20px;">
+            <h3>Level Akademi: <span id="youthLevel">1</span></h3>
+            <div class="progress-bar">
+              <div class="progress-fill" id="youthProgress" style="width: 0%"></div>
+            </div>
+            <button class="btn btn-primary" onclick="upgradeYouthAcademy()" style="margin-top: 10px;">
+              Upgrade (£<span id="youthUpgradeCost">10000</span>)
+            </button>
+          </div>
+          <h3>Calon Bintang</h3>
+          <div class="squad-grid" id="youthContainer">
+            <!-- Youth players will be loaded here -->
+          </div>
+          <button class="btn btn-success" onclick="recruitYouth()" style="margin-top: 20px; width: 100%; padding: 15px;">
+            Rekrut Pemuda Baru (£5000)
+          </button>
+        </section>
+
+        <!-- Finances -->
+        <section id="finances" class="game-section hidden">
+          <h2 class="section-title">Laporan Keuangan</h2>
+          <div class="finance-grid">
+            <div class="finance-card">
+              <h3>Saldo Saat Ini</h3>
+              <div class="finance-amount" id="currentBalance">£50,000</div>
+            </div>
+            <div class="finance-card">
+              <h3>Pendapatan per Minggu</h3>
+              <div class="finance-amount" id="weeklyIncome">£2,500</div>
+            </div>
+            <div class="finance-card">
+              <h3>Pengeluaran per Minggu</h3>
+              <div class="finance-amount finance-negative" id="weeklyExpense">£3,000</div>
+            </div>
+            <div class="finance-card">
+              <h3>Nilai Klub</h3>
+              <div class="finance-amount" id="clubValue">£150,000</div>
+            </div>
+          </div>
+          <div class="finance-card" style="margin-top: 20px;">
+            <h3>Sponsor & Komersial</h3>
+            <div id="sponsorsList">
+              <p>Sponsor Utama: <strong>Belum ada</strong></p>
+              <p>Kit Sponsor: <strong>Belum ada</strong></p>
+            </div>
+            <button class="btn btn-primary" onclick="negotiateSponsor()" style="margin-top: 10px;">Negosiasi Sponsor</button>
+          </div>
+        </section>
+
+        <!-- Facilities -->
+        <section id="facilities" class="game-section hidden">
+          <h2 class="section-title">Pengembangan Fasilitas</h2>
+          <div class="squad-grid">
+            <div class="finance-card">
+              <h3>🏟️ Stadion</h3>
+              <p>Kapasitas: <span id="stadiumCapacity">3,000</span></p>
+              <p>Kualitas: <span id="stadiumQuality">Standar</span></p>
+              <button class="btn btn-primary" onclick="upgradeStadium()">Upgrade (£25,000)</button>
+            </div>
+            <div class="finance-card">
+              <h3>🏋️ Pusat Latihan</h3>
+              <p>Level: <span id="trainingLevel">1</span></p>
+              <p>Efek: +5% perkembangan pemain</p>
+              <button class="btn btn-primary" onclick="upgradeTraining()">Upgrade (£20,000)</button>
+            </div>
+            <div class="finance-card">
+              <h3>🏥 Fasilitas Medis</h3>
+              <p>Level: <span id="medicalLevel">1</span></p>
+              <p>Efek: -10% cedera</p>
+              <button class="btn btn-primary" onclick="upgradeMedical()">Upgrade (£15,000)</button>
+            </div>
+            <div class="finance-card">
+              <h3>🔬 Analisis Data</h3>
+              <p>Level: <span id="analysisLevel">0</span></p>
+              <p>Efek: Scouting lebih akurat</p>
+              <button class="btn btn-primary" onclick="upgradeAnalysis()">Upgrade (£30,000)</button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- Player Modal -->
+  <div class="modal" id="playerModal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeModal()">&times;</span>
+      <div id="playerModalContent"></div>
+    </div>
+  </div>
+
   <script src="game.js"></script>
 </body>
 </html>
