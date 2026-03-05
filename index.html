@@ -1,3 +1,783 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Non-League Football Manager - Newton United FC</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #800000 0%, #4a0000 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+            border: 3px solid #fff;
+        }
+
+        .logo-container {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 5px solid #000;
+            overflow: hidden;
+        }
+
+        .logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .club-name {
+            font-size: 2.5em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .nickname {
+            font-size: 1.3em;
+            color: #ffd700;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        .stadium-info {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .division-badge {
+            display: inline-block;
+            background: #ffd700;
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .save-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #00ff88;
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: none;
+            z-index: 1000;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: #800000;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .nav-btn:hover {
+            background: #a00000;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(128,0,0,0.3);
+        }
+
+        .nav-btn.active {
+            background: #fff;
+            color: #800000;
+            border-color: #800000;
+        }
+
+        .panel {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .card-title {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #ffd700;
+            border-bottom: 2px solid #800000;
+            padding-bottom: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #800000 0%, #600000 100%);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid #fff;
+            transition: transform 0.3s;
+        }
+
+        .stat-box:hover {
+            transform: scale(1.05);
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .money-positive { color: #00ff88; }
+        .money-negative { color: #ff4757; }
+
+        .progress-container {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            height: 30px;
+            overflow: hidden;
+            margin: 10px 0;
+            border: 2px solid #fff;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ffd700 0%, #ffed4e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-weight: bold;
+            transition: width 0.5s ease;
+        }
+
+        .match-result {
+            background: linear-gradient(135deg, #2d3436 0%, #000000 100%);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+            border: 3px solid #800000;
+        }
+
+        .score-display {
+            font-size: 4em;
+            font-weight: bold;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .vs {
+            font-size: 1.5em;
+            color: #ffd700;
+            margin: 0 20px;
+        }
+
+        .team-name {
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .result-win { color: #00ff88; text-shadow: 0 0 10px #00ff88; }
+        .result-draw { color: #ffd700; text-shadow: 0 0 10px #ffd700; }
+        .result-loss { color: #ff4757; text-shadow: 0 0 10px #ff4757; }
+
+        .btn {
+            background: linear-gradient(135deg, #800000 0%, #600000 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin: 10px;
+            transition: all 0.3s;
+            border: 2px solid #fff;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(128,0,0,0.4);
+            background: linear-gradient(135deg, #a00000 0%, #800000 100%);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #fdcb6e 0%, #f39c12 100%);
+            color: #000;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff4757 0%, #ff6b81 100%);
+        }
+
+        .btn-tactic {
+            background: linear-gradient(135deg, #2d3436 0%, #636e72 100%);
+            padding: 10px 20px;
+            font-size: 0.9em;
+        }
+
+        .btn-tactic.active {
+            background: linear-gradient(135deg, #ffd700 0%, #f39c12 100%);
+            color: #000;
+        }
+
+        .league-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.85em;
+        }
+
+        .league-table th {
+            background: #800000;
+            padding: 10px 6px;
+            text-align: center;
+            border-bottom: 3px solid #ffd700;
+            font-weight: bold;
+            font-size: 0.8em;
+        }
+
+        .league-table td {
+            padding: 8px 6px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .league-table tr:hover {
+            background: rgba(128,0,0,0.2);
+        }
+
+        .league-table .highlight {
+            background: rgba(255,215,0,0.25) !important;
+            font-weight: bold;
+            border-left: 4px solid #ffd700;
+            border-right: 4px solid #ffd700;
+        }
+
+        .league-table .champion {
+            background: rgba(0,255,136,0.2) !important;
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        .league-table .promotion {
+            background: rgba(0,255,136,0.1) !important;
+            color: #00ff88;
+        }
+
+        .league-table .relegation {
+            background: rgba(255,71,87,0.15) !important;
+            color: #ff4757;
+        }
+
+        .form-w { 
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: #00ff88;
+            color: #000;
+            border-radius: 50%;
+            line-height: 20px;
+            font-size: 0.7em;
+            font-weight: bold;
+            margin: 0 1px;
+        }
+        .form-d { 
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: #ffd700;
+            color: #000;
+            border-radius: 50%;
+            line-height: 20px;
+            font-size: 0.7em;
+            font-weight: bold;
+            margin: 0 1px;
+        }
+        .form-l { 
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: #ff4757;
+            color: #fff;
+            border-radius: 50%;
+            line-height: 20px;
+            font-size: 0.7em;
+            font-weight: bold;
+            margin: 0 1px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            text-align: center;
+            border: 3px solid #800000;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        .modal h2 {
+            color: #ffd700;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .sponsor-amount {
+            font-size: 3em;
+            color: #00ff88;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .news-item {
+            background: rgba(128,0,0,0.2);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #ffd700;
+        }
+
+        .news-date {
+            font-size: 0.8em;
+            color: #888;
+            margin-bottom: 5px;
+        }
+
+        .upgrade-card {
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 2px solid #800000;
+        }
+
+        .upgrade-cost {
+            color: #ffd700;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .table-legend {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+            font-size: 0.9em;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .legend-box {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+        }
+
+        .squad-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .player-card {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #800000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .player-info {
+            flex: 1;
+        }
+
+        .player-name {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #fff;
+        }
+
+        .player-details {
+            font-size: 0.9em;
+            color: #aaa;
+            margin-top: 5px;
+        }
+
+        .player-rating {
+            background: #ffd700;
+            color: #000;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .position-gk { border-left: 4px solid #ff4757; }
+        .position-def { border-left: 4px solid #00ff88; }
+        .position-mid { border-left: 4px solid #ffd700; }
+        .position-fwd { border-left: 4px solid #74b9ff; }
+
+        .formation-display {
+            background: rgba(0,100,0,0.2);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+            border: 2px solid #00ff88;
+        }
+
+        .formation-title {
+            font-size: 2em;
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+
+        .formation-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .formation-stat {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .formation-stat-label {
+            font-size: 0.9em;
+            color: #aaa;
+        }
+
+        .formation-stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .tactics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .club-name { font-size: 1.8em; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .score-display { font-size: 2.5em; }
+            .league-table { font-size: 0.75em; }
+            .league-table th, .league-table td { padding: 4px 2px; }
+            .squad-grid { grid-template-columns: 1fr; }
+            .formation-stats { grid-template-columns: 1fr; }
+            .save-indicator { top: 10px; right: 10px; padding: 5px 10px; font-size: 0.8em; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .promotion-animation {
+            animation: pulse 2s infinite;
+            color: #00ff88;
+            font-size: 2em;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .champion-animation {
+            background: linear-gradient(45deg, #ffd700, #ffed4e, #ffd700);
+            background-size: 200% 200%;
+            animation: gradient 3s ease infinite;
+            color: #000;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 2em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .save-indicator.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="save-indicator" id="saveIndicator">💾 Game Saved!</div>
+    
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo-container">
+                <img src="1000587736.png" alt="Newton United FC Logo" id="clubLogo">
+            </div>
+            
+            <div class="club-name">Newton United FC</div>
+            <div class="nickname">"The Crimson Lions"</div>
+            <div class="stadium-info">
+                🏟️ <span id="stadiumName">Newton Borough Ground</span> | 
+                Capacity: <span id="capacity">3,000</span> | 
+                Division: <span id="currentLevel">8</span>
+                <div class="division-badge" id="divisionName">Division 8 - National League North/South</div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-tabs">
+            <button class="nav-btn active" onclick="showPanel('dashboard')">Dashboard</button>
+            <button class="nav-btn" onclick="showPanel('squad')">Squad</button>
+            <button class="nav-btn" onclick="showPanel('tactics')">Tactics</button>
+            <button class="nav-btn" onclick="showPanel('league')">League</button>
+            <button class="nav-btn" onclick="showPanel('finances')">Finances</button>
+            <button class="nav-btn" onclick="showPanel('stadium')">Stadium</button>
+            <button class="nav-btn" onclick="showPanel('history')">History</button>
+        </div>
+
+        <!-- Dashboard Panel -->
+        <div id="dashboard" class="panel active">
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-label">Weekly Income</div>
+                    <div class="stat-value money-positive">£25k</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Weekly Expenses</div>
+                    <div class="stat-value money-negative">£7k</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Balance</div>
+                    <div class="stat-value" id="balance">£50,000</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Matchday</div>
+                    <div class="stat-value" id="matchday">1/38</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">📊 Current Season Progress</div>
+                <div>League Position: <strong id="position">-</strong></div>
+                <div class="progress-container">
+                    <div class="progress-bar" id="seasonProgress" style="width: 0%">0%</div>
+                </div>
+                <div style="margin-top: 10px;">
+                    Played: <span id="played">0</span> | 
+                    Won: <span id="won" style="color: #00ff88">0</span> | 
+                    Drawn: <span id="drawn" style="color: #ffd700">0</span> | 
+                    Lost: <span id="lost" style="color: #ff4757">0</span>
+                </div>
+                <div style="margin-top: 10px; font-size: 1.2em;">
+                    Points: <strong id="points">0</strong> | 
+                    Goal Difference: <span id="gd">0</span>
+                </div>
+                <div style="margin-top: 10px; color: #ffd700;">
+                    Goals For: <span id="gf">0</span> | 
+                    Goals Against: <span id="ga">0</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">⚽ Current Formation</div>
+                <div class="formation-display">
+                    <div class="formation-title" id="currentFormation">4-4-2</div>
+                    <div style="color: #aaa; margin-bottom: 15px;">Click "Tactics" tab to change formation</div>
+                    <div class="formation-stats">
+                        <div class="formation-stat">
+                            <div class="formation-stat-label">Attack</div>
+                            <div class="formation-stat-value" id="formationAttack">70</div>
+                        </div>
+                        <div class="formation-stat">
+                            <div class="formation-stat-label">Midfield</div>
+                            <div class="formation-stat-value" id="formationMidfield">60</div>
+                        </div>
+                        <div class="formation-stat">
+                            <div class="formation-stat-label">Defense</div>
+                            <div class="formation-stat-value" id="formationDefense">70</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" id="nextMatchCard">
+                <div class="card-title">⚽ Next Match</div>
+                <div id="nextMatchInfo" style="font-size: 1.2em; margin-bottom: 20px;">
+                    vs <strong id="nextOpponent">TBD</strong>
+                </div>
+                <button class="btn btn-success" onclick="playMatch()" id="playMatchBtn">
+                    Play Match
+                </button>
+                <button class="btn btn-warning" onclick="simulateMatches()" id="simMatchesBtn">
+                    Simulate to Next Match
+                </button>
+            </div>
+
+            <div class="card" id="matchResultCard" style="display: none;">
+                <div class="card-title">🏆 Match Result</div>
+                <div class="match-result">
+                    <div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap;">
+                        <div class="team-name">Newton United</div>
+                        <div class="score-display">
+                            <span id="homeScore">0</span>
+                            <span class="vs">-</span>
+                            <span id="awayScore">0</span>
+                        </div>
+                        <div class="team-name" id="opponentName">Opponent</div>
+                    </div>
+                    <div id="matchResult" style="font-size: 1.5em; margin-top: 15px;"></div>
+                    <div id="matchDetails" style="margin-top: 10px; opacity: 0.8;"></div>
+                </div>
+                <button class="btn" onclick="nextMatch()" style="margin-top: 20px;">
+                    Next Match
+                </button>
+            </div>
+
+            <div class="card">
+                <div class="card-title">📰 Club News</div>
+                <div id="newsFeed">
+                    <div class="news-item">
+                        <div class="news-date">Matchday 1 - Season 1</div>
+                        <div>Welcome to Newton United FC! The Crimson Lions are ready to roar in Division 8!</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">💾 Game Data</div>
+                <button class="btn btn-danger" onclick="resetGame()">Reset Game (New Career)</button>
+                <p style="margin-top: 10px; font-size: 0.9em; opacity: 0.8;">
+                    Game saves automatically after every match. Close and reopen browser anytime to continue.
+                </p>
+            </div>
+        </div>
+
+        <!-- Squad Panel -->
+        <div id="squad" class="panel">
+            <div class="card">
+                <div class="card-title">👥 Squad Overview</div>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-label">Squad Size</div>
+                        <div class="stat-value" id="squadSize">22</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Average Age</div>
+                        <div class="stat-value">24.5</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Avg Rating</div>
+                        <div class="stat-value" id="avgRating">62
                     </div>
                     <div class="stat-box">
                         <div class="stat-label">Team Chemistry</div>
@@ -216,15 +996,15 @@
                 <div class="stats-grid">
                     <div class="stat-box">
                         <div class="stat-label">Current Capacity</div>
-                        <div class="stat-value" id="currentCapacity">3,000</div>
+                        <div class="stat-value" id="currentCapacity">7,000</div>
                     </div>
                     <div class="stat-box">
                         <div class="stat-label">Condition</div>
-                        <div class="stat-value" id="stadiumCondition">75%</div>
+                        <div class="stat-value" id="stadiumCondition">85%</div>
                     </div>
                     <div class="stat-box">
                         <div class="stat-label">Avg Attendance</div>
-                        <div class="stat-value" id="avgAttendance">2,400</div>
+                        <div class="stat-value" id="avgAttendance">2,000</div>
                     </div>
                 </div>
             </div>
@@ -333,38 +1113,38 @@
 
         // Formation database
         const formations = {
-            '4-4-2': { name: '4-4-2', attack: 70, midfield: 60, defense: 70, description: 'Classic Balance' },
-            '4-3-3': { name: '4-3-3', attack: 85, midfield: 65, defense: 60, description: 'Attacking' },
-            '4-2-3-1': { name: '4-2-3-1', attack: 75, midfield: 75, defense: 65, description: 'Modern Control' },
-            '3-5-2': { name: '3-5-2', attack: 70, midfield: 80, defense: 60, description: 'Wing Play' },
-            '5-3-2': { name: '5-3-2', attack: 55, midfield: 60, defense: 85, description: 'Defensive' },
-            '3-4-3': { name: '3-4-3', attack: 90, midfield: 70, defense: 50, description: 'All Out Attack' }
+            '4-4-2': { name: '4-4-2', attack: 70, midfield: 70, defense: 70, description: 'Classic Balance' },
+            '4-3-3': { name: '4-3-3', attack: 85, midfield: 75, defense: 70, description: 'Attacking' },
+            '4-2-3-1': { name: '4-2-3-1', attack: 75, midfield: 75, defense: 75, description: 'Modern Control' },
+            '3-5-2': { name: '3-5-2', attack: 75, midfield: 80, defense: 70, description: 'Wing Play' },
+            '5-3-2': { name: '5-3-2', attack: 75, midfield: 70, defense: 85, description: 'Defensive' },
+            '3-4-3': { name: '3-4-3', attack: 90, midfield: 80, defense: 70, description: 'All Out Attack' }
         };
 
         // Complete 22-player squad
         const fullSquad = [
-            { name: "James Harrison", pos: "GK", rating: 68, age: 28 },
-            { name: "Michael Brown", pos: "GK", rating: 62, age: 24 },
-            { name: "David Wilson", pos: "GK", rating: 58, age: 21 },
-            { name: "Robert Clarke", pos: "DEF", rating: 66, age: 29 },
-            { name: "Thomas Wright", pos: "DEF", rating: 65, age: 26 },
-            { name: "William Parker", pos: "DEF", rating: 64, age: 25 },
-            { name: "Richard Taylor", pos: "DEF", rating: 63, age: 27 },
-            { name: "Joseph Evans", pos: "DEF", rating: 62, age: 23 },
-            { name: "Charles Morgan", pos: "DEF", rating: 61, age: 22 },
-            { name: "Daniel Phillips", pos: "DEF", rating: 60, age: 24 },
-            { name: "Matthew Jenkins", pos: "DEF", rating: 59, age: 20 },
-            { name: "Andrew Thompson", pos: "MID", rating: 69, age: 28 },
-            { name: "Christopher Lee", pos: "MID", rating: 67, age: 26 },
-            { name: "Stephen White", pos: "MID", rating: 65, age: 25 },
-            { name: "Kevin Harris", pos: "MID", rating: 64, age: 24 },
-            { name: "Brian Martin", pos: "MID", rating: 62, age: 27 },
-            { name: "Edward Clark", pos: "MID", rating: 61, age: 22 },
-            { name: "George Lewis", pos: "MID", rating: 60, age: 21 },
-            { name: "Anthony Walker", pos: "FWD", rating: 70, age: 29 },
-            { name: "Paul Hall", pos: "FWD", rating: 68, age: 26 },
-            { name: "Mark Young", pos: "FWD", rating: 65, age: 24 },
-            { name: "Steven Allen", pos: "FWD", rating: 63, age: 22 }
+            { name: "James Harrison", pos: "GK", rating: 78, age: 25 },
+            { name: "Michael Brown", pos: "GK", rating: 72, age: 24 },
+            { name: "David Wilson", pos: "GK", rating: 70, age: 21 },
+            { name: "Robert Clarke", pos: "DEF", rating: 75, age: 25 },
+            { name: "Thomas Wright", pos: "DEF", rating: 75, age: 26 },
+            { name: "William Parker", pos: "DEF", rating: 74, age: 25 },
+            { name: "Richard Taylor", pos: "DEF", rating: 73, age: 26 },
+            { name: "Joseph Evans", pos: "DEF", rating: 72, age: 23 },
+            { name: "Charles Morgan", pos: "DEF", rating: 71, age: 22 },
+            { name: "Daniel Phillips", pos: "DEF", rating: 70, age: 24 },
+            { name: "Matthew Jenkins", pos: "DEF", rating: 71, age: 20 },
+            { name: "Andrew Thompson", pos: "MID", rating: 70, age: 26 },
+            { name: "Christopher Lee", pos: "MID", rating: 72, age: 26 },
+            { name: "Stephen White", pos: "MID", rating: 75, age: 25 },
+            { name: "Kevin Harris", pos: "MID", rating: 74, age: 24 },
+            { name: "Brian Martin", pos: "MID", rating: 72, age: 25 },
+            { name: "Edward Clark", pos: "MID", rating: 71, age: 22 },
+            { name: "George Lewis", pos: "MID", rating: 70, age: 21 },
+            { name: "Anthony Walker", pos: "FWD", rating: 70, age: 26 },
+            { name: "Paul Hall", pos: "FWD", rating: 73, age: 26 },
+            { name: "Mark Young", pos: "FWD", rating: 74, age: 24 },
+            { name: "Steven Allen", pos: "FWD", rating: 73, age: 22 }
         ];
 
         // Default game state
@@ -395,12 +1175,12 @@
         };
 
         const divisions = {
-            8: { name: "Division 8", full: "Northern Premier League Division One", isLowest: true },
-            7: { name: "Division 7", full: "Northern Premier League", isLowest: false },
-            6: { name: "Division 6", full: "National League North", isLowest: false },
+            8: { name: "Division 8", full: "Northern/Southern Premier League Division One", isLowest: true },
+            7: { name: "Division 7", full: "Northern/Southern Premier League", isLowest: false },
+            6: { name: "Division 6", full: "National League North/South", isLowest: false },
             5: { name: "Division 5", full: "National League", isLowest: false },
             4: { name: "Division 4", full: "League Two", isLowest: false },
-            3: { name: "Division 3", full: "League one", isLowest: false },
+            3: { name: "Division 3", full: "League One", isLowest: false },
             2: { name: "Division 2", full: "Championship", isLowest: false },
             1: { name: "Division 1", full: "Premier League", isLowest: false }
         };
@@ -1267,4 +2047,4 @@
         window.onload = initGame;
     </script>
 </body>
-</html>
+</html>se
