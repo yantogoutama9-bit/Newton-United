@@ -1,804 +1,1926 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Newton United FC - Football Manager Ultra</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-      color: #fff;
-      min-height: 100vh;
-    }
-    
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    
-    header {
-      background: linear-gradient(90deg, #800000 0%, #4a0000 100%);
-      padding: 20px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    }
-    
-    .club-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    
-    .club-info h1 {
-      font-size: 2.5em;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-    }
-    
-    .club-badge {
-      width: 80px;
-      height: 80px;
-      background: #fff;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2em;
-      color: #800000;
-      font-weight: bold;
-    }
-    
-    .stats-bar {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 15px;
-      margin-top: 15px;
-    }
-    
-    .stat-box {
-      background: rgba(255,255,255,0.1);
-      padding: 10px;
-      border-radius: 8px;
-      text-align: center;
-    }
-    
-    .stat-label {
-      font-size: 0.8em;
-      opacity: 0.8;
-    }
-    
-    .stat-value {
-      font-size: 1.3em;
-      font-weight: bold;
-      color: #ffd700;
-    }
-    
-    .main-content {
-      display: grid;
-      grid-template-columns: 250px 1fr;
-      gap: 20px;
-    }
-    
-    .sidebar {
-      background: rgba(255,255,255,0.05);
-      border-radius: 10px;
-      padding: 20px;
-    }
-    
-    .nav-menu {
-      list-style: none;
-    }
-    
-    .nav-menu li {
-      margin-bottom: 10px;
-    }
-    
-    .nav-menu button {
-      width: 100%;
-      padding: 12px;
-      background: linear-gradient(90deg, #800000 0%, #600000 100%);
-      border: none;
-      color: #fff;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 1em;
-      transition: all 0.3s;
-    }
-    
-    .nav-menu button:hover {
-      transform: translateX(5px);
-      box-shadow: 0 2px 10px rgba(128,0,0,0.5);
-    }
-    
-    .nav-menu button.active {
-      background: linear-gradient(90deg, #ffd700 0%, #ffed4e 100%);
-      color: #000;
-    }
-    
-    .content-area {
-      background: rgba(255,255,255,0.05);
-      border-radius: 10px;
-      padding: 20px;
-      min-height: 600px;
-    }
-    
-    .section-title {
-      font-size: 1.8em;
-      margin-bottom: 20px;
-      color: #ffd700;
-      border-bottom: 2px solid #800000;
-      padding-bottom: 10px;
-    }
-    
-    .hidden {
-      display: none;
-    }
-    
-    /* Squad Styles */
-    .squad-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 15px;
-    }
-    
-    .player-card {
-      background: linear-gradient(135deg, #2d2d44 0%, #1a1a2e 100%);
-      border-radius: 10px;
-      padding: 15px;
-      border: 2px solid #800000;
-      transition: transform 0.3s;
-    }
-    
-    .player-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 5px 20px rgba(128,0,0,0.5);
-    }
-    
-    .player-name {
-      font-weight: bold;
-      font-size: 1.1em;
-      color: #ffd700;
-    }
-    
-    .player-position {
-      color: #aaa;
-      font-size: 0.9em;
-    }
-    
-    .player-rating {
-      font-size: 2em;
-      color: #00ff88;
-      text-align: center;
-      margin: 10px 0;
-    }
-    
-    .player-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5px;
-      font-size: 0.8em;
-    }
-    
-    /* Match Styles */
-    .match-container {
-      background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
-      border-radius: 15px;
-      padding: 30px;
-      text-align: center;
-    }
-    
-    .scoreboard {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 30px;
-      margin: 30px 0;
-    }
-    
-    .team-display {
-      text-align: center;
-    }
-    
-    .team-name {
-      font-size: 1.5em;
-      font-weight: bold;
-    }
-    
-    .score {
-      font-size: 4em;
-      font-weight: bold;
-      color: #ffd700;
-      min-width: 100px;
-    }
-    
-    .match-time {
-      font-size: 1.2em;
-      color: #00ff88;
-      margin: 20px 0;
-    }
-    
-    .match-events {
-      background: rgba(0,0,0,0.3);
-      border-radius: 10px;
-      padding: 20px;
-      max-height: 300px;
-      overflow-y: auto;
-      text-align: left;
-    }
-    
-    .event {
-      padding: 8px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-    
-    .event-time {
-      color: #ffd700;
-      font-weight: bold;
-    }
-    
-    /* Tactics Styles */
-    .pitch {
-      background: linear-gradient(90deg, #2d5a27 0%, #3d7a37 50%, #2d5a27 100%);
-      border-radius: 10px;
-      padding: 40px;
-      position: relative;
-      min-height: 500px;
-      margin-bottom: 20px;
-    }
-    
-    .formation-display {
-      display: grid;
-      grid-template-rows: repeat(4, 1fr);
-      gap: 20px;
-      height: 100%;
-    }
-    
-    .position-row {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-    }
-    
-    .position-slot {
-      width: 80px;
-      height: 80px;
-      background: rgba(255,255,255,0.9);
-      border-radius: 50%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-    
-    .position-slot:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 20px rgba(255,215,0,0.5);
-    }
-    
-    .position-slot.filled {
-      background: #ffd700;
-    }
-    
-    /* Transfer Styles */
-    .transfer-list {
-      display: grid;
-      gap: 10px;
-    }
-    
-    .transfer-item {
-      background: rgba(255,255,255,0.1);
-      padding: 15px;
-      border-radius: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    
-    .transfer-info h4 {
-      color: #ffd700;
-    }
-    
-    .transfer-price {
-      font-size: 1.2em;
-      color: #00ff88;
-    }
-    
-    .btn {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: all 0.3s;
-    }
-    
-    .btn-primary {
-      background: #800000;
-      color: #fff;
-    }
-    
-    .btn-success {
-      background: #00ff88;
-      color: #000;
-    }
-    
-    .btn-danger {
-      background: #ff4444;
-      color: #fff;
-    }
-    
-    .btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-    }
-    
-    /* Finance Styles */
-    .finance-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-    }
-    
-    .finance-card {
-      background: rgba(255,255,255,0.1);
-      padding: 20px;
-      border-radius: 10px;
-    }
-    
-    .finance-amount {
-      font-size: 2em;
-      color: #00ff88;
-    }
-    
-    .finance-negative {
-      color: #ff4444;
-    }
-    
-    /* Youth Academy */
-    .youth-player {
-      background: rgba(255,215,0,0.1);
-      border: 1px solid #ffd700;
-    }
-    
-    .potential-bar {
-      background: #333;
-      height: 10px;
-      border-radius: 5px;
-      overflow: hidden;
-      margin-top: 5px;
-    }
-    
-    .potential-fill {
-      background: linear-gradient(90deg, #ffd700, #ff6b6b);
-      height: 100%;
-      transition: width 0.3s;
-    }
-    
-    /* Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.8);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-    }
-    
-    .modal-content {
-      background: #1a1a2e;
-      padding: 30px;
-      border-radius: 15px;
-      max-width: 600px;
-      width: 90%;
-      max-height: 80vh;
-      overflow-y: auto;
-    }
-    
-    .close-modal {
-      float: right;
-      font-size: 1.5em;
-      cursor: pointer;
-      color: #ff4444;
-    }
-    
-    /* Tables */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    
-    th, td {
-      padding: 12px;
-      text-align: left;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-    
-    th {
-      background: #800000;
-      color: #fff;
-    }
-    
-    tr:hover {
-      background: rgba(255,255,255,0.05);
-    }
-    
-    .start-screen {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, #800000 0%, #1a1a2e 100%);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 2000;
-    }
-    
-    .start-screen h1 {
-      font-size: 4em;
-      margin-bottom: 20px;
-      text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
-    }
-    
-    .start-btn {
-      padding: 20px 60px;
-      font-size: 1.5em;
-      background: #ffd700;
-      color: #000;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: all 0.3s;
-    }
-    
-    .start-btn:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 30px rgba(255,215,0,0.5);
-    }
-    
-    .notification {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: #800000;
-      color: #fff;
-      padding: 15px 25px;
-      border-radius: 8px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-      z-index: 3000;
-      animation: slideIn 0.3s ease;
-    }
-    
-    @keyframes slideIn {
-      from { transform: translateX(400px); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
-    
-    .progress-bar {
-      background: #333;
-      height: 20px;
-      border-radius: 10px;
-      overflow: hidden;
-      margin: 10px 0;
-    }
-    
-    .progress-fill {
-      background: linear-gradient(90deg, #800000, #ffd700);
-      height: 100%;
-      transition: width 0.5s;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Non-League Football Manager - Newton United FC</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #800000 0%, #4a0000 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+            border: 3px solid #fff;
+        }
+
+        .logo-container {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 5px solid #000;
+            overflow: hidden;
+        }
+
+        .logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .club-name {
+            font-size: 2.5em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .nickname {
+            font-size: 1.3em;
+            color: #ffd700;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        .stadium-info {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .division-badge {
+            display: inline-block;
+            background: #ffd700;
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: #800000;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .nav-btn:hover {
+            background: #a00000;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(128,0,0,0.3);
+        }
+
+        .nav-btn.active {
+            background: #fff;
+            color: #800000;
+            border-color: #800000;
+        }
+
+        .panel {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .card-title {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #ffd700;
+            border-bottom: 2px solid #800000;
+            padding-bottom: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #800000 0%, #600000 100%);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid #fff;
+            transition: transform 0.3s;
+        }
+
+        .stat-box:hover {
+            transform: scale(1.05);
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .money-positive { color: #00ff88; }
+        .money-negative { color: #ff4757; }
+
+        .progress-container {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            height: 30px;
+            overflow: hidden;
+            margin: 10px 0;
+            border: 2px solid #fff;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ffd700 0%, #ffed4e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-weight: bold;
+            transition: width 0.5s ease;
+        }
+
+        .match-result {
+            background: linear-gradient(135deg, #2d3436 0%, #000000 100%);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+            border: 3px solid #800000;
+        }
+
+        .score-display {
+            font-size: 4em;
+            font-weight: bold;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .vs {
+            font-size: 1.5em;
+            color: #ffd700;
+            margin: 0 20px;
+        }
+
+        .team-name {
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .result-win { color: #00ff88; text-shadow: 0 0 10px #00ff88; }
+        .result-draw { color: #ffd700; text-shadow: 0 0 10px #ffd700; }
+        .result-loss { color: #ff4757; text-shadow: 0 0 10px #ff4757; }
+
+        .btn {
+            background: linear-gradient(135deg, #800000 0%, #600000 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin: 10px;
+            transition: all 0.3s;
+            border: 2px solid #fff;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(128,0,0,0.4);
+            background: linear-gradient(135deg, #a00000 0%, #800000 100%);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #fdcb6e 0%, #f39c12 100%);
+            color: #000;
+        }
+
+        .btn-tactic {
+            background: linear-gradient(135deg, #2d3436 0%, #636e72 100%);
+            padding: 10px 20px;
+            font-size: 0.9em;
+        }
+
+        .btn-tactic.active {
+            background: linear-gradient(135deg, #ffd700 0%, #f39c12 100%);
+            color: #000;
+        }
+
+        .league-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.85em;
+        }
+
+        .league-table th {
+            background: #800000;
+            padding: 10px 6px;
+            text-align: center;
+            border-bottom: 3px solid #ffd700;
+            font-weight: bold;
+            font-size: 0.8em;
+        }
+
+        .league-table td {
+            padding: 8px 6px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .league-table tr:hover {
+            background: rgba(128,0,0,0.2);
+        }
+
+        .league-table .highlight {
+            background: rgba(255,215,0,0.25) !important;
+            font-weight: bold;
+            border-left: 4px solid #ffd700;
+            border-right: 4px solid #ffd700;
+        }
+
+        .league-table .champion {
+            background: rgba(0,255,136,0.2) !important;
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        .league-table .promotion {
+            background: rgba(0,255,136,0.1) !important;
+            color: #00ff88;
+        }
+
+        .league-table .relegation {
+            background: rgba(255,71,87,0.15) !important;
+            color: #ff4757;
+        }
+
+        .form-w { 
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: #00ff88;
+            color: #000;
+            border-radius: 50%;
+            line-height: 20px;
+            font-size: 0.7em;
+            font-weight: bold;
+            margin: 0 1px;
+        }
+        .form-d { 
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: #ffd700;
+            color: #000;
+            border-radius: 50%;
+            line-height: 20px;
+            font-size: 0.7em;
+            font-weight: bold;
+            margin: 0 1px;
+        }
+        .form-l { 
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: #ff4757;
+            color: #fff;
+            border-radius: 50%;
+            line-height: 20px;
+            font-size: 0.7em;
+            font-weight: bold;
+            margin: 0 1px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            text-align: center;
+            border: 3px solid #800000;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        .modal h2 {
+            color: #ffd700;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .sponsor-amount {
+            font-size: 3em;
+            color: #00ff88;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .news-item {
+            background: rgba(128,0,0,0.2);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #ffd700;
+        }
+
+        .news-date {
+            font-size: 0.8em;
+            color: #888;
+            margin-bottom: 5px;
+        }
+
+        .upgrade-card {
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 2px solid #800000;
+        }
+
+        .upgrade-cost {
+            color: #ffd700;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .table-legend {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+            font-size: 0.9em;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .legend-box {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+        }
+
+        /* Squad Styles */
+        .squad-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .player-card {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #800000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .player-info {
+            flex: 1;
+        }
+
+        .player-name {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #fff;
+        }
+
+        .player-details {
+            font-size: 0.9em;
+            color: #aaa;
+            margin-top: 5px;
+        }
+
+        .player-rating {
+            background: #ffd700;
+            color: #000;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .position-gk { border-left: 4px solid #ff4757; }
+        .position-def { border-left: 4px solid #00ff88; }
+        .position-mid { border-left: 4px solid #ffd700; }
+        .position-fwd { border-left: 4px solid #74b9ff; }
+
+        .formation-display {
+            background: rgba(0,100,0,0.2);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+            border: 2px solid #00ff88;
+        }
+
+        .formation-title {
+            font-size: 2em;
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+
+        .formation-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .formation-stat {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .formation-stat-label {
+            font-size: 0.9em;
+            color: #aaa;
+        }
+
+        .formation-stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .tactics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .club-name { font-size: 1.8em; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .score-display { font-size: 2.5em; }
+            .league-table { font-size: 0.75em; }
+            .league-table th, .league-table td { padding: 4px 2px; }
+            .squad-grid { grid-template-columns: 1fr; }
+            .formation-stats { grid-template-columns: 1fr; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .promotion-animation {
+            animation: pulse 2s infinite;
+            color: #00ff88;
+            font-size: 2em;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .champion-animation {
+            background: linear-gradient(45deg, #ffd700, #ffed4e, #ffd700);
+            background-size: 200% 200%;
+            animation: gradient 3s ease infinite;
+            color: #000;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 2em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
 </head>
 <body>
-  <div class="start-screen" id="startScreen">
-    <h1>⚽ Newton United FC</h1>
-    <p style="font-size: 1.5em; margin-bottom: 30px;">Football Manager Ultra</p>
-    <button class="start-btn" onclick="startGame()">Mulai Karir</button>
-  </div>
-
-  <div class="container" id="mainGame" style="display: none;">
-    <header>
-      <div class="club-header">
-        <div class="club-info">
-          <h1>⚽ Newton United FC</h1>
-          <p>The Newtonians | Level <span id="clubLevel">8</span></p>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo-container">
+                <img src="1000587736.png" alt="Newton United FC Logo" id="clubLogo">
+            </div>
+            
+            <div class="club-name">Newton United FC</div>
+            <div class="nickname">"The Crimson Lions"</div>
+            <div class="stadium-info">
+                🏟️ <span id="stadiumName">Newton Borough Ground</span> | 
+                Capacity: <span id="capacity">3,000</span> | 
+                Division: <span id="currentLevel">8</span>
+                <div class="division-badge" id="divisionName">Division 8 - National League North/South</div>
+            </div>
         </div>
-        <div class="club-badge">NU</div>
-      </div>
-      <div class="stats-bar">
-        <div class="stat-box">
-          <div class="stat-label">Uang</div>
-          <div class="stat-value" id="moneyDisplay">£50K</div>
+
+        <!-- Navigation -->
+        <div class="nav-tabs">
+            <button class="nav-btn active" onclick="showPanel('dashboard')">Dashboard</button>
+            <button class="nav-btn" onclick="showPanel('squad')">Squad</button>
+            <button class="nav-btn" onclick="showPanel('tactics')">Tactics</button>
+            <button class="nav-btn" onclick="showPanel('league')">League</button>
+            <button class="nav-btn" onclick="showPanel('finances')">Finances</button>
+            <button class="nav-btn" onclick="showPanel('stadium')">Stadium</button>
+            <button class="nav-btn" onclick="showPanel('history')">History</button>
         </div>
-        <div class="stat-box">
-          <div class="stat-label">Minggu</div>
-          <div class="stat-value" id="weekDisplay">1</div>
+
+        <!-- Dashboard Panel -->
+        <div id="dashboard" class="panel active">
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-label">Weekly Income</div>
+                    <div class="stat-value money-positive">£25k</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Weekly Expenses</div>
+                    <div class="stat-value money-negative">£7k</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Balance</div>
+                    <div class="stat-value" id="balance">£50,000</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Matchday</div>
+                    <div class="stat-value" id="matchday">1/38</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">📊 Current Season Progress</div>
+                <div>League Position: <strong id="position">-</strong></div>
+                <div class="progress-container">
+                    <div class="progress-bar" id="seasonProgress" style="width: 0%">0%</div>
+                </div>
+                <div style="margin-top: 10px;">
+                    Played: <span id="played">0</span> | 
+                    Won: <span id="won" style="color: #00ff88">0</span> | 
+                    Drawn: <span id="drawn" style="color: #ffd700">0</span> | 
+                    Lost: <span id="lost" style="color: #ff4757">0</span>
+                </div>
+                <div style="margin-top: 10px; font-size: 1.2em;">
+                    Points: <strong id="points">0</strong> | 
+                    Goal Difference: <span id="gd">0</span>
+                </div>
+                <div style="margin-top: 10px; color: #ffd700;">
+                    Goals For: <span id="gf">0</span> | 
+                    Goals Against: <span id="ga">0</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">⚽ Current Formation</div>
+                <div class="formation-display">
+                    <div class="formation-title" id="currentFormation">4-4-2</div>
+                    <div style="color: #aaa; margin-bottom: 15px;">Click "Tactics" tab to change formation</div>
+                    <div class="formation-stats">
+                        <div class="formation-stat">
+                            <div class="formation-stat-label">Attack</div>
+                            <div class="formation-stat-value" id="formationAttack">70</div>
+                        </div>
+                        <div class="formation-stat">
+                            <div class="formation-stat-label">Midfield</div>
+                            <div class="formation-stat-value" id="formationMidfield">60</div>
+                        </div>
+                        <div class="formation-stat">
+                            <div class="formation-stat-label">Defense</div>
+                            <div class="formation-stat-value" id="formationDefense">70</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" id="nextMatchCard">
+                <div class="card-title">⚽ Next Match</div>
+                <div id="nextMatchInfo" style="font-size: 1.2em; margin-bottom: 20px;">
+                    vs <strong id="nextOpponent">TBD</strong>
+                </div>
+                <button class="btn btn-success" onclick="playMatch()" id="playMatchBtn">
+                    Play Match
+                </button>
+                <button class="btn btn-warning" onclick="simulateMatches()" id="simMatchesBtn">
+                    Simulate 5 Matches
+                </button>
+            </div>
+
+            <div class="card" id="matchResultCard" style="display: none;">
+                <div class="card-title">🏆 Match Result</div>
+                <div class="match-result">
+                    <div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap;">
+                        <div class="team-name">Newton United</div>
+                        <div class="score-display">
+                            <span id="homeScore">0</span>
+                            <span class="vs">-</span>
+                            <span id="awayScore">0</span>
+                        </div>
+                        <div class="team-name" id="opponentName">Opponent</div>
+                    </div>
+                    <div id="matchResult" style="font-size: 1.5em; margin-top: 15px;"></div>
+                    <div id="matchDetails" style="margin-top: 10px; opacity: 0.8;"></div>
+                </div>
+                <button class="btn" onclick="nextMatch()" style="margin-top: 20px;">
+                    Next Match
+                </button>
+            </div>
+
+            <div class="card">
+                <div class="card-title">📰 Club News</div>
+                <div id="newsFeed">
+                    <div class="news-item">
+                        <div class="news-date">Matchday 1 - Season 1</div>
+                        <div>Welcome to Newton United FC! The Crimson Lions are ready to roar in Division 8!</div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="stat-box">
-          <div class="stat-label">Musim</div>
-          <div class="stat-value" id="seasonDisplay">2024/25</div>
+
+        <!-- Squad Panel -->
+        <div id="squad" class="panel">
+            <div class="card">
+                <div class="card-title">👥 Squad Overview</div>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-label">Squad Size</div>
+                        <div class="stat-value" id="squadSize">22</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Average Age</div>
+                        <div class="stat-value">24.5</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Avg Rating</div>
+                        <div class="stat-value" id="avgRating">62</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Team Chemistry</div>
+                        <div class="stat-value" id="chemistry">75%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">🥅 Goalkeepers (3)</div>
+                <div class="squad-grid" id="gkList"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">🛡️ Defenders (8)</div>
+                <div class="squad-grid" id="defList"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">⚡ Midfielders (7)</div>
+                <div class="squad-grid" id="midList"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">🎯 Forwards (4)</div>
+                <div class="squad-grid" id="fwdList"></div>
+            </div>
         </div>
-        <div class="stat-box">
-          <div class="stat-label">Reputasi</div>
-          <div class="stat-value" id="reputationDisplay">⭐</div>
+
+        <!-- Tactics Panel -->
+        <div id="tactics" class="panel">
+            <div class="card">
+                <div class="card-title">⚽ Formation & Tactics</div>
+                
+                <div class="formation-display">
+                    <div class="formation-title" id="tacticsFormation">4-4-2</div>
+                    <div class="formation-stats">
+                        <div class="formation-stat">
+                            <div class="formation-stat-label">Attack</div>
+                            <div class="formation-stat-value" id="tacticsAttack">70</div>
+                        </div>
+                        <div class="formation-stat">
+                            <div class="formation-stat-label">Midfield</div>
+                            <div class="formation-stat-value" id="tacticsMidfield">60</div>
+                        </div>
+                        <div class="formation-stat">
+                            <div class="formation-stat-label">Defense</div>
+                            <div class="formation-stat-value" id="tacticsDefense">70</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="color: #ffd700; margin: 20px 0;">Select Formation:</h3>
+                <div class="tactics-grid">
+                    <button class="btn btn-tactic active" onclick="setFormation('4-4-2')" id="btn-4-4-2">
+                        4-4-2<br>
+                        <small>Classic Balance</small>
+                    </button>
+                    <button class="btn btn-tactic" onclick="setFormation('4-3-3')" id="btn-4-3-3">
+                        4-3-3<br>
+                        <small>Attacking</small>
+                    </button>
+                    <button class="btn btn-tactic" onclick="setFormation('4-2-3-1')" id="btn-4-2-3-1">
+                        4-2-3-1<br>
+                        <small>Modern Control</small>
+                    </button>
+                    <button class="btn btn-tactic" onclick="setFormation('3-5-2')" id="btn-3-5-2">
+                        3-5-2<br>
+                        <small>Wing Play</small>
+                    </button>
+                    <button class="btn btn-tactic" onclick="setFormation('5-3-2')" id="btn-5-3-2">
+                        5-3-2<br>
+                        <small>Defensive</small>
+                    </button>
+                    <button class="btn btn-tactic" onclick="setFormation('3-4-3')" id="btn-3-4-3">
+                        3-4-3<br>
+                        <small>All Out Attack</small>
+                    </button>
+                </div>
+
+                <div style="margin-top: 30px; padding: 20px; background: rgba(128,0,0,0.2); border-radius: 10px;">
+                    <h4 style="color: #ffd700; margin-bottom: 15px;">Formation Guide:</h4>
+                    <ul style="list-style: none; line-height: 2;">
+                        <li><strong>4-4-2:</strong> Keseimbangan sempurna antara serang dan bertahan</li>
+                        <li><strong>4-3-3:</strong> Fokus menyerang melalui sayap</li>
+                        <li><strong>4-2-3-1:</strong> Kontrol midfield dengan playmaker</li>
+                        <li><strong>3-5-2:</strong> Dominasi midfield dengan wing-back</li>
+                        <li><strong>5-3-2:</strong> Bertahan solid dengan counter attack</li>
+                        <li><strong>3-4-3:</strong> Serangan maksimal, bertahan minimal</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">💪 Training Focus</div>
+                <p>Current focus: <strong id="trainingFocusDisplay">Balanced</strong></p>
+                <div style="margin-top: 15px;">
+                    <button class="btn" onclick="setTraining('attack')">Focus Attack</button>
+                    <button class="btn" onclick="setTraining('defense')">Focus Defense</button>
+                    <button class="btn" onclick="setTraining('balanced')">Balanced</button>
+                    <button class="btn" onclick="setTraining('fitness')">Fitness & Speed</button>
+                    <button class="btn" onclick="setTraining('tactical')">Tactical Awareness</button>
+                </div>
+            </div>
         </div>
-        <div class="stat-box">
-          <div class="stat-label">Fans</div>
-          <div class="stat-value" id="fansDisplay">1.2K</div>
+
+        <!-- League Panel -->
+        <div id="league" class="panel">
+            <div class="card">
+                <div class="card-title">🏆 <span id="leagueName">Division 8</span> Standings (20 Teams)</div>
+                <div style="overflow-x: auto;">
+                    <table class="league-table">
+                        <thead>
+                            <tr>
+                                <th>Pos</th>
+                                <th>Team</th>
+                                <th>P</th>
+                                <th>W</th>
+                                <th>D</th>
+                                <th>L</th>
+                                <th>GF</th>
+                                <th>GA</th>
+                                <th>GD</th>
+                                <th>Pts</th>
+                                <th>Form</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leagueTableBody"></tbody>
+                    </table>
+                </div>
+                
+                <div class="table-legend">
+                    <div class="legend-item">
+                        <div class="legend-box" style="background: rgba(255,215,0,0.25); border: 2px solid #ffd700;"></div>
+                        <span>Your Team</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-box" style="background: rgba(0,255,136,0.2);"></div>
+                        <span style="color: #00ff88;">Champion (Auto Promote)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-box" style="background: rgba(0,255,136,0.1);"></div>
+                        <span style="color: #00ff88;">Promotion Playoff (AI)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-box" style="background: rgba(255,71,87,0.15);"></div>
+                        <span style="color: #ff4757;">Relegation Zone</span>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px; padding: 15px; background: rgba(0,255,136,0.1); border-radius: 8px; border-left: 4px solid #00ff88;">
+                    <strong>Promotion:</strong> Juara 1 otomatis promosi. Posisi 2-4 playoff (AI only).
+                </div>
+                <div style="margin-top: 10px; padding: 15px; background: rgba(255,71,87,0.1); border-radius: 8px; border-left: 4px solid #ff4757;">
+                    <strong>Relegation:</strong> Posisi 19-20 degradasi ke divisi bawah (kecuali Divisi 8).
+                </div>
+            </div>
         </div>
-      </div>
-    </header>
 
-    <div class="main-content">
-      <aside class="sidebar">
-        <ul class="nav-menu">
-          <li><button onclick="showSection('dashboard')" class="active" id="nav-dashboard">📊 Dashboard</button></li>
-          <li><button onclick="showSection('squad')" id="nav-squad">👥 Skuat</button></li>
-          <li><button onclick="showSection('tactics')" id="nav-tactics">📋 Taktik</button></li>
-          <li><button onclick="showSection('matches')" id="nav-matches">🏆 Pertandingan</button></li>
-          <li><button onclick="showSection('transfers')" id="nav-transfers">💰 Transfer</button></li>
-          <li><button onclick="showSection('youth')" id="nav-youth">🌱 Akademi</button></li>
-          <li><button onclick="showSection('finances')" id="nav-finances">💵 Keuangan</button></li>
-          <li><button onclick="showSection('facilities')" id="nav-facilities">🏟️ Fasilitas</button></li>
-          <li><button onclick="nextWeek()" style="background: #ffd700; color: #000; margin-top: 20px;">⏭️ Minggu Berikutnya</button></li>
-        </ul>
-      </aside>
+        <!-- Finances Panel -->
+        <div id="finances" class="panel">
+            <div class="card">
+                <div class="card-title">💰 Financial Overview</div>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-label">Current Balance</div>
+                        <div class="stat-value" id="financeBalance">£50,000</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Weekly Profit</div>
+                        <div class="stat-value money-positive">+£18,000</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Total Income</div>
+                        <div class="stat-value money-positive" id="totalIncome">£0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Total Expenses</div>
+                        <div class="stat-value money-negative" id="totalExpenses">£0</div>
+                    </div>
+                </div>
+            </div>
 
-      <main class="content-area">
-        <!-- Dashboard -->
-        <section id="dashboard" class="game-section">
-          <h2 class="section-title">Dashboard Manajer</h2>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-            <div class="finance-card">
-              <h3>Pertandingan Berikutnya</h3>
-              <div id="nextMatch" style="margin-top: 15px;">
-                <p>Memuat jadwal...</p>
-              </div>
+            <div class="card">
+                <div class="card-title">🤝 Sponsorship</div>
+                <div id="sponsorStatus" style="margin: 20px 0; padding: 20px; background: rgba(255,215,0,0.1); border-radius: 10px; border: 2px dashed #ffd700;">
+                    <div style="font-size: 1.2em; margin-bottom: 10px;">No active sponsorship</div>
+                    <button class="btn btn-success" onclick="getSponsorship()" id="sponsorBtn">
+                        Get Sponsorship (£500k)
+                    </button>
+                    <div style="font-size: 0.9em; margin-top: 10px; opacity: 0.8;">
+                        Includes Jersey Sponsorship & Stadium Renovation Fund
+                    </div>
+                </div>
             </div>
-            <div class="finance-card">
-              <h3>Klasemen Liga</h3>
-              <div id="miniLeagueTable" style="margin-top: 15px;">
-                <p>Memuat klasemen...</p>
-              </div>
-            </div>
-          </div>
-          <div class="finance-card" style="margin-top: 20px;">
-            <h3>Performa Terbaru</h3>
-            <div id="recentForm" style="margin-top: 15px;">
-              <p>Belum ada pertandingan</p>
-            </div>
-          </div>
-        </section>
 
-        <!-- Squad -->
-        <section id="squad" class="game-section hidden">
-          <h2 class="section-title">Manajemen Skuat</h2>
-          <div style="margin-bottom: 20px;">
-            <button class="btn btn-primary" onclick="showSquadFilter('all')">Semua</button>
-            <button class="btn btn-primary" onclick="showSquadFilter('GK')">KI</button>
-            <button class="btn btn-primary" onclick="showSquadFilter('DEF')">Bek</button>
-            <button class="btn btn-primary" onclick="showSquadFilter('MID')">Gelandang</button>
-            <button class="btn btn-primary" onclick="showSquadFilter('FWD')">Penyerang</button>
-          </div>
-          <div class="squad-grid" id="squadContainer">
-            <!-- Players will be loaded here -->
-          </div>
-        </section>
+            <div class="card">
+                <div class="card-title">📈 Income Breakdown (Weekly)</div>
+                <ul style="list-style: none; line-height: 2;">
+                    <li>🏟️ Match Day Revenue: £15,000</li>
+                    <li>📺 TV Rights: £5,000</li>
+                    <li>🎁 Merchandise: £3,000</li>
+                    <li>🍔 Concessions: £2,000</li>
+                    <li style="border-top: 2px solid #800000; margin-top: 10px; padding-top: 10px;">
+                        <strong>Total: £25,000</strong>
+                    </li>
+                </ul>
+            </div>
 
-        <!-- Tactics -->
-        <section id="tactics" class="game-section hidden">
-          <h2 class="section-title">Taktik & Formasi</h2>
-          <div style="margin-bottom: 20px;">
-            <label>Formasi: </label>
-            <select id="formationSelect" onchange="changeFormation()" style="padding: 10px; font-size: 1em;">
-              <option value="4-4-2">4-4-2 (Klasik)</option>
-              <option value="4-3-3">4-3-3 (Serang)</option>
-              <option value="4-5-1">4-5-1 (Defensif)</option>
-              <option value="3-5-2">3-5-2 (Tengah Kuat)</option>
-              <option value="5-3-2">5-3-2 (Ultra Defensif)</option>
-            </select>
-          </div>
-          <div class="pitch" id="tacticsPitch">
-            <div class="formation-display" id="formationDisplay">
-              <!-- Formation will be rendered here -->
+            <div class="card">
+                <div class="card-title">📉 Expense Breakdown (Weekly)</div>
+                <ul style="list-style: none; line-height: 2;">
+                    <li>💼 Player Wages: £4,000</li>
+                    <li>🏟️ Stadium Maintenance: £1,500</li>
+                    <li>🚌 Travel & Logistics: £1,000</li>
+                    <li>⚕️ Medical & Insurance: £500</li>
+                    <li style="border-top: 2px solid #800000; margin-top: 10px; padding-top: 10px;">
+                        <strong>Total: £7,000</strong>
+                    </li>
+                </ul>
             </div>
-          </div>
-          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px;">
-            <div class="finance-card">
-              <h4>Gaya Permainan</h4>
-              <select id="playStyle" style="width: 100%; margin-top: 10px; padding: 8px;">
-                <option value="balanced">Seimbang</option>
-                <option value="possession">Penguasaan Bola</option>
-                <option value="counter">Serangan Balik</option>
-                <option value="longball">Bola Panjang</option>
-                <option value="pressing">High Pressing</option>
-              </select>
-            </div>
-            <div class="finance-card">
-              <h4>Intensitas</h4>
-              <select id="intensity" style="width: 100%; margin-top: 10px; padding: 8px;">
-                <option value="low">Rendah</option>
-                <option value="medium">Sedang</option>
-                <option value="high">Tinggi</option>
-              </select>
-            </div>
-            <div class="finance-card">
-              <h4>Mentality</h4>
-              <select id="mentality" style="width: 100%; margin-top: 10px; padding: 8px;">
-                <option value="defensive">Defensif</option>
-                <option value="cautious">Hati-hati</option>
-                <option value="balanced">Seimbang</option>
-                <option value="positive">Positif</option>
-                <option value="attacking">Menyerang</option>
-              </select>
-            </div>
-          </div>
-        </section>
+        </div>
 
-        <!-- Matches -->
-        <section id="matches" class="game-section hidden">
-          <h2 class="section-title">Pusat Pertandingan</h2>
-          <div class="match-container" id="matchContainer">
-            <div class="scoreboard">
-              <div class="team-display">
-                <div class="team-name">Newton United</div>
-              </div>
-              <div class="score" id="matchScore">0 - 0</div>
-              <div class="team-display">
-                <div class="team-name" id="opponentName">Opponent</div>
-              </div>
+        <!-- Stadium Panel -->
+        <div id="stadium" class="panel">
+            <div class="card">
+                <div class="card-title">🏟️ Stadium Management</div>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-label">Current Capacity</div>
+                        <div class="stat-value" id="currentCapacity">3,000</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Condition</div>
+                        <div class="stat-value" id="stadiumCondition">75%</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Avg Attendance</div>
+                        <div class="stat-value" id="avgAttendance">2,400</div>
+                    </div>
+                </div>
             </div>
-            <div class="match-time" id="matchTime">Belum Dimulai</div>
-            <button class="btn btn-success" id="playMatchBtn" onclick="playMatch()" style="font-size: 1.2em; padding: 15px 40px;">Mainkan Pertandingan</button>
-            <div class="match-events" id="matchEvents">
-              <div class="event">Pertandingan belum dimulai...</div>
-            </div>
-          </div>
-          <div style="margin-top: 30px;">
-            <h3>Jadwal Musim Ini</h3>
-            <table id="fixturesTable">
-              <thead>
-                <tr>
-                  <th>Minggu</th>
-                  <th>Lawan</th>
-                  <th>Tandang/Kandang</th>
-                  <th>Hasil</th>
-                </tr>
-              </thead>
-              <tbody id="fixturesBody">
-              </tbody>
-            </table>
-          </div>
-        </section>
 
-        <!-- Transfers -->
-        <section id="transfers" class="game-section hidden">
-          <h2 class="section-title">Pasar Transfer</h2>
-          <div style="margin-bottom: 20px;">
-            <input type="text" id="scoutInput" placeholder="Cari pemain..." style="padding: 10px; width: 300px;">
-            <button class="btn btn-primary" onclick="scoutPlayers()">Scout</button>
-            <button class="btn btn-success" onclick="generateTransferList()">Refresh Pasar</button>
-          </div>
-          <div class="transfer-list" id="transferList">
-            <!-- Transfer targets will be loaded here -->
-          </div>
-        </section>
+            <div class="card">
+                <div class="card-title">🔨 Renovation Projects</div>
+                <div class="upgrade-card">
+                    <h3>Expand South Stand (+1,000 seats)</h3>
+                    <div class="upgrade-cost">Cost: £150,000</div>
+                    <button class="btn" onclick="upgradeStadium(1000, 150000)" id="upgrade1">Start Project</button>
+                </div>
+                <div class="upgrade-card">
+                    <h3>Renovate Main Stand</h3>
+                    <div class="upgrade-cost">Cost: £200,000</div>
+                    <button class="btn" onclick="upgradeStadium(0, 200000, true)" id="upgrade2">Start Project</button>
+                </div>
+                <div class="upgrade-card">
+                    <h3>New Training Ground</h3>
+                    <div class="upgrade-cost">Cost: £300,000</div>
+                    <button class="btn" onclick="upgradeTraining()" id="upgrade3">Start Project</button>
+                </div>
+            </div>
+        </div>
 
-        <!-- Youth Academy -->
-        <section id="youth" class="game-section hidden">
-          <h2 class="section-title">Akademi Pemuda</h2>
-          <div class="finance-card" style="margin-bottom: 20px;">
-            <h3>Level Akademi: <span id="youthLevel">1</span></h3>
-            <div class="progress-bar">
-              <div class="progress-fill" id="youthProgress" style="width: 0%"></div>
+        <!-- History Panel -->
+        <div id="history" class="panel">
+            <div class="card">
+                <div class="card-title">📜 Club History</div>
+                <div id="seasonHistory"></div>
             </div>
-            <button class="btn btn-primary" onclick="upgradeYouthAcademy()" style="margin-top: 10px;">
-              Upgrade (£<span id="youthUpgradeCost">10000</span>)
-            </button>
-          </div>
-          <h3>Calon Bintang</h3>
-          <div class="squad-grid" id="youthContainer">
-            <!-- Youth players will be loaded here -->
-          </div>
-          <button class="btn btn-success" onclick="recruitYouth()" style="margin-top: 20px; width: 100%; padding: 15px;">
-            Rekrut Pemuda Baru (£5000)
-          </button>
-        </section>
+            <div class="card">
+                <div class="card-title">🏅 Achievements</div>
+                <div id="achievements">
+                    <p style="opacity: 0.6;">No achievements yet...</p>
+                </div>
+            </div>
+        </div>
 
-        <!-- Finances -->
-        <section id="finances" class="game-section hidden">
-          <h2 class="section-title">Laporan Keuangan</h2>
-          <div class="finance-grid">
-            <div class="finance-card">
-              <h3>Saldo Saat Ini</h3>
-              <div class="finance-amount" id="currentBalance">£50,000</div>
+        <!-- Modals -->
+        <div id="sponsorModal" class="modal">
+            <div class="modal-content">
+                <h2>🎉 Sponsorship Secured!</h2>
+                <div class="sponsor-amount">£500,000</div>
+                <div style="margin: 20px 0; text-align: left; line-height: 1.8;">
+                    <p>✅ Jersey Sponsorship: £200,000</p>
+                    <p>✅ Stadium Renovation Fund: £200,000</p>
+                    <p>✅ Marketing & Merchandise: £100,000</p>
+                </div>
+                <button class="btn btn-success" onclick="closeModal()">Accept Deal</button>
             </div>
-            <div class="finance-card">
-              <h3>Pendapatan per Minggu</h3>
-              <div class="finance-amount" id="weeklyIncome">£2,500</div>
-            </div>
-            <div class="finance-card">
-              <h3>Pengeluaran per Minggu</h3>
-              <div class="finance-amount finance-negative" id="weeklyExpense">£3,000</div>
-            </div>
-            <div class="finance-card">
-              <h3>Nilai Klub</h3>
-              <div class="finance-amount" id="clubValue">£150,000</div>
-            </div>
-          </div>
-          <div class="finance-card" style="margin-top: 20px;">
-            <h3>Sponsor & Komersial</h3>
-            <div id="sponsorsList">
-              <p>Sponsor Utama: <strong>Belum ada</strong></p>
-              <p>Kit Sponsor: <strong>Belum ada</strong></p>
-            </div>
-            <button class="btn btn-primary" onclick="negotiateSponsor()" style="margin-top: 10px;">Negosiasi Sponsor</button>
-          </div>
-        </section>
+        </div>
 
-        <!-- Facilities -->
-        <section id="facilities" class="game-section hidden">
-          <h2 class="section-title">Pengembangan Fasilitas</h2>
-          <div class="squad-grid">
-            <div class="finance-card">
-              <h3>🏟️ Stadion</h3>
-              <p>Kapasitas: <span id="stadiumCapacity">3,000</span></p>
-              <p>Kualitas: <span id="stadiumQuality">Standar</span></p>
-              <button class="btn btn-primary" onclick="upgradeStadium()">Upgrade (£25,000)</button>
+        <div id="promotionModal" class="modal">
+            <div class="modal-content">
+                <h2>🎊 CHAMPION & PROMOTED!</h2>
+                <div class="promotion-animation">Newton United are Champions!</div>
+                <div id="promotionDetails" style="font-size: 1.2em; margin: 20px 0;"></div>
+                <button class="btn btn-success" onclick="closePromotionModal()">Continue</button>
             </div>
-            <div class="finance-card">
-              <h3>🏋️ Pusat Latihan</h3>
-              <p>Level: <span id="trainingLevel">1</span></p>
-              <p>Efek: +5% perkembangan pemain</p>
-              <button class="btn btn-primary" onclick="upgradeTraining()">Upgrade (£20,000)</button>
+        </div>
+
+        <div id="relegationModal" class="modal">
+            <div class="modal-content" style="border-color: #ff4757;">
+                <h2 style="color: #ff4757;">😞 RELEGATED</h2>
+                <div style="font-size: 1.5em; color: #ff4757; margin: 20px 0;">Newton United have been relegated</div>
+                <div id="relegationDetails" style="font-size: 1.2em; margin: 20px 0;"></div>
+                <button class="btn" onclick="closeRelegationModal()" style="background: #ff4757;">Continue</button>
             </div>
-            <div class="finance-card">
-              <h3>🏥 Fasilitas Medis</h3>
-              <p>Level: <span id="medicalLevel">1</span></p>
-              <p>Efek: -10% cedera</p>
-              <button class="btn btn-primary" onclick="upgradeMedical()">Upgrade (£15,000)</button>
+        </div>
+
+        <div id="seasonEndModal" class="modal">
+            <div class="modal-content">
+                <h2 id="seasonEndTitle">Season Complete</h2>
+                <div id="seasonEndDetails" style="font-size: 1.2em; margin: 20px 0;"></div>
+                <button class="btn btn-success" onclick="continueToNextSeason()">Continue</button>
             </div>
-            <div class="finance-card">
-              <h3>🔬 Analisis Data</h3>
-              <p>Level: <span id="analysisLevel">0</span></p>
-              <p>Efek: Scouting lebih akurat</p>
-              <button class="btn btn-primary" onclick="upgradeAnalysis()">Upgrade (£30,000)</button>
+        </div>
+
+        <div id="championModal" class="modal">
+            <div class="modal-content" style="max-width: 600px;">
+                <div class="champion-animation">🏆 PREMIER LEAGUE CHAMPIONS! 🏆</div>
+                <div style="font-size: 1.3em; margin: 20px 0;">
+                    <p>The Crimson Lions have conquered English football!</p>
+                    <div style="margin: 30px 0; padding: 20px; background: rgba(0,0,0,0.3); border-radius: 10px;">
+                        <h3 style="color: #ffd700;">Final Stats:</h3>
+                        <p>Seasons Played: <span id="finalSeasons"></span></p>
+                        <p>Total Matches: <span id="finalMatches"></span></p>
+                        <p>Total Earnings: <span id="finalEarnings"></span></p>
+                    </div>
+                </div>
+                <button class="btn btn-success" onclick="resetGame()">Start New Journey</button>
             </div>
-          </div>
-        </section>
-      </main>
+        </div>
     </div>
-  </div>
 
-  <!-- Player Modal -->
-  <div class="modal" id="playerModal">
-    <div class="modal-content">
-      <span class="close-modal" onclick="closeModal()">&times;</span>
-      <div id="playerModalContent"></div>
-    </div>
-  </div>
+    <script>
+        // Game Configuration
+        const CONFIG = {
+            TEAMS_PER_DIVISION: 20,
+            MATCHES_PER_SEASON: 38,
+            PROMOTION_SPOTS: 1,
+            PLAYOFF_SPOTS: 3,
+            RELEGATION_SPOTS: 2
+        };
 
-  <script src="game.js"></script>
+        // Formation database
+        const formations = {
+            '4-4-2': { name: '4-4-2', attack: 70, midfield: 60, defense: 70, description: 'Classic Balance' },
+            '4-3-3': { name: '4-3-3', attack: 85, midfield: 65, defense: 60, description: 'Attacking' },
+            '4-2-3-1': { name: '4-2-3-1', attack: 75, midfield: 75, defense: 65, description: 'Modern Control' },
+            '3-5-2': { name: '3-5-2', attack: 70, midfield: 80, defense: 60, description: 'Wing Play' },
+            '5-3-2': { name: '5-3-2', attack: 55, midfield: 60, defense: 85, description: 'Defensive' },
+            '3-4-3': { name: '3-4-3', attack: 90, midfield: 70, defense: 50, description: 'All Out Attack' }
+        };
+
+        // Game State
+        const club = {
+            name: "Newton United FC",
+            nickname: "The Crimson Lions",
+            level: 8,
+            money: 50000,
+            weeklyIncome: 25000,
+            weeklyExpense: 7000,
+            season: 1,
+            played: 0,
+            won: 0,
+            drawn: 0,
+            lost: 0,
+            points: 0,
+            gf: 0,
+            ga: 0,
+                        hasSponsorship: false,
+            totalIncome: 0,
+            totalExpenses: 0,
+            history: [],
+            trainingFocus: 'balanced',
+            capacity: 3000,
+            stadiumCondition: 75,
+            avgAttendance: 2400,
+            currentFormation: '4-4-2'
+        };
+
+        const divisions = {
+            8: { name: "Division 8", full: "Northern Premier Division One League", isLowest: true },
+            7: { name: "Division 7", full: "Northern Premier League", isLowest: false },
+            6: { name: "Division 6", full: "National League North", isLowest: false },
+            5: { name: "Division 5", full: "National League", isLowest: false },
+            4: { name: "Division 4", full: "League Two", isLowest: false },
+            3: { name: "Division 3", full: "League One", isLowest: false },
+            2: { name: "Division 2", full: "Chmapionship", isLowest: false },
+            1: { name: "Division 1", full: "Premier League", isLowest: false }
+        };
+
+        const teamNames = [
+            "AFC Borough", "Athletic United", "City Wanderers", "Town Rovers",
+            "United FC", "Vale Park", "Heath End", "Common Green", "Bridge Athletic",
+            "Riverside FC", "North End", "Southampton", "Eastside United", "Westbridge Town",
+            "Central FC", "Park Rangers", "Hilltop United", "Valley Rovers",
+            "Metro City", "Coastal Town", "Forest Green", "Industrial FC",
+            "Royal Borough", "Maritime FC", "Highland United", "Lowland Town"
+        ];
+
+        // Complete 22-player squad
+        const fullSquad = [
+            // Goalkeepers (3)
+            { name: "James Harrison", pos: "GK", rating: 68, age: 28 },
+            { name: "Michael Brown", pos: "GK", rating: 62, age: 24 },
+            { name: "David Wilson", pos: "GK", rating: 58, age: 21 },
+            
+            // Defenders (8)
+            { name: "Robert Clarke", pos: "DEF", rating: 66, age: 29 },
+            { name: "Thomas Wright", pos: "DEF", rating: 65, age: 26 },
+            { name: "William Parker", pos: "DEF", rating: 64, age: 25 },
+            { name: "Richard Taylor", pos: "DEF", rating: 63, age: 27 },
+            { name: "Joseph Evans", pos: "DEF", rating: 62, age: 23 },
+            { name: "Charles Morgan", pos: "DEF", rating: 61, age: 22 },
+            { name: "Daniel Phillips", pos: "DEF", rating: 60, age: 24 },
+            { name: "Matthew Jenkins", pos: "DEF", rating: 59, age: 20 },
+            
+            // Midfielders (7)
+            { name: "Andrew Thompson", pos: "MID", rating: 69, age: 28 },
+            { name: "Christopher Lee", pos: "MID", rating: 67, age: 26 },
+            { name: "Stephen White", pos: "MID", rating: 65, age: 25 },
+            { name: "Kevin Harris", pos: "MID", rating: 64, age: 24 },
+            { name: "Brian Martin", pos: "MID", rating: 62, age: 27 },
+            { name: "Edward Clark", pos: "MID", rating: 61, age: 22 },
+            { name: "George Lewis", pos: "MID", rating: 60, age: 21 },
+            
+            // Forwards (4)
+            { name: "Anthony Walker", pos: "FWD", rating: 70, age: 29 },
+            { name: "Paul Hall", pos: "FWD", rating: 68, age: 26 },
+            { name: "Mark Young", pos: "FWD", rating: 65, age: 24 },
+            { name: "Steven Allen", pos: "FWD", rating: 63, age: 22 }
+        ];
+
+        let teams = [];
+        let fixtures = [];
+        let currentFixture = 0;
+
+        function initGame() {
+            generateTeams();
+            generateFixtures();
+            updateDisplay();
+            updateLeagueTable();
+            updateSquad();
+            updateFormationDisplay();
+        }
+
+        function generateTeams() {
+            teams = [];
+            
+            teams.push({
+                name: "Newton United",
+                played: 0, won: 0, drawn: 0, lost: 0,
+                gf: 0, ga: 0, points: 0,
+                isPlayer: true,
+                strength: 0.60 + (Math.random() * 0.1),
+                form: []
+            });
+
+            const shuffledNames = [...teamNames].sort(() => Math.random() - 0.5).slice(0, 19);
+            for (let i = 0; i < 19; i++) {
+                teams.push({
+                    name: shuffledNames[i],
+                    played: 0, won: 0, drawn: 0, lost: 0,
+                    gf: 0, ga: 0, points: 0,
+                    isPlayer: false,
+                    strength: 0.40 + (Math.random() * 0.40),
+                    form: []
+                });
+            }
+        }
+
+        function generateFixtures() {
+            fixtures = [];
+            const teamCount = CONFIG.TEAMS_PER_DIVISION;
+            
+            for (let round = 0; round < 2; round++) {
+                for (let i = 0; i < teamCount; i++) {
+                    for (let j = i + 1; j < teamCount; j++) {
+                        if (round === 0) {
+                            fixtures.push([i, j]);
+                        } else {
+                            fixtures.push([j, i]);
+                        }
+                    }
+                }
+            }
+            
+            fixtures.sort(() => Math.random() - 0.5);
+            
+            const playerFixtures = [];
+            const otherFixtures = [];
+            
+            fixtures.forEach((f) => {
+                if (f[0] === 0 || f[1] === 0) {
+                    playerFixtures.push(f);
+                } else {
+                    otherFixtures.push(f);
+                }
+            });
+            
+            fixtures = [];
+            const interval = Math.floor(otherFixtures.length / playerFixtures.length);
+            
+            let otherIdx = 0;
+            playerFixtures.forEach((pf, i) => {
+                const batchEnd = (i === playerFixtures.length - 1) ? otherFixtures.length : (i + 1) * interval;
+                while (otherIdx < batchEnd && otherIdx < otherFixtures.length) {
+                    fixtures.push(otherFixtures[otherIdx]);
+                    otherIdx++;
+                }
+                fixtures.push(pf);
+            });
+            
+            while (otherIdx < otherFixtures.length) {
+                fixtures.push(otherFixtures[otherIdx]);
+                otherIdx++;
+            }
+        }
+
+        function simulateAIWeek() {
+            let matchesSimulated = 0;
+            for (let i = 0; i < teams.length && matchesSimulated < 9; i++) {
+                for (let j = i + 1; j < teams.length && matchesSimulated < 9; j++) {
+                    if (!teams[i].isPlayer && !teams[j].isPlayer) {
+                        const targetPlayed = Math.min(teams[i].played, teams[j].played);
+                        if (targetPlayed < Math.floor(club.season * 1.9)) {
+                            const t1Strength = teams[i].strength + (Math.random() * 0.2 - 0.1);
+                            const t2Strength = teams[j].strength + (Math.random() * 0.2 - 0.1);
+                            
+                            let t1Score, t2Score;
+                            if (t1Strength > t2Strength + 0.15) {
+                                t1Score = Math.floor(Math.random() * 3) + 2;
+                                t2Score = Math.floor(Math.random() * 2);
+                            } else if (t2Strength > t1Strength + 0.15) {
+                                t2Score = Math.floor(Math.random() * 3) + 2;
+                                t1Score = Math.floor(Math.random() * 2);
+                            } else {
+                                t1Score = Math.floor(Math.random() * 3) + 1;
+                                t2Score = Math.floor(Math.random() * 3) + 1;
+                            }
+                            
+                            updateTeamStats(i, t1Score, t2Score);
+                            updateTeamStats(j, t2Score, t1Score);
+                            matchesSimulated++;
+                        }
+                    }
+                }
+            }
+        }
+
+        function updateTeamStats(teamIdx, gf, ga) {
+            const team = teams[teamIdx];
+            team.played++;
+            team.gf += gf;
+            team.ga += ga;
+            
+            if (gf > ga) {
+                team.won++;
+                team.points += 3;
+                team.form.push('W');
+            } else if (gf === ga) {
+                team.drawn++;
+                team.points += 1;
+                team.form.push('D');
+            } else {
+                team.lost++;
+                team.form.push('L');
+            }
+            
+            if (team.form.length > 5) team.form.shift();
+        }
+
+        function playMatch() {
+            if (currentFixture >= fixtures.length) return;
+            
+            const fixture = fixtures[currentFixture];
+            const isHome = fixture[0] === 0;
+            const opponentIdx = isHome ? fixture[1] : fixture[0];
+            const opponent = teams[opponentIdx];
+            
+            let ourStrength = teams[0].strength;
+            let theirStrength = opponent.strength;
+            
+            // Formation effects
+            const form = formations[club.currentFormation];
+            ourStrength += (form.attack + form.midfield + form.defense) / 300;
+            
+            if (club.trainingFocus === 'attack') ourStrength += 0.03;
+            if (club.trainingFocus === 'defense') theirStrength -= 0.02;
+            if (isHome) ourStrength += 0.05;
+            
+            ourStrength += (Math.random() * 0.2) - 0.1;
+            theirStrength += (Math.random() * 0.2) - 0.1;
+            
+            let ourScore, theirScore;
+            const strengthDiff = ourStrength - theirStrength;
+            
+            if (strengthDiff > 0.2) {
+                ourScore = Math.floor(Math.random() * 4) + 1;
+                theirScore = Math.floor(Math.random() * Math.min(ourScore, 3));
+            } else if (strengthDiff < -0.2) {
+                theirScore = Math.floor(Math.random() * 4) + 1;
+                ourScore = Math.floor(Math.random() * Math.min(theirScore, 3));
+            } else {
+                ourScore = Math.floor(Math.random() * 4) + 1;
+                theirScore = Math.floor(Math.random() * 4) + 1;
+            }
+            
+            updateTeamStats(0, ourScore, theirScore);
+            updateTeamStats(opponentIdx, theirScore, ourScore);
+            syncClubStats();
+            
+            club.money += club.weeklyIncome;
+            club.money -= club.weeklyExpense;
+            club.totalIncome += club.weeklyIncome;
+            club.totalExpenses += club.weeklyExpense;
+            club.season++;
+            
+            let attendance = club.avgAttendance + Math.floor(Math.random() * 600 - 300);
+            if (ourScore > theirScore) attendance += 200;
+            let matchRevenue = Math.floor((attendance / club.capacity) * 15000);
+            club.money += matchRevenue;
+            club.totalIncome += matchRevenue;
+            
+            document.getElementById('homeScore').textContent = isHome ? ourScore : theirScore;
+            document.getElementById('awayScore').textContent = isHome ? theirScore : ourScore;
+            document.getElementById('opponentName').textContent = opponent.name;
+            
+            const resultDiv = document.getElementById('matchResult');
+            const detailsDiv = document.getElementById('matchDetails');
+            
+            if (ourScore > theirScore) {
+                resultDiv.innerHTML = '<span class="result-win">VICTORY!</span>';
+                detailsDiv.innerHTML = `+3 Points | Attendance: ${attendance.toLocaleString()}`;
+                addNews(`FT: Newton United ${ourScore}-${theirScore} ${opponent.name} - Great win!`);
+            } else if (ourScore === theirScore) {
+                resultDiv.innerHTML = '<span class="result-draw">DRAW</span>';
+                detailsDiv.innerHTML = `+1 Point | Attendance: ${attendance.toLocaleString()}`;
+                addNews(`FT: Newton United ${ourScore}-${theirScore} ${opponent.name} - Draw.`);
+            } else {
+                resultDiv.innerHTML = '<span class="result-loss">DEFEAT</span>';
+                detailsDiv.innerHTML = `0 Points | Attendance: ${attendance.toLocaleString()}`;
+                addNews(`FT: Newton United ${ourScore}-${theirScore} ${opponent.name} - Loss.`);
+            }
+            
+            document.getElementById('matchResultCard').style.display = 'block';
+            document.getElementById('nextMatchCard').style.display = 'none';
+            
+            currentFixture++;
+            simulateAIWeek();
+            updateDisplay();
+            updateLeagueTable();
+            
+            if (teams[0].played >= CONFIG.MATCHES_PER_SEASON) {
+                setTimeout(endSeason, 1500);
+            }
+        }
+
+        function simulateMatches() {
+            for (let i = 0; i < 5; i++) {
+                if (teams[0].played < CONFIG.MATCHES_PER_SEASON) {
+                    simulateAIWeek();
+                }
+            }
+            updateLeagueTable();
+            addNews("Multiple matches simulated.");
+        }
+
+        function syncClubStats() {
+            const playerTeam = teams[0];
+            club.played = playerTeam.played;
+            club.won = playerTeam.won;
+            club.drawn = playerTeam.drawn;
+            club.lost = playerTeam.lost;
+            club.points = playerTeam.points;
+            club.gf = playerTeam.gf;
+            club.ga = playerTeam.ga;
+        }
+
+        function nextMatch() {
+            document.getElementById('matchResultCard').style.display = 'none';
+            document.getElementById('nextMatchCard').style.display = 'block';
+            
+            if (teams[0].played >= CONFIG.MATCHES_PER_SEASON) {
+                document.getElementById('playMatchBtn').disabled = true;
+                document.getElementById('nextOpponent').textContent = "Season Ended";
+            } else {
+                updateNextOpponent();
+            }
+        }
+
+        function updateNextOpponent() {
+            for (let i = currentFixture; i < fixtures.length; i++) {
+                if (fixtures[i][0] === 0 || fixtures[i][1] === 0) {
+                    const opponentIdx = fixtures[i][0] === 0 ? fixtures[i][1] : fixtures[i][0];
+                    document.getElementById('nextOpponent').textContent = teams[opponentIdx].name;
+                    return;
+                }
+            }
+            document.getElementById('nextOpponent').textContent = "Season Ended";
+        }
+
+        function endSeason() {
+            teams.forEach((team, idx) => {
+                if (!team.isPlayer) {
+                    while (team.played < CONFIG.MATCHES_PER_SEASON) {
+                        const opponent = teams.find(t => !t.isPlayer && t !== team && t.played < CONFIG.MATCHES_PER_SEASON);
+                        if (opponent) {
+                            const t1Strength = team.strength + (Math.random() * 0.2 - 0.1);
+                            const t2Strength = opponent.strength + (Math.random() * 0.2 - 0.1);
+                            let t1Score = Math.floor(Math.random() * 4);
+                            let t2Score = Math.floor(Math.random() * 4);
+                            updateTeamStats(idx, t1Score, t2Score);
+                            const oppIdx = teams.indexOf(opponent);
+                            updateTeamStats(oppIdx, t2Score, t1Score);
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            });
+            
+            updateLeagueTable();
+            syncClubStats();
+            
+            const position = calculatePosition();
+            const isChampion = position === 1;
+            const isRelegated = position > (CONFIG.TEAMS_PER_DIVISION - CONFIG.RELEGATION_SPOTS);
+            const isLowestDivision = divisions[club.level].isLowest;
+            
+            if (club.level === 1 && isChampion) {
+                document.getElementById('finalSeasons').textContent = club.season;
+                document.getElementById('finalMatches').textContent = teams[0].played * club.season;
+                document.getElementById('finalEarnings').textContent = `£${club.totalIncome.toLocaleString()}`;
+                document.getElementById('championModal').style.display = 'flex';
+                return;
+            }
+            
+            if (isChampion) {
+                const prizeMoney = 150000 * (9 - club.level);
+                document.getElementById('promotionDetails').innerHTML = `
+                    <p>Finished <strong>${getOrdinal(position)}</strong> in ${divisions[club.level].name}</p>
+                    <p>🏆 CHAMPIONS!</p>
+                    <p>Promoted to ${divisions[club.level - 1].name}</p>
+                    <p>Prize Money: £${prizeMoney.toLocaleString()}</p>
+                `;
+                document.getElementById('promotionModal').style.display = 'flex';
+                addNews(`🏆 CHAMPIONS! Promoted to ${divisions[club.level - 1].name}!`);
+            } else if (isRelegated && !isLowestDivision) {
+                document.getElementById('relegationDetails').innerHTML = `
+                    <p>Finished <strong>${getOrdinal(position)}</strong> in ${divisions[club.level].name}</p>
+                    <p>❌ Relegated to ${divisions[club.level + 1].name}</p>
+                `;
+                document.getElementById('relegationModal').style.display = 'flex';
+                addNews(`Relegated to ${divisions[club.level + 1].name}.`);
+            } else {
+                const details = `
+                    <p>Finished <strong>${getOrdinal(position)}</strong> in ${divisions[club.level].name}</p>
+                    <p>No promotion or relegation.</p>
+                `;
+                document.getElementById('seasonEndTitle').textContent = "Season Complete";
+                document.getElementById('seasonEndDetails').innerHTML = details;
+                document.getElementById('seasonEndModal').style.display = 'flex';
+                addNews(`Season ${club.season} finished ${getOrdinal(position)}.`);
+            }
+        }
+
+        function closePromotionModal() {
+            document.getElementById('promotionModal').style.display = 'none';
+            saveSeasonHistory();
+            club.level--;
+            club.money += 150000 * (9 - club.level);
+            updateHeaderLevel();
+            resetSeason();
+        }
+
+        function closeRelegationModal() {
+            document.getElementById('relegationModal').style.display = 'none';
+            saveSeasonHistory();
+            club.level++;
+            updateHeaderLevel();
+            resetSeason();
+        }
+
+        function continueToNextSeason() {
+            document.getElementById('seasonEndModal').style.display = 'none';
+            saveSeasonHistory();
+            resetSeason();
+        }
+
+        function saveSeasonHistory() {
+            club.history.push({
+                season: club.season,
+                level: club.level,
+                division: divisions[club.level].name,
+                position: calculatePosition(),
+                played: teams[0].played,
+                won: teams[0].won,
+                drawn: teams[0].drawn,
+                lost: teams[0].lost,
+                points: teams[0].points,
+                gf: teams[0].gf,
+                ga: teams[0].ga
+            });
+            updateHistory();
+        }
+
+        function updateHeaderLevel() {
+            document.getElementById('currentLevel').textContent = club.level;
+            document.getElementById('divisionName').textContent = 
+                `${divisions[club.level].name} - ${divisions[club.level].full}`;
+        }
+
+        function resetSeason() {
+            club.season++;
+            club.played = 0;
+            club.won = 0;
+            club.drawn = 0;
+            club.lost = 0;
+            club.points = 0;
+            club.gf = 0;
+            club.ga = 0;
+            
+            generateTeams();
+            generateFixtures();
+            currentFixture = 0;
+            
+            for (let i = 0; i < fixtures.length; i++) {
+                if (fixtures[i][0] === 0 || fixtures[i][1] === 0) {
+                    currentFixture = i;
+                    break;
+                }
+            }
+            
+            document.getElementById('matchResultCard').style.display = 'none';
+            document.getElementById('nextMatchCard').style.display = 'block';
+            document.getElementById('playMatchBtn').disabled = false;
+            
+            updateDisplay();
+            updateLeagueTable();
+            addNews(`Season ${club.season} begins! ${divisions[club.level].name}`);
+        }
+
+        function calculatePosition() {
+            const sorted = [...teams].sort((a, b) => {
+                if (b.points !== a.points) return b.points - a.points;
+                if ((b.gf - b.ga) !== (a.gf - a.ga)) return (b.gf - b.ga) - (a.gf - a.ga);
+                return b.gf - a.gf;
+            });
+            return sorted.findIndex(t => t.isPlayer) + 1;
+        }
+
+        function getOrdinal(n) {
+            const s = ["th", "st", "nd", "rd"];
+            const v = n % 100;
+            return n + (s[(v - 20) % 10] || s[v] || s[0]);
+        }
+
+        function updateDisplay() {
+            document.getElementById('balance').textContent = `£${club.money.toLocaleString()}`;
+            document.getElementById('financeBalance').textContent = `£${club.money.toLocaleString()}`;
+            document.getElementById('matchday').textContent = `${Math.min(teams[0].played + 1, CONFIG.MATCHES_PER_SEASON)}/${CONFIG.MATCHES_PER_SEASON}`;
+            
+            const pos = calculatePosition();
+            document.getElementById('position').textContent = getOrdinal(pos);
+            document.getElementById('played').textContent = teams[0].played;
+            document.getElementById('won').textContent = teams[0].won;
+            document.getElementById('drawn').textContent = teams[0].drawn;
+            document.getElementById('lost').textContent = teams[0].lost;
+            document.getElementById('points').textContent = teams[0].points;
+            document.getElementById('gf').textContent = teams[0].gf;
+            document.getElementById('ga').textContent = teams[0].ga;
+            document.getElementById('gd').textContent = (teams[0].gf - teams[0].ga) > 0 ? `+${teams[0].gf - teams[0].ga}` : teams[0].gf - teams[0].ga;
+            document.getElementById('totalIncome').textContent = `£${club.totalIncome.toLocaleString()}`;
+            document.getElementById('totalExpenses').textContent = `£${club.totalExpenses.toLocaleString()}`;
+            document.getElementById('leagueName').textContent = divisions[club.level].name;
+            document.getElementById('currentCapacity').textContent = club.capacity.toLocaleString();
+            document.getElementById('stadiumCondition').textContent = club.stadiumCondition + '%';
+            document.getElementById('avgAttendance').textContent = club.avgAttendance.toLocaleString();
+            
+            const progress = Math.min(100, (teams[0].played / CONFIG.MATCHES_PER_SEASON) * 100);
+            document.getElementById('seasonProgress').style.width = progress + '%';
+            document.getElementById('seasonProgress').textContent = Math.round(progress) + '%';
+            
+            updateNextOpponent();
+            
+            if (teams[0].played >= CONFIG.MATCHES_PER_SEASON) {
+                document.getElementById('playMatchBtn').disabled = true;
+            }
+        }
+
+        function updateLeagueTable() {
+            const tbody = document.getElementById('leagueTableBody');
+            tbody.innerHTML = '';
+            
+            const sorted = [...teams].sort((a, b) => {
+                if (b.points !== a.points) return b.points - a.points;
+                if ((b.gf - b.ga) !== (a.gf - a.ga)) return (b.gf - b.ga) - (a.gf - a.ga);
+                return b.gf - a.gf;
+            });
+            
+            const isLowestDivision = divisions[club.level].isLowest;
+            
+            sorted.forEach((team, idx) => {
+                const row = document.createElement('tr');
+                const pos = idx + 1;
+                
+                if (team.isPlayer) {
+                    row.className = 'highlight';
+                } else if (pos === 1) {
+                    row.className = 'champion';
+                } else if (pos <= 4) {
+                    row.className = 'promotion';
+                } else if (pos > 18 && !isLowestDivision) {
+                    row.className = 'relegation';
+                }
+                
+                const gd = team.gf - team.ga;
+                const gdStr = gd > 0 ? `+${gd}` : gd;
+                
+                let formHtml = '';
+                const recentForm = team.form.slice(-5);
+                recentForm.forEach(r => {
+                    const className = r === 'W' ? 'form-w' : r === 'D' ? 'form-d' : 'form-l';
+                    formHtml += `<span class="${className}">${r}</span>`;
+                });
+                
+                row.innerHTML = `
+                    <td>${pos}</td>
+                    <td style="text-align: left; font-weight: ${team.isPlayer ? 'bold' : 'normal'};">
+                        ${team.name}
+                    </td>
+                    <td>${team.played}</td>
+                    <td>${team.won}</td>
+                    <td>${team.drawn}</td>
+                    <td>${team.lost}</td>
+                    <td>${team.gf}</td>
+                    <td>${team.ga}</td>
+                    <td style="color: ${gd > 0 ? '#00ff88' : gd < 0 ? '#ff4757' : '#ffd700'}">${gdStr}</td>
+                    <td><strong>${team.points}</strong></td>
+                    <td>${formHtml}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function updateSquad() {
+            const gks = fullSquad.filter(p => p.pos === 'GK');
+            const defs = fullSquad.filter(p => p.pos === 'DEF');
+            const mids = fullSquad.filter(p => p.pos === 'MID');
+            const fwds = fullSquad.filter(p => p.pos === 'FWD');
+            
+            const createPlayerCard = (p) => `
+                <div class="player-card position-${p.pos.toLowerCase()}">
+                    <div class="player-info">
+                        <div class="player-name">${p.name}</div>
+                        <div class="player-details">${p.pos} | Age: ${p.age}</div>
+                    </div>
+                    <div class="player-rating">${p.rating}</div>
+                </div>
+            `;
+            
+            document.getElementById('gkList').innerHTML = gks.map(createPlayerCard).join('');
+            document.getElementById('defList').innerHTML = defs.map(createPlayerCard).join('');
+            document.getElementById('midList').innerHTML = mids.map(createPlayerCard).join('');
+            document.getElementById('fwdList').innerHTML = fwds.map(createPlayerCard).join('');
+            
+            const avgRating = Math.round(fullSquad.reduce((a, b) => a + b.rating, 0) / fullSquad.length);
+            document.getElementById('avgRating').textContent = avgRating;
+            document.getElementById('squadSize').textContent = fullSquad.length;
+        }
+
+        function updateFormationDisplay() {
+            const form = formations[club.currentFormation];
+            document.getElementById('currentFormation').textContent = form.name;
+            document.getElementById('formationAttack').textContent = form.attack;
+            document.getElementById('formationMidfield').textContent = form.midfield;
+            document.getElementById('formationDefense').textContent = form.defense;
+            
+            document.getElementById('tacticsFormation').textContent = form.name;
+            document.getElementById('tacticsAttack').textContent = form.attack;
+            document.getElementById('tacticsMidfield').textContent = form.midfield;
+            document.getElementById('tacticsDefense').textContent = form.defense;
+        }
+
+        function setFormation(formationName) {
+            club.currentFormation = formationName;
+            
+            // Update button states
+            document.querySelectorAll('.btn-tactic').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(`btn-${formationName}`).classList.add('active');
+            
+            updateFormationDisplay();
+            addNews(`Formation changed to ${formationName}: ${formations[formationName].description}`);
+        }
+
+        function setTraining(focus) {
+            club.trainingFocus = focus;
+            document.getElementById('trainingFocusDisplay').textContent = 
+                focus.charAt(0).toUpperCase() + focus.slice(1);
+            addNews(`Training focus changed to: ${focus.charAt(0).toUpperCase() + focus.slice(1)}`);
+        }
+
+        function getSponsorship() {
+            if (club.hasSponsorship) {
+                alert("You already have an active sponsorship!");
+                return;
+            }
+            
+            club.money += 500000;
+            club.totalIncome += 500000;
+            club.hasSponsorship = true;
+            
+            document.getElementById('sponsorModal').style.display = 'flex';
+            
+            document.getElementById('sponsorStatus').innerHTML = `
+                <div style="font-size: 1.2em; color: #00ff88; margin-bottom: 10px;">
+                    ✅ Active Sponsorship
+                </div>
+                <div style="font-size: 0.9em; opacity: 0.8;">
+                    Jersey Sponsor: SportsDirect<br>
+                    Stadium Partner: Local Construction Co.<br>
+                    Deal Value: £500,000 (One-time)
+                </div>
+            `;
+            
+            updateDisplay();
+            addNews("Major sponsorship deal signed! £500,000 injection!");
+        }
+
+        function closeModal() {
+            document.getElementById('sponsorModal').style.display = 'none';
+        }
+
+        function upgradeStadium(capacityIncrease, cost, improveFacilities = false) {
+            if (club.money < cost) {
+                alert("Insufficient funds for this upgrade!");
+                return;
+            }
+            
+            club.money -= cost;
+            if (capacityIncrease > 0) {
+                club.capacity += capacityIncrease;
+            }
+            if (improveFacilities) {
+                club.stadiumCondition = Math.min(100, club.stadiumCondition + 15);
+                club.weeklyIncome += 2000;
+            }
+            
+            updateDisplay();
+            addNews(`Stadium upgrade complete! ${capacityIncrease > 0 ? 'Capacity: ' + club.capacity.toLocaleString() : 'Facilities improved!'}`);
+            alert("Upgrade completed successfully!");
+        }
+
+        function upgradeTraining() {
+            const cost = 300000;
+            if (club.money < cost) {
+                alert("Insufficient funds!");
+                return;
+            }
+            
+            club.money -= cost;
+            teams[0].strength += 0.05;
+            addNews("New training ground opened! Team strength improved!");
+            alert("Training ground upgraded!");
+        }
+
+        function addNews(text) {
+            const feed = document.getElementById('newsFeed');
+            const item = document.createElement('div');
+            item.className = 'news-item';
+            item.innerHTML = `
+                <div class="news-date">Matchday ${Math.min(teams[0].played + 1, 38)} - Season ${club.season}</div>
+                <div>${text}</div>
+            `;
+            feed.insertBefore(item, feed.firstChild);
+        }
+
+        function updateHistory() {
+            const container = document.getElementById('seasonHistory');
+            const achievements = document.getElementById('achievements');
+            
+            let html = '';
+            let achievementsHtml = '';
+            
+            club.history.forEach(h => {
+                const gd = h.gf - h.ga;
+                html += `
+                    <div class="news-item">
+                        <div class="news-date">Season ${h.season} - ${h.division}</div>
+                        <div>
+                            Position: <strong>${getOrdinal(h.position)}</strong> | 
+                            ${h.won}W-${h.drawn}D-${h.lost}L | 
+                            Points: ${h.points} | 
+                            GD: ${gd > 0 ? '+' : ''}${gd}
+                        </div>
+                    </div>
+                `;
+                
+                if (h.position === 1) {
+                    achievementsHtml += `<p>🏆 Season ${h.season}: Champions of ${h.division}</p>`;
+                }
+            });
+            
+            container.innerHTML = html || '<p style="opacity: 0.6;">No history yet...</p>';
+            achievements.innerHTML = achievementsHtml || '<p style="opacity: 0.6;">No achievements yet...</p>';
+        }
+
+        function showPanel(panelName) {
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            
+            document.getElementById(panelName).classList.add('active');
+            event.target.classList.add('active');
+            
+            if (panelName === 'league') updateLeagueTable();
+        }
+
+        function resetGame() {
+            document.getElementById('championModal').style.display = 'none';
+            
+            club.level = 8;
+            club.season = 1;
+            club.money = 50000;
+            club.totalIncome = 0;
+            club.totalExpenses = 0;
+            club.hasSponsorship = false;
+            club.capacity = 3000;
+            club.history = [];
+            club.currentFormation = '4-4-2';
+            
+            document.getElementById('sponsorStatus').innerHTML = `
+                <div style="font-size: 1.2em; margin-bottom: 10px;">No active sponsorship</div>
+                <button class="btn btn-success" onclick="getSponsorship()" id="sponsorBtn">
+                    Get Sponsorship (£500k)
+                </button>
+                <div style="font-size: 0.9em; margin-top: 10px; opacity: 0.8;">
+                    Includes Jersey Sponsorship & Stadium Renovation Fund
+                </div>
+            `;
+            
+            document.getElementById('newsFeed').innerHTML = `
+                <div class="news-item">
+                    <div class="news-date">Matchday 1 - Season 1</div>
+                    <div>New game started! Welcome to Newton United FC!</div>
+                </div>
+            `;
+            
+            // Reset formation buttons
+            document.querySelectorAll('.btn-tactic').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById('btn-4-4-2').classList.add('active');
+            
+            updateHeaderLevel();
+            updateFormationDisplay();
+            generateTeams();
+            generateFixtures();
+            currentFixture = 0;
+            
+            for (let i = 0; i < fixtures.length; i++) {
+                if (fixtures[i][0] === 0 || fixtures[i][1] === 0) {
+                    currentFixture = i;
+                    break;
+                }
+            }
+            
+            document.getElementById('matchResultCard').style.display = 'none';
+            document.getElementById('nextMatchCard').style.display = 'block';
+            document.getElementById('playMatchBtn').disabled = false;
+            
+            updateDisplay();
+            updateLeagueTable();
+            updateHistory();
+        }
+
+        window.onload = initGame;
+    </script>
 </body>
 </html>
