@@ -1,746 +1,3 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Non-League Football Manager - Newton United FC</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #fff;
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #800000 0%, #4a0000 100%);
-            padding: 30px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            text-align: center;
-            border: 3px solid #fff;
-        }
-
-        .logo-container {
-            width: 150px;
-            height: 150px;
-            margin: 0 auto 20px;
-            background: #fff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 5px solid #000;
-            overflow: hidden;
-        }
-
-        .logo-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .club-name {
-            font-size: 2.5em;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-
-        .nickname {
-            font-size: 1.3em;
-            color: #ffd700;
-            font-style: italic;
-            margin-bottom: 10px;
-        }
-
-        .stadium-info {
-            font-size: 0.9em;
-            opacity: 0.9;
-        }
-
-        .division-badge {
-            display: inline-block;
-            background: #ffd700;
-            color: #000;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-
-        .nav-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .nav-btn {
-            background: #800000;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-            border: 2px solid transparent;
-        }
-
-        .nav-btn:hover {
-            background: #a00000;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(128,0,0,0.3);
-        }
-
-        .nav-btn.active {
-            background: #fff;
-            color: #800000;
-            border-color: #800000;
-        }
-
-        .panel {
-            display: none;
-            animation: fadeIn 0.3s;
-        }
-
-        .panel.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .card {
-            background: rgba(255,255,255,0.05);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-        }
-
-        .card-title {
-            font-size: 1.5em;
-            margin-bottom: 15px;
-            color: #ffd700;
-            border-bottom: 2px solid #800000;
-            padding-bottom: 10px;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .stat-box {
-            background: linear-gradient(135deg, #800000 0%, #600000 100%);
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            border: 2px solid #fff;
-            transition: transform 0.3s;
-        }
-
-        .stat-box:hover {
-            transform: scale(1.05);
-        }
-
-        .stat-label {
-            font-size: 0.9em;
-            opacity: 0.9;
-            margin-bottom: 5px;
-        }
-
-        .stat-value {
-            font-size: 2em;
-            font-weight: bold;
-            color: #ffd700;
-        }
-
-        .money-positive { color: #00ff88; }
-        .money-negative { color: #ff4757; }
-
-        .progress-container {
-            background: rgba(0,0,0,0.3);
-            border-radius: 10px;
-            height: 30px;
-            overflow: hidden;
-            margin: 10px 0;
-            border: 2px solid #fff;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #ffd700 0%, #ffed4e 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #000;
-            font-weight: bold;
-            transition: width 0.5s ease;
-        }
-
-        .match-result {
-            background: linear-gradient(135deg, #2d3436 0%, #000000 100%);
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            margin: 20px 0;
-            border: 3px solid #800000;
-        }
-
-        .score-display {
-            font-size: 4em;
-            font-weight: bold;
-            margin: 20px 0;
-            font-family: 'Courier New', monospace;
-        }
-
-        .vs {
-            font-size: 1.5em;
-            color: #ffd700;
-            margin: 0 20px;
-        }
-
-        .team-name {
-            font-size: 1.3em;
-            font-weight: bold;
-        }
-
-        .result-win { color: #00ff88; text-shadow: 0 0 10px #00ff88; }
-        .result-draw { color: #ffd700; text-shadow: 0 0 10px #ffd700; }
-        .result-loss { color: #ff4757; text-shadow: 0 0 10px #ff4757; }
-
-        .btn {
-            background: linear-gradient(135deg, #800000 0%, #600000 100%);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1.1em;
-            font-weight: bold;
-            margin: 10px;
-            transition: all 0.3s;
-            border: 2px solid #fff;
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(128,0,0,0.4);
-            background: linear-gradient(135deg, #a00000 0%, #800000 100%);
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
-        }
-
-        .btn-warning {
-            background: linear-gradient(135deg, #fdcb6e 0%, #f39c12 100%);
-            color: #000;
-        }
-
-        .btn-tactic {
-            background: linear-gradient(135deg, #2d3436 0%, #636e72 100%);
-            padding: 10px 20px;
-            font-size: 0.9em;
-        }
-
-        .btn-tactic.active {
-            background: linear-gradient(135deg, #ffd700 0%, #f39c12 100%);
-            color: #000;
-        }
-
-        .league-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            font-size: 0.85em;
-        }
-
-        .league-table th {
-            background: #800000;
-            padding: 10px 6px;
-            text-align: center;
-            border-bottom: 3px solid #ffd700;
-            font-weight: bold;
-            font-size: 0.8em;
-        }
-
-        .league-table td {
-            padding: 8px 6px;
-            text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .league-table tr:hover {
-            background: rgba(128,0,0,0.2);
-        }
-
-        .league-table .highlight {
-            background: rgba(255,215,0,0.25) !important;
-            font-weight: bold;
-            border-left: 4px solid #ffd700;
-            border-right: 4px solid #ffd700;
-        }
-
-        .league-table .champion {
-            background: rgba(0,255,136,0.2) !important;
-            color: #00ff88;
-            font-weight: bold;
-        }
-
-        .league-table .promotion {
-            background: rgba(0,255,136,0.1) !important;
-            color: #00ff88;
-        }
-
-        .league-table .relegation {
-            background: rgba(255,71,87,0.15) !important;
-            color: #ff4757;
-        }
-
-        .form-w { 
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            background: #00ff88;
-            color: #000;
-            border-radius: 50%;
-            line-height: 20px;
-            font-size: 0.7em;
-            font-weight: bold;
-            margin: 0 1px;
-        }
-        .form-d { 
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            background: #ffd700;
-            color: #000;
-            border-radius: 50%;
-            line-height: 20px;
-            font-size: 0.7em;
-            font-weight: bold;
-            margin: 0 1px;
-        }
-        .form-l { 
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            background: #ff4757;
-            color: #fff;
-            border-radius: 50%;
-            line-height: 20px;
-            font-size: 0.7em;
-            font-weight: bold;
-            margin: 0 1px;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            padding: 40px;
-            border-radius: 20px;
-            max-width: 500px;
-            text-align: center;
-            border: 3px solid #800000;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-        }
-
-        .modal h2 {
-            color: #ffd700;
-            margin-bottom: 20px;
-            font-size: 2em;
-        }
-
-        .sponsor-amount {
-            font-size: 3em;
-            color: #00ff88;
-            margin: 20px 0;
-            font-weight: bold;
-        }
-
-        .news-item {
-            background: rgba(128,0,0,0.2);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            border-left: 4px solid #ffd700;
-        }
-
-        .news-date {
-            font-size: 0.8em;
-            color: #888;
-            margin-bottom: 5px;
-        }
-
-        .upgrade-card {
-            background: rgba(0,0,0,0.3);
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            border: 2px solid #800000;
-        }
-
-        .upgrade-cost {
-            color: #ffd700;
-            font-size: 1.3em;
-            font-weight: bold;
-        }
-
-        .table-legend {
-            display: flex;
-            gap: 20px;
-            margin-top: 15px;
-            font-size: 0.9em;
-            flex-wrap: wrap;
-        }
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .legend-box {
-            width: 20px;
-            height: 20px;
-            border-radius: 3px;
-        }
-
-        /* Squad Styles */
-        .squad-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .player-card {
-            background: rgba(0,0,0,0.3);
-            padding: 15px;
-            border-radius: 10px;
-            border: 2px solid #800000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .player-info {
-            flex: 1;
-        }
-
-        .player-name {
-            font-weight: bold;
-            font-size: 1.1em;
-            color: #fff;
-        }
-
-        .player-details {
-            font-size: 0.9em;
-            color: #aaa;
-            margin-top: 5px;
-        }
-
-        .player-rating {
-            background: #ffd700;
-            color: #000;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 1.2em;
-        }
-
-        .position-gk { border-left: 4px solid #ff4757; }
-        .position-def { border-left: 4px solid #00ff88; }
-        .position-mid { border-left: 4px solid #ffd700; }
-        .position-fwd { border-left: 4px solid #74b9ff; }
-
-        .formation-display {
-            background: rgba(0,100,0,0.2);
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            margin: 20px 0;
-            border: 2px solid #00ff88;
-        }
-
-        .formation-title {
-            font-size: 2em;
-            color: #ffd700;
-            margin-bottom: 10px;
-        }
-
-        .formation-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-top: 15px;
-        }
-
-        .formation-stat {
-            background: rgba(0,0,0,0.3);
-            padding: 15px;
-            border-radius: 10px;
-        }
-
-        .formation-stat-label {
-            font-size: 0.9em;
-            color: #aaa;
-        }
-
-        .formation-stat-value {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #ffd700;
-        }
-
-        .tactics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
-            margin: 20px 0;
-        }
-
-        @media (max-width: 768px) {
-            .club-name { font-size: 1.8em; }
-            .stats-grid { grid-template-columns: 1fr; }
-            .score-display { font-size: 2.5em; }
-            .league-table { font-size: 0.75em; }
-            .league-table th, .league-table td { padding: 4px 2px; }
-            .squad-grid { grid-template-columns: 1fr; }
-            .formation-stats { grid-template-columns: 1fr; }
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .promotion-animation {
-            animation: pulse 2s infinite;
-            color: #00ff88;
-            font-size: 2em;
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .champion-animation {
-            background: linear-gradient(45deg, #ffd700, #ffed4e, #ffd700);
-            background-size: 200% 200%;
-            animation: gradient 3s ease infinite;
-            color: #000;
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            font-size: 2em;
-            font-weight: bold;
-            margin: 20px 0;
-        }
-
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="logo-container">
-                <img src="1000587736.png" alt="Newton United FC Logo" id="clubLogo">
-            </div>
-            
-            <div class="club-name">Newton United FC</div>
-            <div class="nickname">"The Crimson Lions"</div>
-            <div class="stadium-info">
-                🏟️ <span id="stadiumName">Newton Borough Ground</span> | 
-                Capacity: <span id="capacity">3,000</span> | 
-                Division: <span id="currentLevel">8</span>
-                <div class="division-badge" id="divisionName">Division 8 - National League North/South</div>
-            </div>
-        </div>
-
-        <!-- Navigation -->
-        <div class="nav-tabs">
-            <button class="nav-btn active" onclick="showPanel('dashboard')">Dashboard</button>
-            <button class="nav-btn" onclick="showPanel('squad')">Squad</button>
-            <button class="nav-btn" onclick="showPanel('tactics')">Tactics</button>
-            <button class="nav-btn" onclick="showPanel('league')">League</button>
-            <button class="nav-btn" onclick="showPanel('finances')">Finances</button>
-            <button class="nav-btn" onclick="showPanel('stadium')">Stadium</button>
-            <button class="nav-btn" onclick="showPanel('history')">History</button>
-        </div>
-
-        <!-- Dashboard Panel -->
-        <div id="dashboard" class="panel active">
-            <div class="stats-grid">
-                <div class="stat-box">
-                    <div class="stat-label">Weekly Income</div>
-                    <div class="stat-value money-positive">£25k</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-label">Weekly Expenses</div>
-                    <div class="stat-value money-negative">£7k</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-label">Balance</div>
-                    <div class="stat-value" id="balance">£50,000</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-label">Matchday</div>
-                    <div class="stat-value" id="matchday">1/38</div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-title">📊 Current Season Progress</div>
-                <div>League Position: <strong id="position">-</strong></div>
-                <div class="progress-container">
-                    <div class="progress-bar" id="seasonProgress" style="width: 0%">0%</div>
-                </div>
-                <div style="margin-top: 10px;">
-                    Played: <span id="played">0</span> | 
-                    Won: <span id="won" style="color: #00ff88">0</span> | 
-                    Drawn: <span id="drawn" style="color: #ffd700">0</span> | 
-                    Lost: <span id="lost" style="color: #ff4757">0</span>
-                </div>
-                <div style="margin-top: 10px; font-size: 1.2em;">
-                    Points: <strong id="points">0</strong> | 
-                    Goal Difference: <span id="gd">0</span>
-                </div>
-                <div style="margin-top: 10px; color: #ffd700;">
-                    Goals For: <span id="gf">0</span> | 
-                    Goals Against: <span id="ga">0</span>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-title">⚽ Current Formation</div>
-                <div class="formation-display">
-                    <div class="formation-title" id="currentFormation">4-4-2</div>
-                    <div style="color: #aaa; margin-bottom: 15px;">Click "Tactics" tab to change formation</div>
-                    <div class="formation-stats">
-                        <div class="formation-stat">
-                            <div class="formation-stat-label">Attack</div>
-                            <div class="formation-stat-value" id="formationAttack">70</div>
-                        </div>
-                        <div class="formation-stat">
-                            <div class="formation-stat-label">Midfield</div>
-                            <div class="formation-stat-value" id="formationMidfield">60</div>
-                        </div>
-                        <div class="formation-stat">
-                            <div class="formation-stat-label">Defense</div>
-                            <div class="formation-stat-value" id="formationDefense">70</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card" id="nextMatchCard">
-                <div class="card-title">⚽ Next Match</div>
-                <div id="nextMatchInfo" style="font-size: 1.2em; margin-bottom: 20px;">
-                    vs <strong id="nextOpponent">TBD</strong>
-                </div>
-                <button class="btn btn-success" onclick="playMatch()" id="playMatchBtn">
-                    Play Match
-                </button>
-                <button class="btn btn-warning" onclick="simulateMatches()" id="simMatchesBtn">
-                    Simulate 5 Matches
-                </button>
-            </div>
-
-            <div class="card" id="matchResultCard" style="display: none;">
-                <div class="card-title">🏆 Match Result</div>
-                <div class="match-result">
-                    <div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap;">
-                        <div class="team-name">Newton United</div>
-                        <div class="score-display">
-                            <span id="homeScore">0</span>
-                            <span class="vs">-</span>
-                            <span id="awayScore">0</span>
-                        </div>
-                        <div class="team-name" id="opponentName">Opponent</div>
-                    </div>
-                    <div id="matchResult" style="font-size: 1.5em; margin-top: 15px;"></div>
-                    <div id="matchDetails" style="margin-top: 10px; opacity: 0.8;"></div>
-                </div>
-                <button class="btn" onclick="nextMatch()" style="margin-top: 20px;">
-                    Next Match
-                </button>
-            </div>
-
-            <div class="card">
-                <div class="card-title">📰 Club News</div>
-                <div id="newsFeed">
-                    <div class="news-item">
-                        <div class="news-date">Matchday 1 - Season 1</div>
-                        <div>Welcome to Newton United FC! The Crimson Lions are ready to roar in Division 8!</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Squad Panel -->
-        <div id="squad" class="panel">
-            <div class="card">
-                <div class="card-title">👥 Squad Overview</div>
-                <div class="stats-grid">
-                    <div class="stat-box">
-                        <div class="stat-label">Squad Size</div>
-                        <div class="stat-value" id="squadSize">22</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Average Age</div>
-                        <div class="stat-value">24.5</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label">Avg Rating</div>
-                        <div class="stat-value" id="avgRating">62</div>
                     </div>
                     <div class="stat-box">
                         <div class="stat-label">Team Chemistry</div>
@@ -819,18 +76,6 @@
                         3-4-3<br>
                         <small>All Out Attack</small>
                     </button>
-                </div>
-
-                <div style="margin-top: 30px; padding: 20px; background: rgba(128,0,0,0.2); border-radius: 10px;">
-                    <h4 style="color: #ffd700; margin-bottom: 15px;">Formation Guide:</h4>
-                    <ul style="list-style: none; line-height: 2;">
-                        <li><strong>4-4-2:</strong> Keseimbangan sempurna antara serang dan bertahan</li>
-                        <li><strong>4-3-3:</strong> Fokus menyerang melalui sayap</li>
-                        <li><strong>4-2-3-1:</strong> Kontrol midfield dengan playmaker</li>
-                        <li><strong>3-5-2:</strong> Dominasi midfield dengan wing-back</li>
-                        <li><strong>5-3-2:</strong> Bertahan solid dengan counter attack</li>
-                        <li><strong>3-4-3:</strong> Serangan maksimal, bertahan minimal</li>
-                    </ul>
                 </div>
             </div>
 
@@ -1082,7 +327,8 @@
             MATCHES_PER_SEASON: 38,
             PROMOTION_SPOTS: 1,
             PLAYOFF_SPOTS: 3,
-            RELEGATION_SPOTS: 2
+            RELEGATION_SPOTS: 2,
+            SAVE_KEY: 'newtonUnitedSave'
         };
 
         // Formation database
@@ -1095,8 +341,34 @@
             '3-4-3': { name: '3-4-3', attack: 90, midfield: 70, defense: 50, description: 'All Out Attack' }
         };
 
-        // Game State
-        const club = {
+        // Complete 22-player squad
+        const fullSquad = [
+            { name: "James Harrison", pos: "GK", rating: 68, age: 28 },
+            { name: "Michael Brown", pos: "GK", rating: 62, age: 24 },
+            { name: "David Wilson", pos: "GK", rating: 58, age: 21 },
+            { name: "Robert Clarke", pos: "DEF", rating: 66, age: 29 },
+            { name: "Thomas Wright", pos: "DEF", rating: 65, age: 26 },
+            { name: "William Parker", pos: "DEF", rating: 64, age: 25 },
+            { name: "Richard Taylor", pos: "DEF", rating: 63, age: 27 },
+            { name: "Joseph Evans", pos: "DEF", rating: 62, age: 23 },
+            { name: "Charles Morgan", pos: "DEF", rating: 61, age: 22 },
+            { name: "Daniel Phillips", pos: "DEF", rating: 60, age: 24 },
+            { name: "Matthew Jenkins", pos: "DEF", rating: 59, age: 20 },
+            { name: "Andrew Thompson", pos: "MID", rating: 69, age: 28 },
+            { name: "Christopher Lee", pos: "MID", rating: 67, age: 26 },
+            { name: "Stephen White", pos: "MID", rating: 65, age: 25 },
+            { name: "Kevin Harris", pos: "MID", rating: 64, age: 24 },
+            { name: "Brian Martin", pos: "MID", rating: 62, age: 27 },
+            { name: "Edward Clark", pos: "MID", rating: 61, age: 22 },
+            { name: "George Lewis", pos: "MID", rating: 60, age: 21 },
+            { name: "Anthony Walker", pos: "FWD", rating: 70, age: 29 },
+            { name: "Paul Hall", pos: "FWD", rating: 68, age: 26 },
+            { name: "Mark Young", pos: "FWD", rating: 65, age: 24 },
+            { name: "Steven Allen", pos: "FWD", rating: 63, age: 22 }
+        ];
+
+        // Default game state
+        const defaultClub = {
             name: "Newton United FC",
             nickname: "The Crimson Lions",
             level: 8,
@@ -1111,7 +383,7 @@
             points: 0,
             gf: 0,
             ga: 0,
-                        hasSponsorship: false,
+            hasSponsorship: false,
             totalIncome: 0,
             totalExpenses: 0,
             history: [],
@@ -1123,13 +395,13 @@
         };
 
         const divisions = {
-            8: { name: "Division 8", full: "Northern Premier Division One League", isLowest: true },
+            8: { name: "Division 8", full: "Northern Premier League Division One", isLowest: true },
             7: { name: "Division 7", full: "Northern Premier League", isLowest: false },
             6: { name: "Division 6", full: "National League North", isLowest: false },
             5: { name: "Division 5", full: "National League", isLowest: false },
             4: { name: "Division 4", full: "League Two", isLowest: false },
-            3: { name: "Division 3", full: "League One", isLowest: false },
-            2: { name: "Division 2", full: "Chmapionship", isLowest: false },
+            3: { name: "Division 3", full: "League one", isLowest: false },
+            2: { name: "Division 2", full: "Championship", isLowest: false },
             1: { name: "Division 1", full: "Premier League", isLowest: false }
         };
 
@@ -1142,55 +414,94 @@
             "Royal Borough", "Maritime FC", "Highland United", "Lowland Town"
         ];
 
-        // Complete 22-player squad
-        const fullSquad = [
-            // Goalkeepers (3)
-            { name: "James Harrison", pos: "GK", rating: 68, age: 28 },
-            { name: "Michael Brown", pos: "GK", rating: 62, age: 24 },
-            { name: "David Wilson", pos: "GK", rating: 58, age: 21 },
-            
-            // Defenders (8)
-            { name: "Robert Clarke", pos: "DEF", rating: 66, age: 29 },
-            { name: "Thomas Wright", pos: "DEF", rating: 65, age: 26 },
-            { name: "William Parker", pos: "DEF", rating: 64, age: 25 },
-            { name: "Richard Taylor", pos: "DEF", rating: 63, age: 27 },
-            { name: "Joseph Evans", pos: "DEF", rating: 62, age: 23 },
-            { name: "Charles Morgan", pos: "DEF", rating: 61, age: 22 },
-            { name: "Daniel Phillips", pos: "DEF", rating: 60, age: 24 },
-            { name: "Matthew Jenkins", pos: "DEF", rating: 59, age: 20 },
-            
-            // Midfielders (7)
-            { name: "Andrew Thompson", pos: "MID", rating: 69, age: 28 },
-            { name: "Christopher Lee", pos: "MID", rating: 67, age: 26 },
-            { name: "Stephen White", pos: "MID", rating: 65, age: 25 },
-            { name: "Kevin Harris", pos: "MID", rating: 64, age: 24 },
-            { name: "Brian Martin", pos: "MID", rating: 62, age: 27 },
-            { name: "Edward Clark", pos: "MID", rating: 61, age: 22 },
-            { name: "George Lewis", pos: "MID", rating: 60, age: 21 },
-            
-            // Forwards (4)
-            { name: "Anthony Walker", pos: "FWD", rating: 70, age: 29 },
-            { name: "Paul Hall", pos: "FWD", rating: 68, age: 26 },
-            { name: "Mark Young", pos: "FWD", rating: 65, age: 24 },
-            { name: "Steven Allen", pos: "FWD", rating: 63, age: 22 }
-        ];
-
+        let club = {};
         let teams = [];
         let fixtures = [];
         let currentFixture = 0;
+        let seasonMatchCount = 0;
+
+        // Save game to localStorage
+        function saveGame() {
+            const saveData = {
+                club: club,
+                teams: teams,
+                fixtures: fixtures,
+                currentFixture: currentFixture,
+                seasonMatchCount: seasonMatchCount,
+                timestamp: new Date().toISOString()
+            };
+            localStorage.setItem(CONFIG.SAVE_KEY, JSON.stringify(saveData));
+            showSaveIndicator();
+        }
+
+        function showSaveIndicator() {
+            const indicator = document.getElementById('saveIndicator');
+            indicator.classList.add('show');
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 2000);
+        }
+
+        // Load game from localStorage
+        function loadGame() {
+            const saved = localStorage.getItem(CONFIG.SAVE_KEY);
+            if (saved) {
+                try {
+                    const saveData = JSON.parse(saved);
+                    club = saveData.club || {...defaultClub};
+                    teams = saveData.teams || [];
+                    fixtures = saveData.fixtures || [];
+                    currentFixture = saveData.currentFixture || 0;
+                    seasonMatchCount = saveData.seasonMatchCount || 0;
+                    
+                    // Ensure all team stats are numbers
+                    teams.forEach(team => {
+                        team.played = Number(team.played) || 0;
+                        team.won = Number(team.won) || 0;
+                        team.drawn = Number(team.drawn) || 0;
+                        team.lost = Number(team.lost) || 0;
+                        team.gf = Number(team.gf) || 0;
+                        team.ga = Number(team.ga) || 0;
+                        team.points = Number(team.points) || 0;
+                    });
+                    
+                    return true;
+                } catch (e) {
+                    console.error('Failed to load save:', e);
+                    return false;
+                }
+            }
+            return false;
+        }
 
         function initGame() {
-            generateTeams();
-            generateFixtures();
+            if (!loadGame()) {
+                // New game
+                club = {...defaultClub};
+                generateTeams();
+                generateFixtures();
+                currentFixture = 0;
+                seasonMatchCount = 0;
+            }
+            
             updateDisplay();
             updateLeagueTable();
             updateSquad();
             updateFormationDisplay();
+            updateHistory();
+            
+            // Update button states
+            document.querySelectorAll('.btn-tactic').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            const activeBtn = document.getElementById(`btn-${club.currentFormation}`);
+            if (activeBtn) activeBtn.classList.add('active');
         }
 
         function generateTeams() {
             teams = [];
             
+            // Player team
             teams.push({
                 name: "Newton United",
                 played: 0, won: 0, drawn: 0, lost: 0,
@@ -1200,6 +511,7 @@
                 form: []
             });
 
+            // AI teams
             const shuffledNames = [...teamNames].sort(() => Math.random() - 0.5).slice(0, 19);
             for (let i = 0; i < 19; i++) {
                 teams.push({
@@ -1217,148 +529,98 @@
             fixtures = [];
             const teamCount = CONFIG.TEAMS_PER_DIVISION;
             
+            // Generate all fixtures for the season
             for (let round = 0; round < 2; round++) {
                 for (let i = 0; i < teamCount; i++) {
                     for (let j = i + 1; j < teamCount; j++) {
                         if (round === 0) {
-                            fixtures.push([i, j]);
+                            fixtures.push({home: i, away: j, played: false});
                         } else {
-                            fixtures.push([j, i]);
+                            fixtures.push({home: j, away: i, played: false});
                         }
                     }
                 }
             }
             
+            // Shuffle fixtures
             fixtures.sort(() => Math.random() - 0.5);
-            
-            const playerFixtures = [];
-            const otherFixtures = [];
-            
-            fixtures.forEach((f) => {
-                if (f[0] === 0 || f[1] === 0) {
-                    playerFixtures.push(f);
-                } else {
-                    otherFixtures.push(f);
-                }
-            });
-            
-            fixtures = [];
-            const interval = Math.floor(otherFixtures.length / playerFixtures.length);
-            
-            let otherIdx = 0;
-            playerFixtures.forEach((pf, i) => {
-                const batchEnd = (i === playerFixtures.length - 1) ? otherFixtures.length : (i + 1) * interval;
-                while (otherIdx < batchEnd && otherIdx < otherFixtures.length) {
-                    fixtures.push(otherFixtures[otherIdx]);
-                    otherIdx++;
-                }
-                fixtures.push(pf);
-            });
-            
-            while (otherIdx < otherFixtures.length) {
-                fixtures.push(otherFixtures[otherIdx]);
-                otherIdx++;
-            }
-        }
-
-        function simulateAIWeek() {
-            let matchesSimulated = 0;
-            for (let i = 0; i < teams.length && matchesSimulated < 9; i++) {
-                for (let j = i + 1; j < teams.length && matchesSimulated < 9; j++) {
-                    if (!teams[i].isPlayer && !teams[j].isPlayer) {
-                        const targetPlayed = Math.min(teams[i].played, teams[j].played);
-                        if (targetPlayed < Math.floor(club.season * 1.9)) {
-                            const t1Strength = teams[i].strength + (Math.random() * 0.2 - 0.1);
-                            const t2Strength = teams[j].strength + (Math.random() * 0.2 - 0.1);
-                            
-                            let t1Score, t2Score;
-                            if (t1Strength > t2Strength + 0.15) {
-                                t1Score = Math.floor(Math.random() * 3) + 2;
-                                t2Score = Math.floor(Math.random() * 2);
-                            } else if (t2Strength > t1Strength + 0.15) {
-                                t2Score = Math.floor(Math.random() * 3) + 2;
-                                t1Score = Math.floor(Math.random() * 2);
-                            } else {
-                                t1Score = Math.floor(Math.random() * 3) + 1;
-                                t2Score = Math.floor(Math.random() * 3) + 1;
-                            }
-                            
-                            updateTeamStats(i, t1Score, t2Score);
-                            updateTeamStats(j, t2Score, t1Score);
-                            matchesSimulated++;
-                        }
-                    }
-                }
-            }
-        }
-
-        function updateTeamStats(teamIdx, gf, ga) {
-            const team = teams[teamIdx];
-            team.played++;
-            team.gf += gf;
-            team.ga += ga;
-            
-            if (gf > ga) {
-                team.won++;
-                team.points += 3;
-                team.form.push('W');
-            } else if (gf === ga) {
-                team.drawn++;
-                team.points += 1;
-                team.form.push('D');
-            } else {
-                team.lost++;
-                team.form.push('L');
-            }
-            
-            if (team.form.length > 5) team.form.shift();
+            seasonMatchCount = 0;
         }
 
         function playMatch() {
-            if (currentFixture >= fixtures.length) return;
+            if (seasonMatchCount >= CONFIG.MATCHES_PER_SEASON) {
+                endSeason();
+                return;
+            }
             
-            const fixture = fixtures[currentFixture];
-            const isHome = fixture[0] === 0;
-            const opponentIdx = isHome ? fixture[1] : fixture[0];
+            // Find next unplayed fixture involving player
+            let fixtureIndex = -1;
+            for (let i = 0; i < fixtures.length; i++) {
+                if (!fixtures[i].played && (fixtures[i].home === 0 || fixtures[i].away === 0)) {
+                    fixtureIndex = i;
+                    break;
+                }
+            }
+            
+            if (fixtureIndex === -1) {
+                // No more player matches, simulate remaining AI matches
+                simulateAllAIMatches();
+                endSeason();
+                return;
+            }
+            
+            const fixture = fixtures[fixtureIndex];
+            const isHome = fixture.home === 0;
+            const opponentIdx = isHome ? fixture.away : fixture.home;
             const opponent = teams[opponentIdx];
             
+            // Calculate match outcome
             let ourStrength = teams[0].strength;
             let theirStrength = opponent.strength;
             
             // Formation effects
             const form = formations[club.currentFormation];
-            ourStrength += (form.attack + form.midfield + form.defense) / 300;
+            ourStrength += (form.attack + form.midfield + form.defense - 200) / 400;
             
             if (club.trainingFocus === 'attack') ourStrength += 0.03;
             if (club.trainingFocus === 'defense') theirStrength -= 0.02;
             if (isHome) ourStrength += 0.05;
             
-            ourStrength += (Math.random() * 0.2) - 0.1;
-            theirStrength += (Math.random() * 0.2) - 0.1;
+            // Random variation
+            ourStrength += (Math.random() * 0.3) - 0.15;
+            theirStrength += (Math.random() * 0.3) - 0.15;
             
+            // Generate scores
             let ourScore, theirScore;
             const strengthDiff = ourStrength - theirStrength;
             
-            if (strengthDiff > 0.2) {
-                ourScore = Math.floor(Math.random() * 4) + 1;
-                theirScore = Math.floor(Math.random() * Math.min(ourScore, 3));
-            } else if (strengthDiff < -0.2) {
-                theirScore = Math.floor(Math.random() * 4) + 1;
-                ourScore = Math.floor(Math.random() * Math.min(theirScore, 3));
+            if (strengthDiff > 0.25) {
+                ourScore = Math.floor(Math.random() * 4) + 2;
+                theirScore = Math.floor(Math.random() * 2);
+            } else if (strengthDiff > 0) {
+                ourScore = Math.floor(Math.random() * 3) + 1;
+                theirScore = Math.floor(Math.random() * 2);
+            } else if (strengthDiff > -0.25) {
+                ourScore = Math.floor(Math.random() * 2) + 1;
+                theirScore = Math.floor(Math.random() * 2) + 1;
             } else {
-                ourScore = Math.floor(Math.random() * 4) + 1;
-                theirScore = Math.floor(Math.random() * 4) + 1;
+                theirScore = Math.floor(Math.random() * 3) + 1;
+                ourScore = Math.floor(Math.random() * 2);
             }
             
+            // Update stats
             updateTeamStats(0, ourScore, theirScore);
             updateTeamStats(opponentIdx, theirScore, ourScore);
-            syncClubStats();
             
+            // Mark fixture as played
+            fixtures[fixtureIndex].played = true;
+            seasonMatchCount++;
+            
+            // Finances
             club.money += club.weeklyIncome;
             club.money -= club.weeklyExpense;
             club.totalIncome += club.weeklyIncome;
             club.totalExpenses += club.weeklyExpense;
-            club.season++;
             
             let attendance = club.avgAttendance + Math.floor(Math.random() * 600 - 300);
             if (ourScore > theirScore) attendance += 200;
@@ -1366,6 +628,7 @@
             club.money += matchRevenue;
             club.totalIncome += matchRevenue;
             
+            // Display result
             document.getElementById('homeScore').textContent = isHome ? ourScore : theirScore;
             document.getElementById('awayScore').textContent = isHome ? theirScore : ourScore;
             document.getElementById('opponentName').textContent = opponent.name;
@@ -1390,24 +653,124 @@
             document.getElementById('matchResultCard').style.display = 'block';
             document.getElementById('nextMatchCard').style.display = 'none';
             
-            currentFixture++;
-            simulateAIWeek();
+            // Simulate some AI matches
+            simulateAIMatches(5);
+            
+            syncClubStats();
             updateDisplay();
             updateLeagueTable();
+            saveGame();
             
-            if (teams[0].played >= CONFIG.MATCHES_PER_SEASON) {
+            if (seasonMatchCount >= CONFIG.MATCHES_PER_SEASON) {
                 setTimeout(endSeason, 1500);
             }
         }
 
         function simulateMatches() {
-            for (let i = 0; i < 5; i++) {
-                if (teams[0].played < CONFIG.MATCHES_PER_SEASON) {
-                    simulateAIWeek();
+            // Simulate until next player match or end of season
+            let simulated = 0;
+            while (simulated < 10 && seasonMatchCount < CONFIG.MATCHES_PER_SEASON) {
+                // Find next player match
+                let nextPlayerMatch = -1;
+                for (let i = 0; i < fixtures.length; i++) {
+                    if (!fixtures[i].played && (fixtures[i].home === 0 || fixtures[i].away === 0)) {
+                        nextPlayerMatch = i;
+                        break;
+                    }
+                }
+                
+                if (nextPlayerMatch === -1) break;
+                
+                // Simulate AI matches before player match
+                simulateAIMatches(3);
+                simulated++;
+            }
+            
+            updateLeagueTable();
+            addNews("Matches simulated. Ready for next game.");
+            saveGame();
+        }
+
+        function simulateAIMatches(count) {
+            let simulated = 0;
+            for (let i = 0; i < fixtures.length && simulated < count; i++) {
+                if (!fixtures[i].played && fixtures[i].home !== 0 && fixtures[i].away !== 0) {
+                    const homeTeam = fixtures[i].home;
+                    const awayTeam = fixtures[i].away;
+                    
+                    const homeStrength = teams[homeTeam].strength + (Math.random() * 0.2 - 0.1);
+                    const awayStrength = teams[awayTeam].strength + (Math.random() * 0.2 - 0.1);
+                    
+                    let homeScore, awayScore;
+                    if (homeStrength > awayStrength + 0.2) {
+                        homeScore = Math.floor(Math.random() * 3) + 2;
+                        awayScore = Math.floor(Math.random() * 2);
+                    } else if (awayStrength > homeStrength + 0.2) {
+                        awayScore = Math.floor(Math.random() * 3) + 2;
+                        homeScore = Math.floor(Math.random() * 2);
+                    } else {
+                        homeScore = Math.floor(Math.random() * 3) + 1;
+                        awayScore = Math.floor(Math.random() * 3) + 1;
+                    }
+                    
+                    updateTeamStats(homeTeam, homeScore, awayScore);
+                    updateTeamStats(awayTeam, awayScore, homeScore);
+                    fixtures[i].played = true;
+                    seasonMatchCount++;
+                    simulated++;
                 }
             }
-            updateLeagueTable();
-            addNews("Multiple matches simulated.");
+        }
+
+        function simulateAllAIMatches() {
+            for (let i = 0; i < fixtures.length; i++) {
+                if (!fixtures[i].played && fixtures[i].home !== 0 && fixtures[i].away !== 0) {
+                    const homeTeam = fixtures[i].home;
+                    const awayTeam = fixtures[i].away;
+                    
+                    const homeStrength = teams[homeTeam].strength + (Math.random() * 0.2 - 0.1);
+                    const awayStrength = teams[awayTeam].strength + (Math.random() * 0.2 - 0.1);
+                    
+                    let homeScore, awayScore;
+                    if (homeStrength > awayStrength + 0.15) {
+                        homeScore = Math.floor(Math.random() * 3) + 2;
+                        awayScore = Math.floor(Math.random() * 2);
+                    } else if (awayStrength > homeStrength + 0.15) {
+                        awayScore = Math.floor(Math.random() * 3) + 2;
+                        homeScore = Math.floor(Math.random() * 2);
+                    } else {
+                        homeScore = Math.floor(Math.random() * 3) + 1;
+                        awayScore = Math.floor(Math.random() * 3) + 1;
+                    }
+                    
+                    updateTeamStats(homeTeam, homeScore, awayScore);
+                    updateTeamStats(awayTeam, awayScore, homeScore);
+                    fixtures[i].played = true;
+                    seasonMatchCount++;
+                }
+            }
+        }
+
+        function updateTeamStats(teamIdx, gf, ga) {
+            const team = teams[teamIdx];
+            team.played = Number(team.played) + 1;
+            team.gf = Number(team.gf) + gf;
+            team.ga = Number(team.ga) + ga;
+            
+            if (gf > ga) {
+                team.won = Number(team.won) + 1;
+                team.points = Number(team.points) + 3;
+                team.form.push('W');
+            } else if (gf === ga) {
+                team.drawn = Number(team.drawn) + 1;
+                team.points = Number(team.points) + 1;
+                team.form.push('D');
+            } else {
+                team.lost = Number(team.lost) + 1;
+                team.form.push('L');
+            }
+            
+            if (team.form.length > 5) team.form.shift();
         }
 
         function syncClubStats() {
@@ -1425,7 +788,7 @@
             document.getElementById('matchResultCard').style.display = 'none';
             document.getElementById('nextMatchCard').style.display = 'block';
             
-            if (teams[0].played >= CONFIG.MATCHES_PER_SEASON) {
+            if (seasonMatchCount >= CONFIG.MATCHES_PER_SEASON) {
                 document.getElementById('playMatchBtn').disabled = true;
                 document.getElementById('nextOpponent').textContent = "Season Ended";
             } else {
@@ -1434,9 +797,9 @@
         }
 
         function updateNextOpponent() {
-            for (let i = currentFixture; i < fixtures.length; i++) {
-                if (fixtures[i][0] === 0 || fixtures[i][1] === 0) {
-                    const opponentIdx = fixtures[i][0] === 0 ? fixtures[i][1] : fixtures[i][0];
+            for (let i = 0; i < fixtures.length; i++) {
+                if (!fixtures[i].played && (fixtures[i].home === 0 || fixtures[i].away === 0)) {
+                    const opponentIdx = fixtures[i].home === 0 ? fixtures[i].away : fixtures[i].home;
                     document.getElementById('nextOpponent').textContent = teams[opponentIdx].name;
                     return;
                 }
@@ -1445,25 +808,7 @@
         }
 
         function endSeason() {
-            teams.forEach((team, idx) => {
-                if (!team.isPlayer) {
-                    while (team.played < CONFIG.MATCHES_PER_SEASON) {
-                        const opponent = teams.find(t => !t.isPlayer && t !== team && t.played < CONFIG.MATCHES_PER_SEASON);
-                        if (opponent) {
-                            const t1Strength = team.strength + (Math.random() * 0.2 - 0.1);
-                            const t2Strength = opponent.strength + (Math.random() * 0.2 - 0.1);
-                            let t1Score = Math.floor(Math.random() * 4);
-                            let t2Score = Math.floor(Math.random() * 4);
-                            updateTeamStats(idx, t1Score, t2Score);
-                            const oppIdx = teams.indexOf(opponent);
-                            updateTeamStats(oppIdx, t2Score, t1Score);
-                        } else {
-                            break;
-                        }
-                    }
-                }
-            });
-            
+            simulateAllAIMatches();
             updateLeagueTable();
             syncClubStats();
             
@@ -1474,7 +819,7 @@
             
             if (club.level === 1 && isChampion) {
                 document.getElementById('finalSeasons').textContent = club.season;
-                document.getElementById('finalMatches').textContent = teams[0].played * club.season;
+                document.getElementById('finalMatches').textContent = club.played;
                 document.getElementById('finalEarnings').textContent = `£${club.totalIncome.toLocaleString()}`;
                 document.getElementById('championModal').style.display = 'flex';
                 return;
@@ -1507,6 +852,8 @@
                 document.getElementById('seasonEndModal').style.display = 'flex';
                 addNews(`Season ${club.season} finished ${getOrdinal(position)}.`);
             }
+            
+            saveGame();
         }
 
         function closePromotionModal() {
@@ -1538,13 +885,13 @@
                 level: club.level,
                 division: divisions[club.level].name,
                 position: calculatePosition(),
-                played: teams[0].played,
-                won: teams[0].won,
-                drawn: teams[0].drawn,
-                lost: teams[0].lost,
-                points: teams[0].points,
-                gf: teams[0].gf,
-                ga: teams[0].ga
+                played: club.played,
+                won: club.won,
+                drawn: club.drawn,
+                lost: club.lost,
+                points: club.points,
+                gf: club.gf,
+                ga: club.ga
             });
             updateHistory();
         }
@@ -1567,14 +914,6 @@
             
             generateTeams();
             generateFixtures();
-            currentFixture = 0;
-            
-            for (let i = 0; i < fixtures.length; i++) {
-                if (fixtures[i][0] === 0 || fixtures[i][1] === 0) {
-                    currentFixture = i;
-                    break;
-                }
-            }
             
             document.getElementById('matchResultCard').style.display = 'none';
             document.getElementById('nextMatchCard').style.display = 'block';
@@ -1582,7 +921,9 @@
             
             updateDisplay();
             updateLeagueTable();
+            updateNextOpponent();
             addNews(`Season ${club.season} begins! ${divisions[club.level].name}`);
+            saveGame();
         }
 
         function calculatePosition() {
@@ -1603,18 +944,18 @@
         function updateDisplay() {
             document.getElementById('balance').textContent = `£${club.money.toLocaleString()}`;
             document.getElementById('financeBalance').textContent = `£${club.money.toLocaleString()}`;
-            document.getElementById('matchday').textContent = `${Math.min(teams[0].played + 1, CONFIG.MATCHES_PER_SEASON)}/${CONFIG.MATCHES_PER_SEASON}`;
+            document.getElementById('matchday').textContent = `${Math.min(seasonMatchCount + 1, CONFIG.MATCHES_PER_SEASON)}/${CONFIG.MATCHES_PER_SEASON}`;
             
             const pos = calculatePosition();
             document.getElementById('position').textContent = getOrdinal(pos);
-            document.getElementById('played').textContent = teams[0].played;
-            document.getElementById('won').textContent = teams[0].won;
-            document.getElementById('drawn').textContent = teams[0].drawn;
-            document.getElementById('lost').textContent = teams[0].lost;
-            document.getElementById('points').textContent = teams[0].points;
-            document.getElementById('gf').textContent = teams[0].gf;
-            document.getElementById('ga').textContent = teams[0].ga;
-            document.getElementById('gd').textContent = (teams[0].gf - teams[0].ga) > 0 ? `+${teams[0].gf - teams[0].ga}` : teams[0].gf - teams[0].ga;
+            document.getElementById('played').textContent = club.played;
+            document.getElementById('won').textContent = club.won;
+            document.getElementById('drawn').textContent = club.drawn;
+            document.getElementById('lost').textContent = club.lost;
+            document.getElementById('points').textContent = club.points;
+            document.getElementById('gf').textContent = club.gf;
+            document.getElementById('ga').textContent = club.ga;
+            document.getElementById('gd').textContent = (club.gf - club.ga) > 0 ? `+${club.gf - club.ga}` : club.gf - club.ga;
             document.getElementById('totalIncome').textContent = `£${club.totalIncome.toLocaleString()}`;
             document.getElementById('totalExpenses').textContent = `£${club.totalExpenses.toLocaleString()}`;
             document.getElementById('leagueName').textContent = divisions[club.level].name;
@@ -1622,14 +963,22 @@
             document.getElementById('stadiumCondition').textContent = club.stadiumCondition + '%';
             document.getElementById('avgAttendance').textContent = club.avgAttendance.toLocaleString();
             
-            const progress = Math.min(100, (teams[0].played / CONFIG.MATCHES_PER_SEASON) * 100);
+            const progress = Math.min(100, (seasonMatchCount / CONFIG.MATCHES_PER_SEASON) * 100);
             document.getElementById('seasonProgress').style.width = progress + '%';
             document.getElementById('seasonProgress').textContent = Math.round(progress) + '%';
             
-            updateNextOpponent();
-            
-            if (teams[0].played >= CONFIG.MATCHES_PER_SEASON) {
-                document.getElementById('playMatchBtn').disabled = true;
+            // Update sponsor status
+            if (club.hasSponsorship) {
+                document.getElementById('sponsorStatus').innerHTML = `
+                    <div style="font-size: 1.2em; color: #00ff88; margin-bottom: 10px;">
+                        ✅ Active Sponsorship
+                    </div>
+                    <div style="font-size: 0.9em; opacity: 0.8;">
+                        Jersey Sponsor: SportsDirect<br>
+                        Stadium Partner: Local Construction Co.<br>
+                        Deal Value: £500,000 (One-time)
+                    </div>
+                `;
             }
         }
 
@@ -1663,8 +1012,8 @@
                 const gdStr = gd > 0 ? `+${gd}` : gd;
                 
                 let formHtml = '';
-                const recentForm = team.form.slice(-5);
-                recentForm.forEach(r => {
+                const recentForm = team.form || [];
+                recentForm.slice(-5).forEach(r => {
                     const className = r === 'W' ? 'form-w' : r === 'D' ? 'form-d' : 'form-l';
                     formHtml += `<span class="${className}">${r}</span>`;
                 });
@@ -1711,7 +1060,6 @@
             
             const avgRating = Math.round(fullSquad.reduce((a, b) => a + b.rating, 0) / fullSquad.length);
             document.getElementById('avgRating').textContent = avgRating;
-            document.getElementById('squadSize').textContent = fullSquad.length;
         }
 
         function updateFormationDisplay() {
@@ -1730,7 +1078,6 @@
         function setFormation(formationName) {
             club.currentFormation = formationName;
             
-            // Update button states
             document.querySelectorAll('.btn-tactic').forEach(btn => {
                 btn.classList.remove('active');
             });
@@ -1738,6 +1085,7 @@
             
             updateFormationDisplay();
             addNews(`Formation changed to ${formationName}: ${formations[formationName].description}`);
+            saveGame();
         }
 
         function setTraining(focus) {
@@ -1745,6 +1093,7 @@
             document.getElementById('trainingFocusDisplay').textContent = 
                 focus.charAt(0).toUpperCase() + focus.slice(1);
             addNews(`Training focus changed to: ${focus.charAt(0).toUpperCase() + focus.slice(1)}`);
+            saveGame();
         }
 
         function getSponsorship() {
@@ -1759,19 +1108,9 @@
             
             document.getElementById('sponsorModal').style.display = 'flex';
             
-            document.getElementById('sponsorStatus').innerHTML = `
-                <div style="font-size: 1.2em; color: #00ff88; margin-bottom: 10px;">
-                    ✅ Active Sponsorship
-                </div>
-                <div style="font-size: 0.9em; opacity: 0.8;">
-                    Jersey Sponsor: SportsDirect<br>
-                    Stadium Partner: Local Construction Co.<br>
-                    Deal Value: £500,000 (One-time)
-                </div>
-            `;
-            
             updateDisplay();
             addNews("Major sponsorship deal signed! £500,000 injection!");
+            saveGame();
         }
 
         function closeModal() {
@@ -1796,6 +1135,7 @@
             updateDisplay();
             addNews(`Stadium upgrade complete! ${capacityIncrease > 0 ? 'Capacity: ' + club.capacity.toLocaleString() : 'Facilities improved!'}`);
             alert("Upgrade completed successfully!");
+            saveGame();
         }
 
         function upgradeTraining() {
@@ -1806,9 +1146,10 @@
             }
             
             club.money -= cost;
-            teams[0].strength += 0.05;
+            if (teams[0]) teams[0].strength += 0.05;
             addNews("New training ground opened! Team strength improved!");
             alert("Training ground upgraded!");
+            saveGame();
         }
 
         function addNews(text) {
@@ -1816,7 +1157,7 @@
             const item = document.createElement('div');
             item.className = 'news-item';
             item.innerHTML = `
-                <div class="news-date">Matchday ${Math.min(teams[0].played + 1, 38)} - Season ${club.season}</div>
+                <div class="news-date">Matchday ${Math.min(seasonMatchCount + 1, 38)} - Season ${club.season}</div>
                 <div>${text}</div>
             `;
             feed.insertBefore(item, feed.firstChild);
@@ -1829,7 +1170,7 @@
             let html = '';
             let achievementsHtml = '';
             
-            club.history.forEach(h => {
+            (club.history || []).forEach(h => {
                 const gd = h.gf - h.ga;
                 html += `
                     <div class="news-item">
@@ -1863,17 +1204,25 @@
         }
 
         function resetGame() {
-            document.getElementById('championModal').style.display = 'none';
+            if (!confirm('Are you sure you want to start a new career? All progress will be lost!')) {
+                return;
+            }
             
-            club.level = 8;
-            club.season = 1;
-            club.money = 50000;
-            club.totalIncome = 0;
-            club.totalExpenses = 0;
-            club.hasSponsorship = false;
-            club.capacity = 3000;
-            club.history = [];
-            club.currentFormation = '4-4-2';
+            // Clear localStorage
+            localStorage.removeItem(CONFIG.SAVE_KEY);
+            
+            // Reset to default
+            club = {...defaultClub};
+            teams = [];
+            fixtures = [];
+            currentFixture = 0;
+            seasonMatchCount = 0;
+            
+            // Reset UI
+            document.getElementById('championModal').style.display = 'none';
+            document.getElementById('promotionModal').style.display = 'none';
+            document.getElementById('relegationModal').style.display = 'none';
+            document.getElementById('seasonEndModal').style.display = 'none';
             
             document.getElementById('sponsorStatus').innerHTML = `
                 <div style="font-size: 1.2em; margin-bottom: 10px;">No active sponsorship</div>
@@ -1892,34 +1241,29 @@
                 </div>
             `;
             
-            // Reset formation buttons
             document.querySelectorAll('.btn-tactic').forEach(btn => {
                 btn.classList.remove('active');
             });
             document.getElementById('btn-4-4-2').classList.add('active');
             
-            updateHeaderLevel();
-            updateFormationDisplay();
             generateTeams();
             generateFixtures();
-            currentFixture = 0;
-            
-            for (let i = 0; i < fixtures.length; i++) {
-                if (fixtures[i][0] === 0 || fixtures[i][1] === 0) {
-                    currentFixture = i;
-                    break;
-                }
-            }
+            updateHeaderLevel();
+            updateFormationDisplay();
+            updateDisplay();
+            updateLeagueTable();
+            updateSquad();
+            updateHistory();
+            updateNextOpponent();
             
             document.getElementById('matchResultCard').style.display = 'none';
             document.getElementById('nextMatchCard').style.display = 'block';
             document.getElementById('playMatchBtn').disabled = false;
             
-            updateDisplay();
-            updateLeagueTable();
-            updateHistory();
+            saveGame();
         }
 
+        // Initialize game on load
         window.onload = initGame;
     </script>
 </body>
