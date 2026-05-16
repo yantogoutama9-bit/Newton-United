@@ -814,4 +814,415 @@ const PRODUCTS = [
         id: 15, name: "Forheuma", code: "PD4", price: 135000,
         image: "./images/PD4.jpg",
         category: "Penyakit Degeneratif",
-        description: "Meredakan pegal linu & nyeri sendi akib
+        description: "Meredakan pegal linu & nyeri sendi akibat rematik, Mengurangi bengkak akibat rematik."
+    }
+    {
+        id: 16, name: "Glucofit", code: "PD5", price: 135000,
+        image: "./images/PD5.jpg",
+        category: "Penyakit Degeneratif",
+        description: "Membantu meringankan kencing manis, Menurunkan kadar gula, Meningkatkan produksi insulin."
+    }
+    {
+        id: 17, name: "Hemocare", code: "PD6", price: 135000,
+        image: "./images/PD6.jpg",
+        category: "Penyakit Degeneratif",
+        description: "Membantu meringankan wasir, Mengurangi nyeri akibat wasir, Mengurangi bengkak akibat wasir, Memperlancar BAB."
+    }
+    {
+        id: 18, name: "Uricofit", code: "PD7", price: 135000,
+        image: "./images/PD7.jpg",
+        category: "Penyakit Degeneratif",
+        description: "Menurunkan kadar asam urat, Mengurangi bengkak akibat asam urat, Melancarkan buang air kecil."
+    }
+    {
+        id: 19, name: "Hermifit", code: "PD8", price: 135000,
+        image: "./images/PD8.jpg",
+        category: "Penyakit Degeneratif",
+        description: "Meredakan sakit kepala akibat vertigo/migrain, Mencegah mual & muntah."
+    }
+    {
+        id: 20, name: "Bron C Fit", code: "PK1", price: 135000,
+        image: "./images/PK1.jpg",
+        category: "Perawatan Kesehatan",
+        description: "Merawat kesehatan paru-paru & sistem pernapasan,  Membantu meringankan batuk, demam & asma, Mengencerkan dahak."
+    }
+    {
+        id: 21, name: "Hepatifit", code: "PK2", price: 135000,
+        image: "./images/PK2.jpg",
+        category: "Perawatan Kesehatan*,
+        description: "Memelihara kesehatan hati, Mengurangi pembengkakan pada hati, Meningkatkan kekebalan tubuh."
+    }
+    {
+        id: 22, name: "Joint Nature", code: "PK3", price: 135000,
+        image: "./images/PK3.jpg",
+        category: "Perawatan Kesehatan",
+        description: "Memenuhi kebutuhan kalsium untuk tulang, Meredakan  nyeri  sendi, Melumasi  persediaan, Meredakan  bengkak  pada sendi."
+    }
+    {
+        id: 23, name: "BV Flow", code: "PK4", price: 135000,
+        image: "./images/PK4.jpg",
+        category: "Perawatan Kesehatan",
+        description: "Melancarkan peredaran darah, Mencegah penggumpalan darah,  Melebarkan pembuluh darah."
+    }
+    {
+        id: 24, name: "Hitenfit", code: "PK5", price: 135000,
+        image: "./images/PK5.jpg",
+        category: "Perawatan Kesehatan",
+        description: ",Meringankan tekanan darah tinggi, Mengurangi nyeri akibat hipertensi,  Melebarkan pembuluh darah"
+    }
+    {
+        id: 25, name: "Mucosafit", code: "PK6", price: 135000,
+        image: "./images/PK6.jpg",
+        category: "Perawatan Kesehatan",
+        description: "Meringankan gangguan pencernaan, mengatasi  maag, asam lambung, kembung, diare."
+    }
+    {
+        id: 26, name: "Stenosifit", code: "PK7", price: 135000,
+        image: "./images/PK7.jpg",
+        category: "Perawatan Kesehatan",
+        description: "Merawat kesehatan tulang belakang, Melenturkan otot pinggang, Mengurangi nyeri punggung. "
+    }
+    {
+        id: 27, name: "Urinofit", code: "PK8", price: 135000,
+        image: "./images/PK8.jpg",
+        category: "Perawatan Kesehatan",
+        description: "Merawat kesehatan ginjal, Meluruhkan batu ginjal, Melancarkan buang air kecil."
+    }
+    {
+        id: 28, name: "Pos-K", code: "PK9", price: 135000,
+        image: "./images/PK9.jpg",
+        category: "Perawatan Kesehatan",
+        description: "Meredakan bengkak dan nyeri, Mengatasi inflamasi, Meredakan gatal pada kulit."
+    }
+];
+
+let cart = [];
+let selectedBank = null;
+let proofFile = null;
+let currentOrder = null;
+
+// ===================== UTILS =====================
+const formatPrice = p => 'Rp ' + p.toLocaleString('id-ID');
+const showToast = msg => {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+};
+
+// ===================== PRODUCTS =====================
+function renderProducts() {
+    const grid = document.getElementById('productsGrid');
+    grid.innerHTML = PRODUCTS.map((p, i) => `
+        <div class="product-card" style="animation:fadeIn 0.5s ${i*0.08}s both" onclick="openQuick(${p.id})">
+            <div class="product-image-wrap">
+                <img src="${p.image}" alt="${p.name}" class="product-image" loading="lazy">
+                <span class="product-badge">${p.category}</span>
+            </div>
+            <div class="product-info">
+                <h3 class="product-name">${p.name}</h3>
+                <div class="product-code">${p.code}</div>
+                <p class="product-desc">${p.description}</p>
+                <div class="product-footer">
+                    <span class="product-price">${formatPrice(p.price)}</span>
+                    <button class="btn-add" onclick="event.stopPropagation(); addToCart(${p.id});">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ===================== QUICK VIEW =====================
+function openQuick(pid) {
+    const p = PRODUCTS.find(x => x.id === pid);
+    if (!p) return;
+    document.getElementById('quickImage').src = p.image;
+    document.getElementById('quickCategory').textContent = p.category;
+    document.getElementById('quickTitle').textContent = p.name;
+    document.getElementById('quickCode').textContent = p.code;
+    document.getElementById('quickPrice').textContent = formatPrice(p.price);
+    document.getElementById('quickDesc').textContent = p.description;
+    document.getElementById('quickAddBtn').onclick = () => { addToCart(p.id); closeQuick(); };
+    const ov = document.getElementById('quickOverlay');
+    ov.style.display = 'flex'; setTimeout(() => ov.classList.add('active'), 10);
+    document.body.style.overflow = 'hidden';
+}
+
+function closeQuick(e) {
+    if (e && e.target !== e.currentTarget) return;
+    const ov = document.getElementById('quickOverlay');
+    ov.classList.remove('active');
+    setTimeout(() => { ov.style.display = 'none'; document.body.style.overflow = ''; }, 300);
+}
+
+// ===================== CART =====================
+function addToCart(pid) {
+    const item = cart.find(c => c.id === pid);
+    if (item) { item.qty++; }
+    else { cart.push({ ...PRODUCTS.find(p => p.id === pid), qty: 1 }); }
+    updateCartUI();
+    showToast('Produk ditambahkan ke keranjang');
+}
+
+function updateQty(pid, delta) {
+    const item = cart.find(c => c.id === pid);
+    if (!item) return;
+    item.qty += delta;
+    if (item.qty < 1) cart = cart.filter(c => c.id !== pid);
+    updateCartUI();
+}
+
+function removeFromCart(pid) {
+    cart = cart.filter(c => c.id !== pid);
+    updateCartUI();
+}
+
+function updateCartUI() {
+    const badge = document.getElementById('cartBadge');
+    const totalQty = cart.reduce((s, c) => s + c.qty, 0);
+    badge.textContent = totalQty;
+    badge.style.display = totalQty ? 'flex' : 'none';
+
+    const body = document.getElementById('cartBody');
+    const footer = document.getElementById('cartFooter');
+    if (!cart.length) {
+        body.innerHTML = `
+            <div class="cart-empty">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                <p>Keranjang masih kosong</p>
+            </div>`;
+        footer.style.display = 'none'; return;
+    }
+    footer.style.display = 'block';
+    body.innerHTML = cart.map(c => `
+        <div class="cart-item">
+            <img src="${c.image}" alt="${c.name}">
+            <div class="cart-item-info">
+                <div class="cart-item-name">${c.name}</div>
+                <div class="cart-item-code">${c.code}</div>
+                <div class="cart-item-price">${formatPrice(c.price * c.qty)}</div>
+                <div class="cart-item-qty">
+                    <button class="qty-btn-sm" onclick="updateQty(${c.id}, -1)">-</button>
+                    <span style="font-size:0.85rem;font-weight:600;width:24px;text-align:center;">${c.qty}</span>
+                    <button class="qty-btn-sm" onclick="updateQty(${c.id}, 1)">+</button>
+                </div>
+                <button class="cart-item-remove" onclick="removeFromCart(${c.id})">Hapus</button>
+            </div>
+        </div>
+    `).join('');
+
+    const subtotal = cart.reduce((s, c) => s + c.price * c.qty, 0);
+    document.getElementById('cartSubtotal').textContent = formatPrice(subtotal);
+    document.getElementById('cartTotal').textContent = formatPrice(subtotal);
+}
+
+function toggleCart() {
+    const overlay = document.getElementById('cartOverlay');
+    const drawer = document.getElementById('cartDrawer');
+    overlay.classList.toggle('active');
+    drawer.classList.toggle('active');
+}
+
+// ===================== CHECKOUT =====================
+function openCheckout() {
+    if (!cart.length) { showToast('Keranjang masih kosong'); return; }
+    toggleCart();
+    renderBankList();
+    renderSummary();
+    document.getElementById('checkoutOverlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeCheckout() {
+    document.getElementById('checkoutOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function renderBankList() {
+    const list = document.getElementById('bankList');
+    list.innerHTML = BANK_ACCOUNTS.map(b => `
+        <div class="bank-option" onclick="selectBank('${b.id}')" id="bank-${b.id}">
+            <div class="bank-radio"></div>
+            <div class="bank-info">
+                <h4>Transfer ${b.name}</h4>
+                <p>${b.holder}</p>
+            </div>
+        </div>
+    `).join('');
+}
+
+function selectBank(bid) {
+    selectedBank = BANK_ACCOUNTS.find(b => b.id === bid);
+    document.querySelectorAll('.bank-option').forEach(el => el.classList.remove('selected'));
+    document.getElementById(`bank-${bid}`).classList.add('selected');
+    const detail = document.getElementById('bankDetail');
+    detail.classList.add('active');
+    detail.innerHTML = `
+        <div class="bank-detail-row"><span>No. Rekening</span><div style="display:flex;gap:0.5rem;align-items:center;"><strong>${selectedBank.number}</strong><button class="copy-btn" onclick="copyText('${selectedBank.number}', this)">Salin</button></div></div>
+        <div class="bank-detail-row"><span>Atas Nama</span><strong>${selectedBank.holder}</strong></div>
+        <div class="bank-detail-row"><span>Total Transfer</span><strong style="color:var(--gold);font-size:1.05rem;">${formatPrice(cart.reduce((s,c)=>s+c.price*c.qty,0))}</strong></div>
+    `;
+}
+
+function copyText(text, btn) {
+    navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = 'Tersalin'; btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Salin'; btn.classList.remove('copied'); }, 2000);
+    });
+}
+
+function renderSummary() {
+    const subtotal = cart.reduce((s, c) => s + c.price * c.qty, 0);
+    document.getElementById('summaryProducts').innerHTML = cart.map(c => `
+        <div class="summary-product"><span>${c.name} (x${c.qty})</span><span>${formatPrice(c.price * c.qty)}</span></div>
+    `).join('');
+    document.getElementById('sumSubtotal').textContent = formatPrice(subtotal);
+    document.getElementById('sumTotal').textContent = formatPrice(subtotal);
+}
+
+// ===================== DRAG & DROP =====================
+const dropZone = document.getElementById('dropZone');
+['dragenter','dragover','dragleave','drop'].forEach(e => {
+    dropZone.addEventListener(e, ev => { ev.preventDefault(); ev.stopPropagation(); });
+});
+['dragenter','dragover'].forEach(e => {
+    dropZone.addEventListener(e, () => dropZone.classList.add('dragover'));
+});
+['dragleave','drop'].forEach(e => {
+    dropZone.addEventListener(e, () => dropZone.classList.remove('dragover'));
+});
+dropZone.addEventListener('drop', e => handleFile(e.dataTransfer.files[0]));
+
+function handleFile(file) {
+    if (!file) return;
+    if (!file.type.startsWith('image/')) { showToast('Hanya file gambar yang diperbolehkan'); return; }
+    if (file.size > 5 * 1024 * 1024) { showToast('Ukuran file maksimal 5MB'); return; }
+    proofFile = file;
+    const reader = new FileReader();
+    reader.onload = e => {
+        document.getElementById('fileThumb').src = e.target.result;
+        document.getElementById('fileName').textContent = file.name;
+        document.getElementById('fileSize').textContent = (file.size / 1024).toFixed(1) + ' KB';
+        document.getElementById('filePreview').classList.add('active');
+        dropZone.style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+}
+
+function removeFile() {
+    proofFile = null;
+    document.getElementById('fileInput').value = '';
+    document.getElementById('filePreview').classList.remove('active');
+    dropZone.style.display = 'block';
+}
+
+// ===================== SUBMIT =====================
+function submitOrder() {
+    const name = document.getElementById('cName').value.trim();
+    const phone = document.getElementById('cPhone').value.trim();
+    const address = document.getElementById('cAddress').value.trim();
+    const subtotal = cart.reduce((s, c) => s + c.price * c.qty, 0);
+
+    if (!name || !phone || !address) { showToast('Lengkapi data pengiriman terlebih dahulu'); return; }
+    if (!selectedBank) { showToast('Pilih bank tujuan transfer'); return; }
+    if (!proofFile) { showToast('Upload bukti transfer wajib'); return; }
+    if (!cart.length) { showToast('Keranjang kosong'); return; }
+
+    const orderId = 'NATURINDO-' + new Date().toISOString().slice(2,10).replace(/-/g,'') + '-' + Math.floor(1000 + Math.random()*9000);
+    currentOrder = {
+        id: orderId, date: new Date().toLocaleString('id-ID'),
+        customer: { name, phone, address },
+        items: cart.map(c => ({ ...c })),
+        bank: selectedBank, total: subtotal,
+        status: 'MENUNGGU VERIFIKASI'
+    };
+
+    const history = JSON.parse(localStorage.getItem('luxe_orders') || '[]');
+    history.push(currentOrder);
+    localStorage.setItem('luxe_orders', JSON.stringify(history));
+
+    renderInvoice();
+    closeCheckout();
+    document.getElementById('successOverlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function renderInvoice() {
+    const o = currentOrder;
+    const box = document.getElementById('invoiceBox');
+    box.innerHTML = `
+        <div class="invoice-header">
+            <div>
+                <div class="invoice-brand">NATURINDO<span>.</span>MARKET</div>
+                <div style="font-size:0.8rem;color:var(--text-muted);margin-top:0.25rem;">${o.date}</div>
+            </div>
+            <div style="text-align:right;">
+                <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:0.25rem;">Order ID</div>
+                <div style="font-family:monospace;font-weight:700;font-size:1rem;">${o.id}</div>
+                <div class="invoice-status" style="margin-top:0.5rem;">${o.status}</div>
+            </div>
+        </div>
+        <div class="invoice-grid">
+            <div class="invoice-block">
+                <h4>Dikirim Kepada</h4>
+                <p><strong>${o.customer.name}</strong><br>${o.customer.phone}<br>${o.customer.address}</p>
+            </div>
+            <div class="invoice-block">
+                <h4>Metode Pembayaran</h4>
+                <p>Transfer ${o.bank.name}<br>${o.bank.number}<br>a/n ${o.bank.holder}</p>
+            </div>
+        </div>
+        <table class="invoice-table">
+            <thead><tr><th>Produk</th><th style="text-align:center;">Qty</th><th>Total</th></tr></thead>
+            <tbody>
+                ${o.items.map(i => `<tr><td>${i.name}<br><span style="font-size:0.75rem;color:var(--text-muted);">${i.code}</span></td><td style="text-align:center;">${i.qty}</td><td>${formatPrice(i.price * i.qty)}</td></tr>`).join('')}
+                <tr><td colspan="2">Total Pembayaran</td><td style="color:var(--gold);font-weight:700;">${formatPrice(o.total)}</td></tr>
+            </tbody>
+        </table>
+        <div class="invoice-note">
+            <strong>Catatan Penting:</strong><br>
+            Kami tidak menerima pembayaran COD. Pesanan akan diproses setelah bukti transfer diverifikasi oleh tim kami. 
+            Silakan kirim bukti transfer ke WhatsApp admin jika diperlukan.
+        </div>
+    `;
+}
+
+function sendToWA() {
+    if (!currentOrder) return;
+    const o = currentOrder;
+    const itemsText = o.items.map(i => `- ${i.name} (${i.qty}x) = ${formatPrice(i.price * i.qty)}`).join('%0A');
+    const msg = `Halo Naturindo Market, saya telah melakukan pembayaran untuk pesanan berikut:%0A%0A` +
+        `*Order ID:* ${o.id}%0A` +
+        `*Nama:* ${o.customer.name}%0A` +
+        `*Alamat:* ${o.customer.address}%0A` +
+        `*Telepon:* ${o.customer.phone}%0A%0A` +
+        `*Detail Pesanan:*%0A${itemsText}%0A%0A` +
+        `*Total:* ${formatPrice(o.total)}%0A` +
+        `*Bank:* ${o.bank.name} (${o.bank.number})%0A%0A` +
+        `Mohon verifikasi pembayaran saya. Terima kasih.`;
+    window.open(`https://wa.me/6281234567890?text=${msg}`, '_blank');
+}
+
+function resetApp() {
+    cart = []; selectedBank = null; proofFile = null; currentOrder = null;
+    document.getElementById('cName').value = '';
+    document.getElementById('cPhone').value = '';
+    document.getElementById('cAddress').value = '';
+    removeFile();
+    document.querySelectorAll('.bank-option').forEach(el => el.classList.remove('selected'));
+    document.getElementById('bankDetail').classList.remove('active');
+    document.getElementById('successOverlay').classList.remove('active');
+    document.getElementById('checkoutOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+    updateCartUI();
+    renderProducts();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ===================== INIT =====================
+renderProducts();
+updateCartUI();
+</script>
+</body>
+</html>
