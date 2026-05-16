@@ -3,890 +3,815 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Newton United FC - Football Manager</title>
+    <title>NATURINDO | KTH YantoGoutama</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg: #f4f7f4;
+            --surface: #ffffff;
+            --text: #0f2e23;
+            --text-secondary: #4a6b5a;
+            --text-muted: #8da898;
+            --border: #d4e8d4;
+            --border-hover: #b8d8b8;
+            --accent: #1a3c2f;
+            --accent-hover: #0f2e23;
+            --gold: #2d5a45;
+            --gold-light: #4a7c5e;
+            --mint: #e8f5e9;
+            --success: #1a5c3a;
+            --warning: #b8860b;
+            --danger: #8b1e1e;
+            --shadow-sm: 0 1px 2px 0 rgb(15 46 35 / 0.04);
+            --shadow: 0 4px 6px -1px rgb(15 46 35 / 0.05), 0 2px 4px -2px rgb(15 46 35 / 0.05);
+            --shadow-lg: 0 10px 15px -3px rgb(15 46 35 / 0.06), 0 4px 6px -4px rgb(15 46 35 / 0.06);
+            --shadow-xl: 0 20px 25px -5px rgb(15 46 35 / 0.08), 0 8px 10px -6px rgb(15 46 35 / 0.08);
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #fff;
-            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 3px; }
+
+        /* Header */
+        header {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            background: rgba(244,247,244,0.88);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+        nav {
+            max-width: 1280px; margin: 0 auto; padding: 1rem 2rem;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo {
+            font-family: 'Playfair Display', serif; font-size: 1.6rem;
+            font-weight: 700; color: var(--accent); letter-spacing: 2px; text-decoration: none;
+        }
+        .logo span { color: var(--gold-light); font-weight: 400; }
+        .nav-cart {
+            position: relative; cursor: pointer; padding: 0.5rem;
+            background: none; border: none; display: flex; align-items: center; gap: 0.5rem;
+            font-family: 'Inter', sans-serif; font-size: 0.9rem; color: var(--text-secondary);
+            transition: color 0.2s;
+        }
+        .nav-cart:hover { color: var(--accent); }
+        .nav-cart svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+        .cart-badge {
+            position: absolute; top: 0; right: 0;
+            background: var(--accent); color: #fff; font-size: 0.65rem;
+            font-weight: 700; width: 18px; height: 18px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
         }
 
-        .header {
-            background: linear-gradient(135deg, #800000 0%, #4a0000 100%);
-            padding: 30px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            text-align: center;
-            border: 3px solid #fff;
+        /* Hero */
+        .hero {
+            margin-top: 72px; padding: 5rem 2rem 3rem; text-align: center;
+            background: linear-gradient(180deg, #ffffff 0%, var(--bg) 100%);
+            position: relative;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--gold-light), var(--accent));
+        }
+        .hero h1 {
+            font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 600;
+            letter-spacing: -0.02em; margin-bottom: 0.75rem; color: var(--accent);
+        }
+        .hero p {
+            color: var(--text-secondary); font-size: 1.05rem; max-width: 520px;
+            margin: 0 auto; font-weight: 400;
+        }
+        .hero-line {
+            width: 48px; height: 2px; background: var(--gold-light); margin: 1.5rem auto;
+            border-radius: 1px;
         }
 
-        .logo-container {
-            width: 150px;
-            height: 150px;
-            margin: 0 auto 20px;
-            background: #fff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 5px solid #000;
+        /* Products */
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 2rem 4rem; }
+        .section-title {
+            font-family: 'Playfair Display', serif; font-size: 1.5rem;
+            margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem; color: var(--accent);
+        }
+        .section-title::after {
+            content: ''; flex: 1; height: 1px; background: var(--border);
+        }
+        .products-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;
+        }
+        .product-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 6px; overflow: hidden; cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+            display: flex; flex-direction: column;
+        }
+        .product-card:hover {
+            border-color: var(--border-hover); box-shadow: var(--shadow-xl);
+            transform: translateY(-4px);
+        }
+        .product-image-wrap { overflow: hidden; position: relative; aspect-ratio: 4/5; }
+        .product-image {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
+        }
+        .product-card:hover .product-image { transform: scale(1.05); }
+        .product-badge {
+            position: absolute; top: 1rem; left: 1rem;
+            background: var(--surface); border: 1px solid var(--border);
+            padding: 0.3rem 0.8rem; font-size: 0.7rem; text-transform: uppercase;
+            letter-spacing: 1.5px; font-weight: 600; color: var(--gold);
+            border-radius: 3px;
+        }
+        .product-info { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
+        .product-name {
+            font-family: 'Playfair Display', serif; font-size: 1.2rem;
+            font-weight: 600; margin-bottom: 0.35rem; color: var(--accent);
+        }
+        .product-code {
+            font-size: 0.75rem; color: var(--text-muted); font-family: 'Courier New', monospace;
+            letter-spacing: 0.5px; margin-bottom: 0.75rem;
+        }
+        .product-desc {
+            font-size: 0.85rem; color: var(--text-secondary); line-height: 1.7;
+            margin-bottom: 1rem; flex: 1;
+            display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
             overflow: hidden;
         }
-
-        .logo-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .product-footer {
+            display: flex; justify-content: space-between; align-items: center;
+            padding-top: 0.75rem; border-top: 1px solid var(--border);
         }
-
-        .club-name {
-            font-size: 2.5em;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        .product-price {
+            font-size: 1.05rem; font-weight: 700; color: var(--gold); letter-spacing: -0.01em;
         }
-
-        .nickname {
-            font-size: 1.3em;
-            color: #ffd700;
-            font-style: italic;
-            margin-bottom: 10px;
+        .btn-add {
+            width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--border);
+            background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s; color: var(--gold);
         }
+        .btn-add:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
 
-        .stadium-info {
-            font-size: 0.9em;
-            opacity: 0.9;
+        /* Quick View Modal */
+        .quick-overlay {
+            position: fixed; inset: 0; background: rgba(15,46,35,0.5); z-index: 1500;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s;
+            display: flex; align-items: center; justify-content: center; padding: 2rem;
         }
-
-        .division-badge {
-            display: inline-block;
-            background: #ffd700;
-            color: #000;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-            margin-top: 10px;
+        .quick-overlay.active { opacity: 1; pointer-events: all; }
+        .quick-modal {
+            background: var(--surface); max-width: 800px; width: 100%;
+            border-radius: 8px; overflow: hidden; display: grid; grid-template-columns: 1fr 1fr;
+            box-shadow: var(--shadow-xl); transform: scale(0.95); transition: transform 0.3s;
+            max-height: 85vh; overflow-y: auto;
         }
-
-        .save-indicator {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #00ff88;
-            color: #000;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-weight: bold;
-            display: none;
-            z-index: 1000;
+        .quick-overlay.active .quick-modal { transform: scale(1); }
+        .quick-image { width: 100%; height: 100%; object-fit: cover; min-height: 400px; }
+        .quick-content { padding: 2.5rem; display: flex; flex-direction: column; }
+        .quick-close {
+            position: absolute; top: 1.5rem; right: 1.5rem; width: 40px; height: 40px;
+            background: var(--surface); border: 1px solid var(--border); border-radius: 50%;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            z-index: 10; transition: all 0.2s; color: var(--text-secondary);
         }
-
-        .nav-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
+        .quick-close:hover { background: var(--bg); color: var(--accent); transform: rotate(90deg); }
+        .quick-category {
+            font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px;
+            color: var(--gold-light); font-weight: 600; margin-bottom: 0.75rem;
         }
-
-        .nav-btn {
-            background: #800000;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-            border: 2px solid transparent;
+        .quick-title {
+            font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700;
+            color: var(--accent); margin-bottom: 0.5rem;
         }
-
-        .nav-btn:hover {
-            background: #a00000;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(128,0,0,0.3);
+        .quick-code {
+            font-family: 'Courier New', monospace; font-size: 0.85rem; color: var(--text-muted);
+            margin-bottom: 1rem;
         }
-
-        .nav-btn.active {
-            background: #fff;
-            color: #800000;
-            border-color: #800000;
+        .quick-price {
+            font-size: 1.4rem; font-weight: 700; color: var(--gold); margin-bottom: 1.25rem;
         }
-
-        .panel {
-            display: none;
-            animation: fadeIn 0.3s;
+        .quick-desc {
+            font-size: 0.95rem; color: var(--text-secondary); line-height: 1.8;
+            margin-bottom: 1.5rem;
         }
-
-        .panel.active {
-            display: block;
+        .btn-quick-add {
+            margin-top: auto; padding: 1rem; background: var(--accent); color: #fff;
+            border: none; font-family: 'Inter', sans-serif; font-size: 0.85rem;
+            font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+            cursor: pointer; border-radius: 4px; transition: all 0.3s;
         }
+        .btn-quick-add:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+        /* Cart Drawer */
+        .cart-overlay {
+            position: fixed; inset: 0; background: rgba(15,46,35,0.4); z-index: 2000;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s;
+        }
+        .cart-overlay.active { opacity: 1; pointer-events: all; }
+        .cart-drawer {
+            position: fixed; top: 0; right: 0; width: 100%; max-width: 460px;
+            height: 100%; background: var(--surface); z-index: 2001;
+            transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+            display: flex; flex-direction: column; border-left: 1px solid var(--border);
+        }
+        .cart-drawer.active { transform: translateX(0); }
+        .cart-header {
+            padding: 1.5rem; border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .cart-header h2 { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--accent); }
+        .btn-close {
+            width: 36px; height: 36px; border: none; background: var(--bg);
+            border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s; color: var(--text-secondary);
+        }
+        .btn-close:hover { background: var(--border); color: var(--accent); }
+        .cart-body { flex: 1; overflow-y: auto; padding: 1rem 1.5rem; }
+        .cart-empty {
+            text-align: center; padding: 3rem 1rem; color: var(--text-muted);
+        }
+        .cart-empty svg { margin-bottom: 1rem; stroke: var(--border-hover); }
+        .cart-item {
+            display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--border);
+        }
+        .cart-item img { width: 72px; height: 90px; object-fit: cover; border-radius: 3px; }
+        .cart-item-info { flex: 1; }
+        .cart-item-name { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.25rem; color: var(--accent); }
+        .cart-item-code { font-size: 0.7rem; color: var(--text-muted); font-family: monospace; }
+        .cart-item-price { font-weight: 700; color: var(--gold); margin-top: 0.5rem; }
+        .cart-item-qty {
+            display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem;
+        }
+        .qty-btn-sm {
+            width: 24px; height: 24px; border: 1px solid var(--border); background: transparent;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem; border-radius: 3px; transition: all 0.2s; color: var(--text);
+        }
+        .qty-btn-sm:hover { border-color: var(--accent); background: var(--mint); }
+        .cart-item-remove {
+            font-size: 0.75rem; color: var(--danger); cursor: pointer; margin-top: 0.5rem;
+            background: none; border: none; text-decoration: underline; text-underline-offset: 2px;
+        }
+        .cart-footer {
+            padding: 1.5rem; border-top: 1px solid var(--border); background: var(--bg);
+        }
+        .cart-total-row {
+            display: flex; justify-content: space-between; margin-bottom: 1rem;
+            font-size: 0.9rem; color: var(--text-secondary);
+        }
+        .cart-total-row.final {
+            font-size: 1.15rem; font-weight: 700; color: var(--accent);
+            padding-top: 0.75rem; border-top: 1px solid var(--border);
+        }
+        .btn-primary {
+            width: 100%; padding: 1rem; background: var(--accent); color: #fff;
+            border: none; font-family: 'Inter', sans-serif; font-size: 0.85rem;
+            font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+            cursor: pointer; border-radius: 4px; transition: all 0.3s;
+        }
+        .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: var(--shadow-lg); }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        /* Checkout Overlay */
+        .checkout-overlay {
+            position: fixed; inset: 0; background: rgba(244,247,244,0.97);
+            backdrop-filter: blur(8px); z-index: 3000; overflow-y: auto;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s;
+        }
+        .checkout-overlay.active { opacity: 1; pointer-events: all; }
+        .checkout-container {
+            max-width: 720px; margin: 2rem auto; padding: 0 1.5rem 3rem;
+            animation: slideUp 0.4s cubic-bezier(0.4,0,0.2,1);
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        .checkout-header {
+            display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; padding-top: 1rem;
+        }
+        .checkout-header h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--accent); }
+        .btn-back {
+            padding: 0.5rem 1rem; background: var(--bg); border: 1px solid var(--border);
+            font-family: 'Inter', sans-serif; font-size: 0.8rem; cursor: pointer;
+            border-radius: 4px; transition: all 0.2s; color: var(--text-secondary);
+        }
+        .btn-back:hover { border-color: var(--accent); color: var(--accent); }
 
+        .checkout-grid { display: grid; gap: 1.5rem; }
         .card {
-            background: rgba(255,255,255,0.05);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 8px; padding: 1.5rem;
         }
-
         .card-title {
-            font-size: 1.5em;
-            margin-bottom: 15px;
-            color: #ffd700;
-            border-bottom: 2px solid #800000;
-            padding-bottom: 10px;
+            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px;
+            font-weight: 700; color: var(--text-muted); margin-bottom: 1.25rem;
         }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 20px;
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group:last-child { margin-bottom: 0; }
+        .form-label {
+            display: block; font-size: 0.8rem; font-weight: 600;
+            margin-bottom: 0.4rem; color: var(--accent);
         }
-
-        .stat-box {
-            background: linear-gradient(135deg, #800000 0%, #600000 100%);
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            border: 2px solid #fff;
+        .form-label .required { color: var(--danger); margin-left: 2px; }
+        .form-input, .form-textarea {
+            width: 100%; padding: 0.85rem 1rem; background: var(--bg);
+            border: 1px solid var(--border); border-radius: 4px;
+            font-family: 'Inter', sans-serif; font-size: 0.95rem; color: var(--text);
+            outline: none; transition: all 0.2s;
         }
-
-        .stat-label {
-            font-size: 0.9em;
-            opacity: 0.9;
-            margin-bottom: 5px;
+        .form-input:focus, .form-textarea:focus {
+            border-color: var(--gold-light); background: #fff;
+            box-shadow: 0 0 0 3px rgba(45,90,69,0.08);
         }
+        .form-textarea { resize: vertical; min-height: 80px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 
-        .stat-value {
-            font-size: 2em;
-            font-weight: bold;
-            color: #ffd700;
+        /* Bank Selection */
+        .bank-list { display: flex; flex-direction: column; gap: 0.75rem; }
+        .bank-option {
+            display: flex; align-items: center; gap: 1rem; padding: 1rem;
+            border: 1.5px solid var(--border); border-radius: 6px; cursor: pointer;
+            transition: all 0.2s; background: transparent;
         }
-
-        .money-positive { color: #00ff88; }
-        .money-negative { color: #ff4757; }
-
-        .btn {
-            background: linear-gradient(135deg, #800000 0%, #600000 100%);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1.1em;
-            font-weight: bold;
-            margin: 10px;
-            transition: all 0.3s;
-            border: 2px solid #fff;
+        .bank-option:hover { border-color: var(--border-hover); background: var(--mint); }
+        .bank-option.selected {
+            border-color: var(--accent); background: rgba(26,60,47,0.04);
         }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(128,0,0,0.4);
+        .bank-radio {
+            width: 20px; height: 20px; border: 2px solid var(--border); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+            transition: all 0.2s;
         }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
+        .bank-option.selected .bank-radio {
+            border-color: var(--accent); background: var(--accent);
         }
-
-        .btn-success {
-            background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
+        .bank-radio::after {
+            content: ''; width: 6px; height: 6px; background: #fff; border-radius: 50%;
+            opacity: 0; transform: scale(0); transition: all 0.2s;
         }
-
-        .btn-warning {
-            background: linear-gradient(135deg, #fdcb6e 0%, #f39c12 100%);
-            color: #000;
+        .bank-option.selected .bank-radio::after { opacity: 1; transform: scale(1); }
+        .bank-info h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.15rem; color: var(--accent); }
+        .bank-info p { font-size: 0.8rem; color: var(--text-secondary); }
+        .bank-detail {
+            margin-top: 1rem; padding: 1rem; background: var(--mint); border-radius: 6px;
+            border: 1px solid var(--border); display: none;
         }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #ff4757 0%, #ff6b81 100%);
+        .bank-detail.active { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .bank-detail-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.5rem 0; font-size: 0.9rem;
         }
-
-        .league-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            font-size: 0.85em;
+        .bank-detail-row:not(:last-child) { border-bottom: 1px solid var(--border); }
+        .copy-btn {
+            font-size: 0.75rem; padding: 0.35rem 0.75rem; background: #fff;
+            border: 1px solid var(--border); cursor: pointer; border-radius: 3px;
+            transition: all 0.2s; color: var(--text-secondary);
         }
+        .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+        .copy-btn.copied { background: var(--success); color: #fff; border-color: var(--success); }
 
-        .league-table th {
-            background: #800000;
-            padding: 10px 6px;
-            text-align: center;
-            border-bottom: 3px solid #ffd700;
-            font-weight: bold;
+        /* Drag & Drop */
+        .drop-zone {
+            border: 2px dashed var(--border); border-radius: 8px;
+            padding: 2.5rem 1.5rem; text-align: center; cursor: pointer;
+            transition: all 0.3s; background: var(--bg); position: relative;
         }
-
-        .league-table td {
-            padding: 8px 6px;
-            text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+        .drop-zone:hover, .drop-zone.dragover {
+            border-color: var(--accent); background: rgba(26,60,47,0.03);
         }
-
-        .league-table .highlight {
-            background: rgba(255,215,0,0.25) !important;
-            font-weight: bold;
-            border-left: 4px solid #ffd700;
-            border-right: 4px solid #ffd700;
+        .drop-zone-icon { margin-bottom: 0.75rem; }
+        .drop-zone-icon svg { stroke: var(--text-muted); width: 40px; height: 40px; }
+        .drop-zone-text { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.25rem; }
+        .drop-zone-hint { font-size: 0.75rem; color: var(--text-muted); }
+        .file-input { display: none; }
+        .file-preview {
+            display: none; margin-top: 1rem; padding: 1rem;
+            background: #fff; border: 1px solid var(--border); border-radius: 4px;
+            align-items: center; gap: 1rem;
         }
-
-        .form-w, .form-d, .form-l {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            line-height: 20px;
-            font-size: 0.7em;
-            font-weight: bold;
-            margin: 0 1px;
+        .file-preview.active { display: flex; }
+        .file-thumb {
+            width: 56px; height: 56px; object-fit: cover; border-radius: 4px;
+            border: 1px solid var(--border);
         }
-
-        .form-w { background: #00ff88; color: #000; }
-        .form-d { background: #ffd700; color: #000; }
-        .form-l { background: #ff4757; color: #fff; }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
+        .file-meta { flex: 1; }
+        .file-name { font-size: 0.85rem; font-weight: 500; margin-bottom: 0.15rem; word-break: break-all; }
+        .file-size { font-size: 0.75rem; color: var(--text-muted); }
+        .file-remove {
+            width: 28px; height: 28px; border: none; background: var(--bg);
+            border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            color: var(--danger); transition: background 0.2s;
         }
+        .file-remove:hover { background: #FEE2E2; }
 
-        .modal-content {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            padding: 40px;
-            border-radius: 20px;
-            max-width: 500px;
-            text-align: center;
-            border: 3px solid #800000;
+        /* Order Summary */
+        .summary-item {
+            display: flex; justify-content: space-between; padding: 0.6rem 0;
+            font-size: 0.9rem; color: var(--text-secondary);
         }
-
-        .match-result {
-            background: linear-gradient(135deg, #2d3436 0%, #000000 100%);
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            margin: 20px 0;
-            border: 3px solid #800000;
+        .summary-item.total {
+            margin-top: 0.5rem; padding-top: 0.75rem; border-top: 2px solid var(--border);
+            font-size: 1.1rem; font-weight: 700; color: var(--accent);
         }
-
-        .score-display {
-            font-size: 4em;
-            font-weight: bold;
-            margin: 20px 0;
-            font-family: 'Courier New', monospace;
+        .summary-products { margin-bottom: 0.5rem; }
+        .summary-product {
+            display: flex; justify-content: space-between; font-size: 0.85rem;
+            padding: 0.4rem 0; color: var(--text-secondary);
         }
+        .summary-product span:first-child { max-width: 70%; }
 
-        .vs {
-            font-size: 1.5em;
-            color: #ffd700;
-            margin: 0 20px;
+        /* Success / Invoice */
+        .success-overlay {
+            position: fixed; inset: 0; background: var(--bg); z-index: 4000;
+            overflow-y: auto; opacity: 0; pointer-events: none; transition: opacity 0.4s;
         }
-
-        .result-win { color: #00ff88; }
-        .result-draw { color: #ffd700; }
-        .result-loss { color: #ff4757; }
-
-        .player-card {
-            background: rgba(0,0,0,0.3);
-            padding: 15px;
-            border-radius: 10px;
-            border: 2px solid #800000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
+        .success-overlay.active { opacity: 1; pointer-events: all; }
+        .success-container {
+            max-width: 640px; margin: 0 auto; padding: 3rem 1.5rem;
+            animation: slideUp 0.5s cubic-bezier(0.4,0,0.2,1);
         }
-
-        .player-rating {
-            background: #ffd700;
-            color: #000;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 1.2em;
+        .success-icon {
+            width: 72px; height: 72px; margin: 0 auto 1.5rem;
+            background: var(--success); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
         }
+        .success-icon svg { stroke: #fff; width: 32px; height: 32px; }
+        .success-title {
+            font-family: 'Playfair Display', serif; font-size: 1.8rem;
+            text-align: center; margin-bottom: 0.5rem; color: var(--accent);
+        }
+        .success-sub {
+            text-align: center; color: var(--text-secondary); margin-bottom: 2rem;
+        }
+        .invoice-box {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 8px; padding: 2rem; margin-bottom: 2rem;
+        }
+        .invoice-header {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            margin-bottom: 1.5rem; padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .invoice-brand { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--accent); }
+        .invoice-brand span { color: var(--gold-light); }
+        .invoice-status {
+            display: inline-block; padding: 0.35rem 0.75rem;
+            background: #FEF3C7; color: var(--warning); font-size: 0.75rem;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+            border-radius: 3px;
+        }
+        .invoice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+        .invoice-block h4 {
+            font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px;
+            color: var(--text-muted); margin-bottom: 0.5rem;
+        }
+        .invoice-block p { font-size: 0.9rem; color: var(--text); line-height: 1.5; }
+        .invoice-table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+        .invoice-table th {
+            text-align: left; font-size: 0.7rem; text-transform: uppercase;
+            letter-spacing: 1px; color: var(--text-muted); padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .invoice-table td { padding: 0.75rem 0; font-size: 0.9rem; border-bottom: 1px solid var(--border); }
+        .invoice-table td:last-child, .invoice-table th:last-child { text-align: right; }
+        .invoice-table tr:last-child td { border-bottom: 2px solid var(--border); font-weight: 700; color: var(--accent); }
+        .invoice-total {
+            display: flex; justify-content: space-between; align-items: center;
+            padding-top: 0.5rem;
+        }
+        .invoice-total-label { font-size: 0.9rem; color: var(--text-secondary); }
+        .invoice-total-value { font-size: 1.3rem; font-weight: 700; color: var(--gold); }
+        .invoice-note {
+            margin-top: 1.5rem; padding: 1rem; background: var(--mint); border-radius: 4px;
+            font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;
+            border-left: 3px solid var(--gold-light);
+        }
+        .success-actions {
+            display: flex; gap: 1rem; flex-wrap: wrap;
+        }
+        .btn-wa {
+            flex: 1; min-width: 200px; padding: 1rem;
+            background: var(--success); color: #fff; border: none;
+            font-family: 'Inter', sans-serif; font-size: 0.85rem;
+            font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+            cursor: pointer; border-radius: 4px; transition: all 0.3s;
+            display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+        }
+        .btn-wa:hover { background: #166534; transform: translateY(-1px); }
+        .btn-wa svg { width: 18px; height: 18px; fill: currentColor; }
+        .btn-secondary {
+            flex: 1; min-width: 200px; padding: 1rem;
+            background: transparent; color: var(--accent); border: 1.5px solid var(--border);
+            font-family: 'Inter', sans-serif; font-size: 0.85rem;
+            font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+            cursor: pointer; border-radius: 4px; transition: all 0.3s;
+        }
+        .btn-secondary:hover { border-color: var(--accent); background: var(--mint); }
 
-        @media (max-width: 768px) {
-            .club-name { font-size: 1.8em; }
-            .stats-grid { grid-template-columns: 1fr; }
-            .score-display { font-size: 2.5em; }
+        /* Toast */
+        .toast {
+            position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px);
+            background: var(--accent); color: #fff; padding: 0.9rem 1.5rem;
+            border-radius: 4px; font-size: 0.9rem; font-weight: 500;
+            box-shadow: var(--shadow-xl); z-index: 5000; opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4,0,0.2,1); pointer-events: none;
+            white-space: nowrap;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+        /* Mobile */
+        @media (max-width: 640px) {
+            .hero h1 { font-size: 2.2rem; }
+            .form-row { grid-template-columns: 1fr; }
+            .invoice-grid { grid-template-columns: 1fr; }
+            .success-actions { flex-direction: column; }
+            .products-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+            .product-image-wrap { aspect-ratio: 3/4; }
+            .quick-modal { grid-template-columns: 1fr; }
+            .quick-image { min-height: 250px; }
         }
     </style>
 </head>
 <body>
-    <div class="save-indicator" id="saveIndicator">Game Saved!</div>
-    
-    <div class="container">
-        <div class="header">
-            <div class="logo-container">
-                <img src="NUFC.jpeg" alt="Newton United FC Logo" id="clubLogo" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦁</text></svg>'">
-            </div>
-            <div class="club-name">Newton United FC</div>
-            <div class="nickname">"The Crimson Lions"</div>
-            <div class="stadium-info">
-                🏟️ Newton Borough Ground | Capacity: <span id="headerCapacity">7,000</span> | 
-                Division: <span id="headerLevel">8</span>
-                <div class="division-badge" id="headerDivision">Division 8</div>
-            </div>
+
+<<header>
+    <nav>
+        <a href="#" class="logo" onclick="resetApp()">NATURINDO<span>.</span>HERBAL</a>
+        <button class="nav-cart" onclick="toggleCart()">
+            <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            <span>Keranjang</span>
+            <span class="cart-badge" id="cartBadge" style="display:none">0</span>
+        </button>
+    </nav>
+</header>
+
+<section class="hero">
+    <div class="hero-line"></div>
+    <h1>Koleksi Eksklusif</h1>
+    <p>Kurasi terpilih untuk mereka yang menghargai kesehatan tanpa kompromi. Pesan sekarang, bayar via transfer bank.</p>
+</section>
+
+<div class="container">
+    <h3 class="section-title">Produk Terbaru</h3>
+    <div class="products-grid" id="productsGrid"></div>
+</div>
+
+<!-- Quick View Modal -->
+<div class="quick-overlay" id="quickOverlay" onclick="closeQuick(event)">
+    <button class="quick-close" onclick="closeQuick()" style="position:absolute;top:1.5rem;right:1.5rem;">&times;</button>
+    <div class="quick-modal" onclick="event.stopPropagation()">
+        <img src="" alt="" class="quick-image" id="quickImage">
+        <div class="quick-content">
+            <div class="quick-category" id="quickCategory"></div>
+            <h2 class="quick-title" id="quickTitle"></h2>
+            <div class="quick-code" id="quickCode"></div>
+            <div class="quick-price" id="quickPrice"></div>
+            <p class="quick-desc" id="quickDesc"></p>
+            <button class="btn-quick-add" id="quickAddBtn" onclick="">
+                Tambah ke Keranjang
+            </button>
         </div>
+    </div>
+</div>
 
-        <div class="nav-tabs">
-            <button class="nav-btn active" onclick="showPanel('dashboard')">Dashboard</button>
-            <button class="nav-btn" onclick="showPanel('squad')">Squad</button>
-            <button class="nav-btn" onclick="showPanel('league')">League</button>
-            <button class="nav-btn" onclick="showPanel('finances')">Finances</button>
-            <button class="nav-btn" onclick="showPanel('history')">History</button>
+<!-- Cart Drawer -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+        <h2>Keranjang Belanja</h2>
+        <button class="btn-close" onclick="toggleCart()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+    </div>
+    <div class="cart-body" id="cartBody">
+        <div class="cart-empty">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            <p>Keranjang masih kosong</p>
         </div>
+    </div>
+    <div class="cart-footer" id="cartFooter" style="display:none">
+        <div class="cart-total-row">
+            <span>Subtotal</span>
+            <span id="cartSubtotal">Rp 0</span>
+        </div>
+        <div class="cart-total-row final">
+            <span>Total</span>
+            <span id="cartTotal">Rp 0</span>
+        </div>
+        <button class="btn-primary" onclick="openCheckout()">Lanjutkan Pembayaran</button>
+    </div>
+</div>
 
-        <!-- Dashboard -->
-        <div id="dashboard" class="panel active">
-            <div class="stats-grid">
-                <div class="stat-box">
-                    <div class="stat-label">Balance</div>
-                    <div class="stat-value" id="dashBalance">£50k</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-label">Matchday</div>
-                    <div class="stat-value" id="dashMatchday">1/38</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-label">Position</div>
-                    <div class="stat-value" id="dashPosition">-</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-label">Points</div>
-                    <div class="stat-value" id="dashPoints">0</div>
-                </div>
-            </div>
-
+<!-- Checkout Overlay -->
+<div class="checkout-overlay" id="checkoutOverlay">
+    <div class="checkout-container">
+        <div class="checkout-header">
+            <button class="btn-back" onclick="closeCheckout()">&larr; Kembali</button>
+            <h2>Pembayaran</h2>
+        </div>
+        <div class="checkout-grid">
+            <!-- Customer Data -->
             <div class="card">
-                <div class="card-title">Next Match</div>
-                <div style="font-size: 1.2em; margin-bottom: 20px;">
-                    vs <strong id="nextOpponentName">Loading...</strong>
-                </div>
-                <button class="btn btn-success" onclick="playMatch()" id="playBtn">Play Match</button>
-                <button class="btn btn-warning" onclick="simulateWeek()">Simulate Week</button>
-            </div>
-
-            <div class="card" id="resultCard" style="display: none;">
-                <div class="card-title">Match Result</div>
-                <div class="match-result">
-                    <div style="display: flex; justify-content: center; align-items: center;">
-                        <span style="font-size: 1.3em; font-weight: bold;">Newton United</span>
-                        <div class="score-display">
-                            <span id="scoreHome">0</span>
-                            <span class="vs">-</span>
-                            <span id="scoreAway">0</span>
-                        </div>
-                        <span style="font-size: 1.3em; font-weight: bold;" id="oppName">Opponent</span>
+                <div class="card-title">Data Pengiriman</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Nama Lengkap <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="cName" placeholder="Nama penerima">
                     </div>
-                    <div id="matchResultText" style="font-size: 1.5em; margin-top: 15px;"></div>
-                </div>
-                <button class="btn" onclick="nextMatch()">Continue</button>
-            </div>
-
-            <div class="card">
-                <div class="card-title">News</div>
-                <div id="newsList"></div>
-            </div>
-        </div>
-
-        <!-- Squad -->
-        <div id="squad" class="panel">
-            <div class="card">
-                <div class="card-title">Goalkeepers</div>
-                <div id="gkList"></div>
-            </div>
-            <div class="card">
-                <div class="card-title">Defenders</div>
-                <div id="defList"></div>
-            </div>
-            <div class="card">
-                <div class="card-title">Midfielders</div>
-                <div id="midList"></div>
-            </div>
-            <div class="card">
-                <div class="card-title">Forwards</div>
-                <div id="fwdList"></div>
-            </div>
-        </div>
-
-        <!-- League -->
-        <div id="league" class="panel">
-            <div class="card">
-                <div class="card-title">League Table</div>
-                <table class="league-table">
-                    <thead>
-                        <tr>
-                            <th>Pos</th>
-                            <th>Team</th>
-                            <th>P</th>
-                            <th>W</th>
-                            <th>D</th>
-                            <th>L</th>
-                            <th>GF</th>
-                            <th>GA</th>
-                            <th>Pts</th>
-                        </tr>
-                    </thead>
-                    <tbody id="leagueBody"></tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Finances -->
-        <div id="finances" class="panel">
-            <div class="card">
-                <div class="card-title">Financial Overview</div>
-                <p>Weekly Income: £25,000</p>
-                <p>Weekly Expenses: £7,000</p>
-                <p>Current Balance: <strong id="finBalance">£50,000</strong></p>
-                <button class="btn btn-success" onclick="getSponsorship()" id="sponsorBtn">Get Sponsorship (£500k)</button>
-            </div>
-        </div>
-
-        <!-- History -->
-        <div id="history" class="panel">
-            <div class="card">
-                <div class="card-title">Season History</div>
-                <div id="historyList"></div>
-                <button class="btn btn-danger" onclick="resetGame()">Reset Career</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modals -->
-    <div id="promoModal" class="modal">
-        <div class="modal-content">
-            <h2>🏆 Promoted!</h2>
-            <p id="promoText"></p>
-            <button class="btn btn-success" onclick="startNewSeason()">Continue</button>
-        </div>
-    </div>
-
-    <div id="relegModal" class="modal">
-        <div class="modal-content">
-            <h2 style="color: #ff4757;">Relegated</h2>
-            <p id="relegText"></p>
-            <button class="btn" onclick="startNewSeason()" style="background: #ff4757;">Continue</button>
-        </div>
-    </div>
-
-    <script>
-        // Game Data
-        const SAVE_KEY = 'nufc_manager_save';
-        
-        const divisions = [
-            { name: 'Premier League', level: 1 },
-            { name: 'Championship', level: 2 },
-            { name: 'League One', level: 3 },
-            { name: 'League Two', level: 4 },
-            { name: 'National League', level: 5 },
-            { name: 'National League North/South', level: 6 },
-            { name: 'Northern/Southern Premier League Premier Division', level: 7 },
-            { name: 'Northern Premier League Division One', level: 8 }
-        ];
-
-        const squad = [
-            { name: 'James Harrison', pos: 'GK', rating: 78, age: 25 },
-            { name: 'Michael Brown', pos: 'GK', rating: 72, age: 24 },
-            { name: 'David Wilson', pos: 'GK', rating: 70, age: 21 },
-            { name: 'Robert Clarke', pos: 'DEF', rating: 76, age: 24 },
-            { name: 'Thomas Wright', pos: 'DEF', rating: 75, age: 25 },
-            { name: 'William Parker', pos: 'DEF', rating: 74, age: 25 },
-            { name: 'Richard Taylor', pos: 'DEF', rating: 73, age: 25 },
-            { name: 'Joseph Evans', pos: 'DEF', rating: 72, age: 23 },
-            { name: 'Charles Morgan', pos: 'DEF', rating: 71, age: 22 },
-            { name: 'Daniel Phillips', pos: 'DEF', rating: 70, age: 24 },
-            { name: 'Matthew Jenkins', pos: 'DEF', rating: 70, age: 20 },
-            { name: 'Andrew Thompson', pos: 'MID', rating: 79, age: 24 },
-            { name: 'Christopher Lee', pos: 'MID', rating: 77, age: 23 },
-            { name: 'Stephen White', pos: 'MID', rating: 75, age: 24 },
-            { name: 'Kevin Harris', pos: 'MID', rating: 74, age: 24 },
-            { name: 'Brian Martin', pos: 'MID', rating: 72, age: 23 },
-            { name: 'Edward Clark', pos: 'MID', rating: 71, age: 22 },
-            { name: 'George Lewis', pos: 'MID', rating: 73, age: 21 },
-            { name: 'Anthony Walker', pos: 'FWD', rating: 75, age: 24 },
-            { name: 'Paul Hall', pos: 'FWD', rating: 71, age: 26 },
-            { name: 'Mark Young', pos: 'FWD', rating: 75, age: 24 },
-            { name: 'Steven Allen', pos: 'FWD', rating: 73, age: 22 }
-        ];
-
-        // Game State
-        let game = {
-            divisionIndex: 7, // Start at Division 8 (index 7)
-            season: 1,
-            money: 50000,
-            hasSponsor: false,
-            history: [],
-            news: ['Welcome to Newton United FC! The Crimson Lions are ready!']
-        };
-
-        let teams = [];
-        let currentMatchday = 0;
-        let seasonComplete = false;
-
-        // Initialize
-        function init() {
-            loadGame();
-            if (teams.length === 0) {
-                createTeams();
-            }
-            renderAll();
-        }
-
-        function createTeams() {
-            teams = [{ name: 'Newton United', played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0, points: 0, isPlayer: true, strength: 0.65 }];
-            
-            const names = ['AFC Borough', 'Athletic United', 'City Wanderers', 'Town Rovers', 'United FC', 'Vale Park', 'Heath End', 'Common Green', 'Bridge Athletic', 'Riverside FC', 'North End', 'Southampton', 'Eastside United', 'Westbridge Town', 'Central FC', 'Park Rangers', 'Hilltop United', 'Valley Rovers', 'Metro City'];
-            const shuffled = names.sort(() => Math.random() - 0.5).slice(0, 19);
-            
-            shuffled.forEach(name => {
-                teams.push({
-                    name: name,
-                    played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0, points: 0,
-                    isPlayer: false,
-                    strength: 0.4 + Math.random() * 0.35
-                });
-            });
-            
-            currentMatchday = 0;
-            seasonComplete = false;
-        }
-
-        function playMatch() {
-            if (seasonComplete) return;
-            
-            // Find opponent
-            const opponentIndex = currentMatchday % 19 + 1;
-            const opponent = teams[opponentIndex];
-            
-            // Calculate result
-            const playerStrength = teams[0].strength + (Math.random() * 0.2 - 0.1);
-            const oppStrength = opponent.strength + (Math.random() * 0.2 - 0.1);
-            
-            let playerScore, oppScore;
-            const diff = playerStrength - oppStrength;
-            
-            if (diff > 0.2) {
-                playerScore = Math.floor(Math.random() * 3) + 2;
-                oppScore = Math.floor(Math.random() * 2);
-            } else if (diff > 0) {
-                playerScore = Math.floor(Math.random() * 2) + 1;
-                oppScore = Math.floor(Math.random() * 2);
-            } else if (diff > -0.2) {
-                playerScore = Math.floor(Math.random() * 2) + 1;
-                oppScore = playerScore;
-            } else {
-                oppScore = Math.floor(Math.random() * 3) + 1;
-                playerScore = Math.floor(Math.random() * 2);
-            }
-            
-            // Update stats
-            updateTeamStats(0, playerScore, oppScore);
-            updateTeamStats(opponentIndex, oppScore, playerScore);
-            
-            // Simulate other matches
-            simulateOtherMatches();
-            
-            // Finances
-            game.money += 25000 - 7000 + (Math.random() * 5000);
-            
-            // Show result
-            document.getElementById('scoreHome').textContent = playerScore;
-            document.getElementById('scoreAway').textContent = oppScore;
-            document.getElementById('oppName').textContent = opponent.name;
-            
-            const resultText = document.getElementById('matchResultText');
-            if (playerScore > oppScore) {
-                resultText.innerHTML = '<span class="result-win">VICTORY!</span>';
-                addNews(`Beat ${opponent.name} ${playerScore}-${oppScore}`);
-            } else if (playerScore === oppScore) {
-                resultText.innerHTML = '<span class="result-draw">DRAW</span>';
-                addNews(`Drew with ${opponent.name} ${playerScore}-${oppScore}`);
-            } else {
-                resultText.innerHTML = '<span class="result-loss">DEFEAT</span>';
-                addNews(`Lost to ${opponent.name} ${playerScore}-${oppScore}`);
-            }
-            
-            document.getElementById('resultCard').style.display = 'block';
-            document.getElementById('playBtn').disabled = true;
-            
-            currentMatchday++;
-            
-            if (currentMatchday >= 38) {
-                seasonComplete = true;
-                setTimeout(checkSeasonEnd, 1000);
-            }
-            
-            saveGame();
-            renderAll();
-        }
-
-        function simulateOtherMatches() {
-            for (let i = 1; i < teams.length; i++) {
-                for (let j = i + 1; j < teams.length; j++) {
-                    if (Math.random() < 0.1) { // Simulate some matches
-                        const s1 = teams[i].strength + (Math.random() * 0.2 - 0.1);
-                        const s2 = teams[j].strength + (Math.random() * 0.2 - 0.1);
-                        
-                        let score1, score2;
-                        if (s1 > s2) {
-                            score1 = Math.floor(Math.random() * 3) + 1;
-                            score2 = Math.floor(Math.random() * 2);
-                        } else {
-                            score2 = Math.floor(Math.random() * 3) + 1;
-                            score1 = Math.floor(Math.random() * 2);
-                        }
-                        
-                        updateTeamStats(i, score1, score2);
-                        updateTeamStats(j, score2, score1);
-                    }
-                }
-            }
-        }
-
-        function updateTeamStats(idx, gf, ga) {
-            teams[idx].played++;
-            teams[idx].gf += gf;
-            teams[idx].ga += ga;
-            
-            if (gf > ga) {
-                teams[idx].won++;
-                teams[idx].points += 3;
-            } else if (gf === ga) {
-                teams[idx].drawn++;
-                teams[idx].points += 1;
-            } else {
-                teams[idx].lost++;
-            }
-        }
-
-        function simulateWeek() {
-            simulateOtherMatches();
-            renderAll();
-            saveGame();
-        }
-
-        function nextMatch() {
-            document.getElementById('resultCard').style.display = 'none';
-            document.getElementById('playBtn').disabled = false;
-            renderAll();
-        }
-
-        function checkSeasonEnd() {
-            const pos = getPosition();
-            
-            if (game.divisionIndex === 0 && pos === 1) {
-                alert('🏆 CHAMPIONS! You won the Premier League!');
-                return;
-            }
-            
-            if (pos === 1) {
-                // Promoted
-                document.getElementById('promoText').textContent = `Champions! Promoted to ${divisions[game.divisionIndex - 1].name}`;
-                document.getElementById('promoModal').style.display = 'flex';
-                game.money += 200000;
-            } else if (pos > 18 && game.divisionIndex < 7) {
-                // Relegated
-                document.getElementById('relegText').textContent = `Relegated to ${divisions[game.divisionIndex + 1].name}`;
-                document.getElementById('relegModal').style.display = 'flex';
-            } else {
-                addNews(`Season ${game.season} finished. Position: ${pos}`);
-                startNewSeason();
-            }
-            
-            // Save history
-            game.history.push({
-                season: game.season,
-                division: divisions[game.divisionIndex].name,
-                position: pos,
-                points: teams[0].points
-            });
-        }
-
-        function startNewSeason() {
-            document.getElementById('promoModal').style.display = 'none';
-            document.getElementById('relegModal').style.display = 'none';
-            
-            const pos = getPosition();
-            if (pos === 1 && game.divisionIndex > 0) game.divisionIndex--;
-            if (pos > 18 && game.divisionIndex < 7) game.divisionIndex++;
-            
-            game.season++;
-            createTeams();
-            saveGame();
-            renderAll();
-        }
-
-        function getPosition() {
-            const sorted = [...teams].sort((a, b) => {
-                if (b.points !== a.points) return b.points - a.points;
-                return (b.gf - b.ga) - (a.gf - a.ga);
-            });
-            return sorted.findIndex(t => t.isPlayer) + 1;
-        }
-
-        function getSponsorship() {
-            if (game.hasSponsor) return;
-            game.money += 500000;
-            game.hasSponsor = true;
-            addNews('Signed £500k sponsorship deal!');
-            saveGame();
-            renderAll();
-        }
-
-        function addNews(text) {
-            game.news.unshift(text);
-            if (game.news.length > 10) game.news.pop();
-        }
-
-        function renderAll() {
-            // Header
-            document.getElementById('headerLevel').textContent = divisions[game.divisionIndex].level;
-            document.getElementById('headerDivision').textContent = divisions[game.divisionIndex].name;
-            document.getElementById('headerCapacity').textContent = '3,000';
-            
-            // Dashboard
-            document.getElementById('dashBalance').textContent = '£' + Math.floor(game.money / 1000) + 'k';
-            document.getElementById('dashMatchday').textContent = (currentMatchday + 1) + '/38';
-            document.getElementById('dashPosition').textContent = teams.length > 0 ? getPosition() : '-';
-            document.getElementById('dashPoints').textContent = teams[0] ? teams[0].points : 0;
-            
-            const nextOpp = teams[(currentMatchday % 19) + 1];
-            document.getElementById('nextOpponentName').textContent = nextOpp ? nextOpp.name : 'Season End';
-            
-            // News
-            document.getElementById('newsList').innerHTML = game.news.map(n => 
-                `<div class="card" style="margin-bottom: 10px; padding: 10px;">${n}</div>`
-            ).join('');
-            
-            // Squad
-            const byPos = (pos) => squad.filter(p => p.pos === pos).map(p => 
-                `<div class="player-card">
-                    <div>
-                        <div style="font-weight: bold;">${p.name}</div>
-                        <div style="font-size: 0.9em; opacity: 0.8;">Age: ${p.age}</div>
+                    <div class="form-group">
+                        <label class="form-label">Nomor Telepon <span class="required">*</span></label>
+                        <input type="tel" class="form-input" id="cPhone" placeholder="08xxxxxxxxxx">
                     </div>
-                    <div class="player-rating">${p.rating}</div>
-                </div>`
-            ).join('');
-            
-            document.getElementById('gkList').innerHTML = byPos('GK');
-            document.getElementById('defList').innerHTML = byPos('DEF');
-            document.getElementById('midList').innerHTML = byPos('MID');
-            document.getElementById('fwdList').innerHTML = byPos('FWD');
-            
-            // League table
-            const sorted = [...teams].sort((a, b) => {
-                if (b.points !== a.points) return b.points - a.points;
-                return (b.gf - b.ga) - (a.gf - a.ga);
-            });
-            
-            document.getElementById('leagueBody').innerHTML = sorted.map((t, i) => `
-                <tr class="${t.isPlayer ? 'highlight' : ''}">
-                    <td>${i + 1}</td>
-                    <td style="text-align: left;">${t.name}</td>
-                    <td>${t.played}</td>
-                    <td>${t.won}</td>
-                    <td>${t.drawn}</td>
-                    <td>${t.lost}</td>
-                    <td>${t.gf}</td>
-                    <td>${t.ga}</td>
-                    <td><strong>${t.points}</strong></td>
-                </tr>
-            `).join('');
-            
-            // Finances
-            document.getElementById('finBalance').textContent = '£' + game.money.toLocaleString();
-            document.getElementById('sponsorBtn').style.display = game.hasSponsor ? 'none' : 'inline-block';
-            
-            // History
-            document.getElementById('historyList').innerHTML = game.history.length ? 
-                game.history.map(h => `<div class="card" style="margin-bottom: 10px;">
-                    Season ${h.season}: ${h.division} - Position ${h.position} (${h.points} pts)
-                </div>`).join('') : 
-                '<p>No history yet</p>';
-        }
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Alamat Lengkap <span class="required">*</span></label>
+                    <textarea class="form-textarea" id="cAddress" placeholder="Jalan, RT/RW, Kelurahan, Kecamatan, Kota, Kode Pos"></textarea>
+                </div>
+            </div>
 
-        function showPanel(id) {
-            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            event.target.classList.add('active');
-        }
+            <!-- Bank Transfer -->
+            <div class="card">
+                <div class="card-title">Transfer Bank <span class="required">*</span></div>
+                <div class="bank-list" id="bankList"></div>
+                <div class="bank-detail" id="bankDetail"></div>
+                <p style="font-size:0.8rem;color:var(--text-muted);margin-top:0.75rem;">
+                    * Harap transfer sesuai total yang tertera. Kami tidak menerima pembayaran COD.
+                </p>
+            </div>
 
-        function saveGame() {
-            const data = { game, teams, currentMatchday, seasonComplete };
-            localStorage.setItem(SAVE_KEY, JSON.stringify(data));
-            
-            const indicator = document.getElementById('saveIndicator');
-            indicator.style.display = 'block';
-            setTimeout(() => indicator.style.display = 'none', 2000);
-        }
+            <!-- Proof Upload -->
+            <div class="card">
+                <div class="card-title">Bukti Transfer <span class="required">*</span></div>
+                <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+                    <div class="drop-zone-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    </div>
+                    <div class="drop-zone-text">Drag & drop bukti transfer di sini</div>
+                    <div class="drop-zone-hint">atau klik untuk pilih file (JPG, PNG, max 5MB)</div>
+                    <input type="file" class="file-input" id="fileInput" accept="image/*" onchange="handleFile(this.files[0])">
+                </div>
+                <div class="file-preview" id="filePreview">
+                    <img src="" alt="" class="file-thumb" id="fileThumb">
+                    <div class="file-meta">
+                        <div class="file-name" id="fileName"></div>
+                        <div class="file-size" id="fileSize"></div>
+                    </div>
+                    <button class="file-remove" onclick="removeFile()" title="Hapus">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                </div>
+            </div>
 
-        function loadGame() {
-            const saved = localStorage.getItem(SAVE_KEY);
-            if (saved) {
-                try {
-                    const data = JSON.parse(saved);
-                    game = data.game || game;
-                    teams = data.teams || [];
-                    currentMatchday = data.currentMatchday || 0;
-                    seasonComplete = data.seasonComplete || false;
-                } catch (e) {
-                    console.error('Load failed', e);
-                }
-            }
-        }
+            <!-- Summary -->
+            <div class="card">
+                <div class="card-title">Ringkasan Pesanan</div>
+                <div class="summary-products" id="summaryProducts"></div>
+                <div class="summary-item">
+                    <span>Subtotal</span>
+                    <span id="sumSubtotal">Rp 0</span>
+                </div>
+                <div class="summary-item">
+                    <span>Ongkir</span>
+                    <span style="color:var(--success);font-weight:600;">GRATIS</span>
+                </div>
+                <div class="summary-item total">
+                    <span>Total Pembayaran</span>
+                    <span id="sumTotal">Rp 0</span>
+                </div>
+                <button class="btn-primary" style="margin-top:1.5rem;" onclick="submitOrder()">
+                    Konfirmasi Pembayaran
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
-        function resetGame() {
-            if (!confirm('Start new career? All progress will be lost!')) return;
-            localStorage.removeItem(SAVE_KEY);
-            game = { divisionIndex: 7, season: 1, money: 50000, hasSponsor: false, history: [], news: ['New career started!'] };
-            createTeams();
-            saveGame();
-            renderAll();
-        }
+<!-- Success / Invoice -->
+<div class="success-overlay" id="successOverlay">
+    <div class="success-container">
+        <div class="success-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h2 class="success-title">Pesanan Berhasil Dibuat</h2>
+        <p class="success-sub">Tim kami akan memverifikasi bukti transfer Anda dalam 1x24 jam.</p>
 
-        // Start
-        window.onload = init;
-    </script>
-</body>
-</html>
+        <div class="invoice-box" id="invoiceBox"></div>
+
+        <div class="success-actions">
+            <button class="btn-wa" id="btnWa" onclick="sendToWA()">
+                <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                Kirim ke WhatsApp
+            </button>
+            <button class="btn-secondary" onclick="resetApp()">Belanja Lagi</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ===================== DATA =====================
+const BANK_ACCOUNTS = [
+    { id: 'bca', name: 'BCA', number: '535-021-7420', holder: 'Yanto Goutama' },
+];
+
+const PRODUCTS = [
+    {
+        id: 1, name: "Soya Sirup", code: "SUP1", price: 145000,
+        image: "./images/SUP1.jpg",
+        category: "Suplemen",
+        description: "Meningkatkan daya tahan tubuh, Menambah asupan nutrisi pada anak, Meringankan demam, batuk & pilek."
+    },
+    {
+        id: 2, name: "Soya Capsule", code: "SUP2", price: 145000,
+        image: "./images/SUP2.jpg",
+        category: "Suplemen",
+        description: "Meningkatkan daya tahan tubuh, Meringankan asupan nutrisi pada anak, Meringankan demam, batuk & pilek."
+    },
+    {
+        id: 3, name: "Met Fit", code: "SUP3", price: 135000,
+        image: "./images/SUP3.jpg",
+        category: "Suplemen",
+        description: "Meningkatkan daya tahan tubuh, Menjaga metabolisme tubuh, Menambah nafsu makan,  Mencegah radikal bebas."
+    },
+    {
+        id: 4, name: "Staminofit", code: "KRS1", price: 135000,
+        image: "./images/KRS1.jpg",
+        category: "Pekerja Keras",
+        description: "Membantu memelihara stamina pria, Membantu meningkatkan gairah & vitalitas pria, Meringankan kualitas sperma pada pria"
+    },
+    {
+        id: 5, name: "Prosela", code: "PS1", price: 135000,
+        image: "./images/PS1.jpg",
+        category: "Pasca Sakit",
+        description: "Membantu menyembuhkan luka dalam/luar, Meregenerasi sel tubuh pasca operasi,  Memperbaiki sel tubuh yang rusak."
+    },
+    {
+        id: 6, name: "Carsifit", code: "PS2", price: 135000,
+        image: "./images/PS2.jpg",
+        category: "Pasca Sakit",
+        description: "Merawat kesehatan pasca stroke,  Mencegah stroke, Menurunkan lemak jahat dalam darah, Melancarkan peredaran darah, Menurunkan hipertensi. "
+    },
+    {
+        id: 7, name: "Barainovit", code: "AR1", price: 135000,
+        image: "./images/AR1.jpg",
+        category: "Anak & Remaja",
+        description: "Meningkatkan daya ingat & konsentrasi,  Anti depresan alami, Memelihara performa otak."
+    },
+    {
+        id: 8, name: "Cabone", code: "AR2", price: 135000,
+        image: "./images/AR2.jpg",
+        category: "Anak & Remaja",
+        description: "Memenuhi kebutuhan kalsium untuk tulang, Menguatkan tulang & gigi, Merangsang hormon pertumbuhan,  Membantu penyembuhan gangguan tulang."
+    }
+    {
+        id: 9, name: "Azzahra", code: "KW1", price: 135000,
+        image: "./images/KW1.jpg",
+        category: "Kewanitaan",
+        description: "Merawat organ kewanitaan, Mencegah jamur & bakteri pada organ kewanitaan, Mengurangi nyeri saat haid. "
+    }
+    {
+        id: 10, name: "Herb 4-Slim", code: "KW2", price: 135000,
+        image: "./images/KW2.jpg",
+        category: "Kewanitaan",
+        description: "Menurunkan berat badan, Membantu mengurangi lemak tubuh, Melancarkan buang air besar & kecil."
+    }
+    {
+        id: 11, name: "Cysto Up", code: "KW3", price: 135000,
+        image: "./images/KW3.jpg",
+        category: "Kewanitaan",
+        description: "Membantu penyembuhan myom & kista, Membantu mengatasi gangguan menstruasi."
+    }
+    {
+        id: 12, name: "Biolopid", code: "PD1", price: 135000,
+        image: "./images/PD1.jpg",
+        category: "Penyakit Degeneratif",
+        description: "Mengurangi lemak jahat dalam darah, Menurunkan kadar kolesterol. "
+    }
+    {
+        id: 13, name: "Carcinofit", code: "PD2", price: 135000,
+        image: "./images/PD2.jpg",
+        category: "Penyakit Degeneratif",
+        description: "Menghambat pertumbuhan sel kanker, Mengurangi nyeri & bengkak, Mencegah radikal bebas."
+    }
+    {
+        id: 14, name: "Cardiafit", code: "PD3", price: 135000,
+        image: "./images/PD3.jpg",
+        category: "Penyakit Degeneratif",
+        description: "Memelihara kesehatan jantung, Melancarkan peredaran darah, Melebarkan pembuluh darah."
+    }
+    {
+        id: 15, name: "Forheuma", code: "PD4", price: 135000,
+        image: "./images/PD4.jpg",
+        category: "Penyakit Degeneratif",
+        description: "Meredakan pegal linu & nyeri sendi akib
