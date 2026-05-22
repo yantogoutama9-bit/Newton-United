@@ -96,6 +96,97 @@
             border-radius: 1px;
         }
 
+        /* ========== DOWNLOAD SECTION ========== */
+        .download-section {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem 2rem;
+        }
+        .download-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+        }
+        .download-card:hover {
+            border-color: var(--border-hover);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+        .download-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--mint);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .download-icon svg {
+            width: 28px;
+            height: 28px;
+            stroke: var(--gold);
+            fill: none;
+            stroke-width: 2;
+        }
+        .download-content {
+            flex: 1;
+        }
+        .download-content h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            color: var(--accent);
+            margin-bottom: 0.25rem;
+        }
+        .download-content p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.85rem 1.5rem;
+            background: var(--accent);
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-radius: 4px;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+        .download-btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        .download-btn svg {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2.5;
+        }
+        @media (max-width: 640px) {
+            .download-card {
+                flex-direction: column;
+                text-align: center;
+                padding: 1.5rem;
+            }
+            .download-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
         /* Products */
         .container { max-width: 1280px; margin: 0 auto; padding: 0 2rem 4rem; }
         .section-title {
@@ -678,6 +769,23 @@
     <p>Kurasi terpilih untuk mereka yang menghargai kesehatan tanpa kompromi. Pesan sekarang, bayar via transfer bank.</p>
 </section>
 
+<!-- ========== KOLOM DOWNLOAD KATALOG ========== -->
+<section class="download-section">
+    <div class="download-card">
+        <div class="download-icon">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <div class="download-content">
+            <h3>Buku Fit</h3>
+            <p>Unduh Buku Fit PDF untuk melihat detail lengkap semua produk herbal Naturindo, dan manfaatnya.</p>
+        </div>
+        <a href="Buku-Fit.pdf" download class="download-btn">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Unduh PDF
+        </a>
+    </div>
+</section>
+
 <div class="container">
     <h3 class="section-title">Produk Terbaru</h3>
     <div class="products-grid" id="productsGrid"></div>
@@ -910,7 +1018,7 @@ const PRODUCTS = [
         description: "Membantu penyembuhan myom & kista, Membantu mengatasi gangguan menstruasi."
     },
     {
-        id: 12, name: "Biolopid", code: "PD1", price: 150000,
+        id: 12, name: "Biolipid", code: "PD1", price: 150000,
         image: "PD1.jpg",
         category: "Penyakit Degeneratif",
         description: "Mengurangi lemak jahat dalam darah, Menurunkan kadar kolesterol. "
@@ -1352,7 +1460,7 @@ updateCartUI();
         <div class="footer-section">
             <h3>Kontak</h3>
             <p>📱 WhatsApp: <a href="https://wa.me/628813967332" target="_blank">0881-396-7332</a></p>
-            <p>📧 Email: <a href="mailto:info. goutama7@gmail.com">info.goutama7@gmail.com</a></p>
+            <p>📧 Email: <a href="mailto:tokoonline.naturindosolo@gmail.com">tokoonline.naturindosolo@gmail.com</a></p>
             <p>📍 Surakarta, Indonesia</p>
         </div>
         <div class="footer-section">
